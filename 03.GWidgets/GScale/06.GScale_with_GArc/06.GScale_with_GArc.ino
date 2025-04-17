@@ -1,0 +1,39 @@
+#include <BlynkGOv5.h>
+
+GRect rect_gauge;
+  GArc   arc(rect_gauge);
+  GScale scale(rect_gauge);
+
+void setup() {
+  Serial.begin(9600); Serial.println();
+  BlynkGO.begin();
+
+  rect_gauge.size(180, 180);
+  rect_gauge.radius(10);
+  rect_gauge.color(TFT_WHITE);
+  rect_gauge.align(ALIGN_TOP_LEFT, 20, 20);
+
+    arc.size(300,300);
+    arc.thickness(40);
+    arc.range(10,50);
+    arc.angle_offset(180);
+    arc.angle_range(90);
+    arc.bg_enable(true);
+    arc.position(15,15);
+
+    arc = 43;
+
+    scale.size(220,220);                        // กว้าง arc - 2 * ความหนา arc = 300 - 2 * 40
+    scale.mode(SCALE_MODE_ROUND_INNER, 41,10);  // scale แบบ โค้ง ภายใน มีเส้นขีด ทั้งหมด 41 ขีด เส้นขีดหลัก เว้นทุกๆ 10 ขีด
+    scale.range(arc);                           // มี range เดียวกับ arc
+    scale.angle_offset(arc);                    // มีมุมเริ่มต้น เดียวกับ arc
+    scale.angle_range(arc);                     // มีช่วงมุม เดียวกับ arc
+    scale.label_show(true);
+    scale.tick_length(10,5);
+    scale.axis_thickness(0);
+    scale.align(arc, ALIGN_CENTER);             // จัดตำแหน่งเอง ด้วย align ไว้กลาง arc
+}
+
+void loop(){
+  BlynkGO.update();
+}
