@@ -1,6 +1,6 @@
 #include <BlynkGOv5.h>
 
-IMAGE_DECLARE(img_skew_strip);
+IMAGE_DECLARE(img_skew_strip)
 
 GBar bar;
 
@@ -11,9 +11,9 @@ void setup()
   BlynkGO.begin();
   BlynkGO.fillScreen(TFT_WHITE);
 
-  bar.bg_image(img_skew_strip);
-  bar.bg_image_tiled(true);
-  bar.bg_image_opa(30);
+  bar.image(img_skew_strip);
+  bar.image_tiled(true);
+  bar.image_opa(120);
   bar.size(260, 20);
   bar.mode(BAR_MODE_RANGE);
   bar.range(0, 100);

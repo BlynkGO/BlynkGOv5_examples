@@ -21,7 +21,7 @@ void setup()
   label_l2r.align(bar_left_to_right, ALIGN_TOP, 0, -5);
 
   bar_right_to_left.size(bar_left_to_right);
-  bar_right_to_left.direction(BASE_DIR_R2L);            // ให้ทิศทาง GBar เป็นแบบ จาก ขวาไปซ้าย
+  bar_right_to_left.direction(BASE_DIR_RTL);            // ให้ทิศทาง GBar เป็นแบบ จาก ขวาไปซ้าย
   bar_right_to_left.align_center(0, 30);
   bar_right_to_left = 70;
 
