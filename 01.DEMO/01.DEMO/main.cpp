@@ -79,7 +79,7 @@ class GGaugeGRAFANA : GScale {      // สร้าง class แตกมาจ�
       lb_value.align_center();
       lb_title.align(lb_value, ALIGN_TOP,0,0);
 
-      this->onSizeChanged([](GWIDGET){
+      this->onSizeChanged(GWIDGET_CB{
         GGaugeGRAFANA* _gauge = (GGaugeGRAFANA*) widget;
         _gauge->refresh_size();
       });
@@ -186,7 +186,7 @@ class GSwitchMod : public GSwitch {
       GSwitch::outline_opa(0);
 
       GSwitch::hookDrawTask(true);          /* ให้สามารถ hook ดัก ขณะกราฟิก กำลัง draw ระดับล่าง ได้ด้วย */
-      GSwitch::onDrawTask([](GWIDGET){      /* เมื่อ ขณะกราฟิก กำลัง draw วิตเจ็ตระดับล่าง */
+      GSwitch::onDrawTask(GWIDGET_CB{      /* เมื่อ ขณะกราฟิก กำลัง draw วิตเจ็ตระดับล่าง */
         GSwitchMod * p_sw = (GSwitchMod*) widget;
         draw_label_dsc_t  label_dsc;
         area_t            label_area;
@@ -263,7 +263,7 @@ class GHomeSwitch : public GRect {
 
       sw.parent(this);
       sw.grid_cell(2,0, 1, 2, GRID_ALIGN_START, GRID_ALIGN_CENTER);
-      sw.onValueChanged([](GWIDGET){
+      sw.onValueChanged(GWIDGET_CB{
         GHomeSwitch* home_sw = (GHomeSwitch*) widget->parent();
         color_t color_on  = home_sw->sw.color((gstate_t) (GPART_KNOB| GSTATE_ON));
         color_t color_off = home_sw->sw.color((gstate_t) (GPART_KNOB| GSTATE_OFF));
@@ -641,7 +641,7 @@ void setup(){
     slider.knob_padding(6);                                         // ขยายพื้นที่ปุ่ม
     slider.range(0,100);
     slider.align(ALIGN_LEFT,30);
-    slider.onValueChanged([](GWIDGET){
+    slider.onValueChanged(GWIDGET_CB{
       lb_slider = slider.toInt();
     });
     lb_slider.font(prasanmit_20, TFT_WHITE);
@@ -662,7 +662,7 @@ void setup(){
     slider2.knob_padding(6);                                         // ขยายพื้นที่ปุ่ม
     slider2.range(0,100);
     slider2.align(ALIGN_BOTTOM,0,-30);
-    slider2.onValueChanged([](GWIDGET){
+    slider2.onValueChanged(GWIDGET_CB{
       lb_slider2 = slider2.toInt();
     });
     lb_slider2.font(prasanmit_20, TFT_WHITE);
@@ -678,7 +678,7 @@ void setup(){
   lb_cardgame_menu.clickable(true);
   lb_cardgame_menu = SYMBOL_LIST;
   lb_cardgame_menu.align(ALIGN_BOTTOM_LEFT,10, cont_frame.padding_bottom()+2);
-  lb_cardgame_menu.onClicked([](GWIDGET){
+  lb_cardgame_menu.onClicked(GWIDGET_CB{
     rect_cardgame.show(true);
   });
 
@@ -693,7 +693,7 @@ void setup(){
     rect_wifi_manager.align(wifi_manager, ALIGN_CENTER);
 
 
-    rect_wifi_manager.onClicked([](GWIDGET){
+    rect_wifi_manager.onClicked(GWIDGET_CB{
       passcodelock.passcode(PASSCODE);
 
       // User ใส่รหัสถูกต้อง ให้ไปทำอะไรต่อ
@@ -723,13 +723,13 @@ void setup(){
   lb_hvac.clickable(true);
   lb_hvac = SYMBOL_HVAC; //SYMBOL_MONITORING;
   lb_hvac.align(lb_config, ALIGN_RIGHT, 30);
-  lb_hvac.onClicked([](GWIDGET){
+  lb_hvac.onClicked(GWIDGET_CB{
     image_hvac_background.show(true);
   });
     //-------------------------------------
     image_hvac_background.show(false);
     image_hvac_background.clickable(true);
-    image_hvac_background.onClicked([](GWIDGET){
+    image_hvac_background.onClicked(GWIDGET_CB{
       image_hvac_background.show(false);
     });
       lb_hvac_title = "HVAC";
@@ -768,7 +768,7 @@ void setup(){
       btn_hvac_mode_winter.color(TFT_PALETTE_DARKEN(TFT_PALETTE_BLUE, 2), GSTATE_ON);
       btn_hvac_mode_winter.color(TFT_PALETTE_DARKEN(TFT_PALETTE_GRAY, 3), GSTATE_OFF);
       btn_hvac_mode_winter.OFF();
-      btn_hvac_mode_winter.onValueChanged([](GWIDGET){
+      btn_hvac_mode_winter.onValueChanged(GWIDGET_CB{
         btn_hvac_mode_winter.isON()? btn_hvac_mode_summer.off() : btn_hvac_mode_summer.on();
         if( btn_hvac_mode_winter.isON() ){
           lb_hvac_mode_winter.color(TFT_WHITE);
@@ -792,7 +792,7 @@ void setup(){
       btn_hvac_mode_summer.color(TFT_PALETTE_DARKEN(TFT_PALETTE_BLUE, 2), GSTATE_ON);
       btn_hvac_mode_summer.color(TFT_PALETTE_DARKEN(TFT_PALETTE_GRAY, 3), GSTATE_OFF);
       btn_hvac_mode_summer.ON();
-      btn_hvac_mode_summer.onValueChanged([](GWIDGET){
+      btn_hvac_mode_summer.onValueChanged(GWIDGET_CB{
         btn_hvac_mode_summer.isON()? btn_hvac_mode_winter.off() : btn_hvac_mode_winter.on();
         if( btn_hvac_mode_summer.isON() ){
           lb_hvac_mode_winter.color(TFT_DARKGRAY);
@@ -903,7 +903,7 @@ void setup(){
   lb_touch.clickable(true);
   lb_touch = SYMBOL_TRACKPAD_INPUT; // SYMBOL_OVERVIEW;
   lb_touch.align(lb_folder, ALIGN_RIGHT, 30);
-  lb_touch.onClicked([](GWIDGET){
+  lb_touch.onClicked(GWIDGET_CB{
     image_touch_tester.show(true);
   });
     //-------------------------------------------------------
@@ -936,7 +936,7 @@ void setup(){
       btn_touch_tester_back.round_design();
       // btn_touch_tester_back.align(ALIGN_TOP_LEFT,10,10);
       btn_touch_tester_back.position(10,10);
-      btn_touch_tester_back.onClicked([](GWIDGET){
+      btn_touch_tester_back.onClicked(GWIDGET_CB{
         image_touch_tester.show(false);
         // rect_dashboard.show(true);
         // rect_weightscale.show(false);
@@ -973,7 +973,7 @@ void setup(){
   btn_cardgame_back.font(material_icon_30);
   btn_cardgame_back.round_design();
   btn_cardgame_back.align(ALIGN_TOP_LEFT, 10,10);
-  btn_cardgame_back.onClicked([](GWIDGET){
+  btn_cardgame_back.onClicked(GWIDGET_CB{
     rect_cardgame.show(false);
   });
 
@@ -988,7 +988,7 @@ void setup(){
       item[i].clickable(true);
       item[i].image_recolor(TFT_BLACK, GSTATE_PRESSED);
       item[i].image_recolor_opa(180, GSTATE_PRESSED);
-      item[i].onClicked([](GWIDGET){
+      item[i].onClicked(GWIDGET_CB{
         int ii = (GImage*)widget-&item[0];
         if(cur_id != ii) anim_item(ii);
       });
@@ -1006,14 +1006,14 @@ void setup(){
 
   btn_right = SYMBOL_ARROW_RIGHT;
   btn_right.align(menu, ALIGN_RIGHT, 30);
-  btn_right.onClicked([](GWIDGET){
+  btn_right.onClicked(GWIDGET_CB{
     if (cur_id <= item_num - 2) 
       anim_item(++cur_id);
   });
 
   btn_left  = SYMBOL_ARROW_LEFT;
   btn_left.align(menu, ALIGN_LEFT, -30);
-  btn_left.onClicked([](GWIDGET){
+  btn_left.onClicked(GWIDGET_CB{
     if (cur_id > 0)
       anim_item(--cur_id);
   });

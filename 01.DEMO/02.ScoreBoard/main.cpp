@@ -47,7 +47,7 @@ class GTeamScore : public GContainer {
             rect_touch[i].size(lb_score[0].width() + 40, lb_score[0].height());
             rect_touch[i].align(lb_score[0], ALIGN_CENTER, 0,( i==0? -1:1 ) * lb_score[0].height()/2 );
             rect_touch[i].user_data(this);
-            rect_touch[i].onClicked([](GWIDGET){
+            rect_touch[i].onClicked(GWIDGET_CB{
               GTeamScore* _team_score = (GTeamScore*) (widget->user_data());
               int ii= (GRect*) widget - &_team_score->rect_touch[0];
               if(ii==0){
@@ -150,7 +150,7 @@ void setup(){
   box_round.value(StringX::printf("%02d", match_round = 0));
   box_round.align(ALIGN_CENTER, 0, -40);
   box_round.color(TFT_PALETTE_DARKEN(TFT_PALETTE_YELLOW, 3));
-  box_round.onClicked([](GWIDGET){
+  box_round.onClicked(GWIDGET_CB{
     Point tp = widget->touch_point();
     if(tp.y <= box_round.height()/2){
       box_round.value(StringX::printf("%02d", ++match_round));
@@ -166,19 +166,19 @@ void setup(){
   box_timecounter.value(StringX::printf("%02d:%02d", minute(), second() ));
   box_timecounter.align(box_round, ALIGN_BOTTOM, 0, 40);
   box_timecounter.color(TFT_PALETTE(TFT_PALETTE_GREEN));
-  box_timecounter.onClicked([](GWIDGET){
+  box_timecounter.onClicked(GWIDGET_CB{
     lb_timer_control.event_send(EVENT_CLICKED);
   });
-  box_timecounter.onPressed([](GWIDGET){
+  box_timecounter.onPressed(GWIDGET_CB{
     lb_timer_control.event_send(EVENT_PRESSED);
   });
-  box_timecounter.onLongPressed([](GWIDGET){
+  box_timecounter.onLongPressed(GWIDGET_CB{
     lb_timer_control.event_send(EVENT_LONG_PRESSED);
   });
 
   rect_touch_protector.show(false);
   rect_touch_protector.bg_opa(0);
-  rect_touch_protector.onClicked([](GWIDGET){ rect_touch_protector.show(false); });
+  rect_touch_protector.onClicked(GWIDGET_CB{ rect_touch_protector.show(false); });
     rect_timecounter.size(SIZE_CONTENT, SIZE_CONTENT);
     rect_timecounter.padding(30, 30, 50, 50, 0);
     rect_timecounter.radius(20);
@@ -186,7 +186,7 @@ void setup(){
     rect_timecounter.event_parent(true);      // หากเกิด event อะไรมาที่นี่ ให้ส่งต่อไปยัง parent ด้วย
       cont_timecounter.bg_opa(0);
       cont_timecounter.layout(LAYOUT_ROW_M,5,5,5,5,5);
-        static auto roller_onValueChange =  [](GWIDGET){
+        static auto roller_onValueChange =  GWIDGET_CB{
                                               round_timeout = TIME_TOTOAL_SEC(roller_minute.toInt(), roller_second.toInt());
                                               lb_timelimit = format_time(round_timeout);
                                               if(state_timer == STATE_TIMER_STOP){
@@ -213,7 +213,7 @@ void setup(){
     rect_bottom_touch.bg_opa(0);
     rect_bottom_touch.size(PCT(100), 60);
     rect_bottom_touch.align(ALIGN_BOTTOM);
-    rect_bottom_touch.onClicked([](GWIDGET){
+    rect_bottom_touch.onClicked(GWIDGET_CB{
       cont_toolbar.show(!cont_toolbar.show());
       if(cont_toolbar.show()) cont_toolbar.toForeground();
     });
@@ -231,7 +231,7 @@ void setup(){
         lb_timer_control.color(TFT_RED);
         lb_timer_control.clickable(true);
         static bool long_pressed = false;
-        lb_timer_control.onClicked([](GWIDGET){
+        lb_timer_control.onClicked(GWIDGET_CB{
           if(long_pressed) { long_pressed = false; return; }
 
           switch( state_timer) {
@@ -279,8 +279,8 @@ void setup(){
               break;
           }
         });
-        lb_timer_control.onPressed([](GWIDGET){  long_pressed = false; });
-        lb_timer_control.onLongPressed([](GWIDGET){ 
+        lb_timer_control.onPressed(GWIDGET_CB{  long_pressed = false; });
+        lb_timer_control.onLongPressed(GWIDGET_CB{ 
           if(!long_pressed){
             long_pressed = true;
             lb_timer_control = SYMBOL_TIMER_OFF;  // กดจาก stop -> play แต่รูป จะเผื่อไปที่ pause
@@ -296,7 +296,7 @@ void setup(){
         lb_timer_count_up_down = SYMBOL_TIMER_ARROW_DOWN;
         lb_timer_count_up_down.color(TFT_WHITE);
         lb_timer_count_up_down.clickable(true);
-        lb_timer_count_up_down.onClicked([](GWIDGET){
+        lb_timer_count_up_down.onClicked(GWIDGET_CB{
           lb_timer_count_up_down = (lb_timer_count_up_down == SYMBOL_TIMER_ARROW_UP)? SYMBOL_TIMER_ARROW_DOWN : SYMBOL_TIMER_ARROW_UP;
           box_timecounter.value( format_time(round_timeout_action =  round_timeout - round_timeout_action));
         });
@@ -305,7 +305,7 @@ void setup(){
         lb_reset_scoreboard.clickable(true);
         lb_reset_scoreboard.color(TFT_WHITE);
         lb_reset_scoreboard.color(TFT_PALETTE_DARKEN(TFT_PALETTE_GRAY,3), GSTATE_PRESSED);
-        lb_reset_scoreboard.onClicked([](GWIDGET){
+        lb_reset_scoreboard.onClicked(GWIDGET_CB{
           // reset scoreboard เป็นค่าเริ่มต้นใหม่
           for(int i=0; i < 2; i++){
             team_score[i].score(0);
@@ -324,7 +324,7 @@ void setup(){
       lb_timelimit = format_time(round_timeout);
       lb_timelimit.font(prasanmit_25, TFT_SILVER);
       lb_timelimit.clickable(true);
-      lb_timelimit.onClicked([](GWIDGET){
+      lb_timelimit.onClicked(GWIDGET_CB{
         rect_touch_protector.show(true);
         rect_touch_protector.toForeground();    
       });

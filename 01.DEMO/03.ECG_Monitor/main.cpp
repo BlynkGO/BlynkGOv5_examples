@@ -112,14 +112,14 @@ void setup(){
     btn_home.grid_cell(0,0,5,1, GRID_ALIGN_START, GRID_ALIGN_CENTER);
     btn_home.size(140,35);
     btn_home.radius(8);
-    btn_home.onClicked([](GWIDGET){
+    btn_home.onClicked(GWIDGET_CB{
 
     });
 
     btn_save.grid_cell(0,0,5,1, GRID_ALIGN_END, GRID_ALIGN_CENTER);
     btn_save.size(btn_home);
     btn_save.radius(8);
-    btn_save.onClicked([](GWIDGET){
+    btn_save.onClicked(GWIDGET_CB{
 
     });
 
@@ -139,7 +139,7 @@ void setup(){
       chart[i].line_opa(50);                                  // ให้ โปร่งใส 50 (จะทำให้เส้นดูบางลง กว่า 1px ปกติ)
       // ทำการ hook การวาดกราฟิกระดับล่าง
       chart[i].hookDrawTask(true);
-      chart[i].onDrawTask([](GWIDGET){                        // เมื่อมีการวาดกราฟิกระดับล่าง
+      chart[i].onDrawTask(GWIDGET_CB{                        // เมื่อมีการวาดกราฟิกระดับล่าง
         int ii = (GChart*) widget -&chart[0];                 // ลำดับ ii นี้จะตรงกับ i พอดี (เนื่องจาก i จะเข้ามาใน นี้ไม่ได้คำนวณผ่านทาง pointer แทน)
         if( chart[ii].draw_part() == GPART_MAIN &&            // ขณะ กำลังวาดระดับล่าง ในส่วน main ของ chart
             chart[ii].draw_type() == DRAW_TASK_TYPE_LINE )    // ขณะ กำลังวาดระดับล่าง ในส่วนตี line ของ chart
@@ -190,7 +190,7 @@ void setup(){
       chart_scale[i].font(prasanmit_25, TFT_WHITE);
       // ทำการ hook การวาดกราฟิกระดับล่าง
       chart_scale[i].hookDrawTask(true);
-      chart_scale[i].onDrawTask([](GWIDGET){                        // เมื่อมีการวาดกราฟิกระดับล่าง
+      chart_scale[i].onDrawTask(GWIDGET_CB{                        // เมื่อมีการวาดกราฟิกระดับล่าง
         int ii = (GScale*) widget -&chart_scale[0];                 // ลำดับ ii นี้จะตรงกับ i พอดี (เนื่องจาก i จะเข้ามาใน นี้ไม่ได้คำนวณผ่านทาง pointer แทน)
         if( chart_scale[ii].draw_part() == GPART_INDICATOR &&       // ขณะ กำลังวาดระดับล่าง ในส่วนของ indicator ของ scale
             chart_scale[ii].draw_type() == DRAW_TASK_TYPE_LABEL )   // ขณะ กำลังวาดระดับล่าง ในส่วน label ของ scale

@@ -114,7 +114,7 @@ class GGaugeGRAFANA : GScale {      // สร้าง class แตกมาจ�
       lb_value.align_center();
       lb_title.align(lb_value, ALIGN_TOP,0,5);
 
-      this->onSizeChanged([](GWIDGET){
+      this->onSizeChanged(GWIDGET_CB{
         GGaugeGRAFANA* _gauge = (GGaugeGRAFANA*) widget;
         _gauge->refresh_size();
       });
