@@ -1,11 +1,17 @@
+/* ปรับแต่งกราฟิกดีไซน์ โดยใช้ GStyle เป็นการกำหนดที่ GStyle แล้วสามารถนำไปใช้ร่วมกับ วิตเจ็ตต่างๆ ได้ โดยลดการเปลืองเม็มไม่ต้องกำหนดแบบแยกกัน */
+
 #include <BlynkGOv5.h>
 
-GButton btn;
+GButton btn1;
+GButton btn2;
 
 void setup(){
   Serial.begin(9600); Serial.println();
   BlynkGO.begin();
   BlynkGO.fillScreen(TFT_WHITE);
+
+  GScreen.layout(LAYOUT_COL_M, 0, 0, 0, 0, 30);
+  GScreen.content_align(CONTENT_ALIGN_CENTER);
 
   static GStyle  style_default;
     style_default.radius(8);
@@ -18,6 +24,7 @@ void setup(){
     style_default.border(2, TFT_PALETTE(TFT_PALETTE_GRAY));
 
     style_default.shadow(8, TFT_PALETTE(TFT_PALETTE_GRAY));
+    
     style_default.shadow_offset(0,8);
 
     style_default.outline_color(TFT_PALETTE(TFT_PALETTE_BLUE));
@@ -41,17 +48,16 @@ void setup(){
 
     style_pressed.transition(trans);
 
-  btn ="ปุ่มกด";
-    btn.addStyle(style_default , GSTATE_DEFAULT);     // กำหนด style เมื่อปุ่มขณะปกติ
-    btn.addStyle(style_pressed , GSTATE_PRESSED);     // กำหนด style เมื่อปุ่มขณะถูกกด
+  btn1 ="ปุ่มกด1";
+    btn1.addStyle(style_default , GSTATE_DEFAULT);    // กำหนด style เมื่อปุ่มขณะปกติ
+    btn1.addStyle(style_pressed , GSTATE_PRESSED);    // กำหนด style เมื่อปุ่มขณะถูกกด
+  
+  btn2 ="ปุ่มกด2";
+  btn2.addStyle(style_default , GSTATE_DEFAULT);      // ใช้ GStyle ร่วมกับ btn1 ทำให้ประหยัดเม็มได้
+  btn2.addStyle(style_pressed , GSTATE_PRESSED);      // ใช้ GStyle ร่วมกับ btn1 ทำให้ประหยัดเม็มได้
 }
 
 void loop(){
   BlynkGO.update();
 }
-
-
-
-
-
 

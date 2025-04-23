@@ -7,8 +7,7 @@ GButton btn_with_image(img_laundry, "เครื่องซักผ้า");
 
 void setup()
 {
-  Serial.begin(9600);
-  Serial.println();
+  Serial.begin(9600); Serial.println();
   BlynkGO.begin();
   BlynkGO.fillScreen(TFT_WHITE);
 
