@@ -27,7 +27,7 @@ void chart_add_temp(String x_str, int32_t y_temp) {
   axis_x_txt_list.push_back(x_str);
   scale_x_chart.label_show(true);
   scale_x_chart.text_src(axis_x_txt_list);
-  chart.next_value(series, y_temp);
+  chart.addPoint(series, y_temp);
 }
 
 void setup(){
@@ -41,6 +41,19 @@ void setup(){
   chart_frame.line_width(1);
   chart_frame.border_color(TFT_COLOR_HEX(0x202020));
   chart_frame.scrollable(false);
+  chart_frame.hookDrawTask(true);
+  chart_frame.onDrawTask(GWIDGET_CB{
+    if( chart_frame.draw_part() == GPART_MAIN &&            // ขณะ กำลังวาดระดับล่าง ในส่วน main ของ chart
+        chart_frame.draw_type() == DRAW_TASK_TYPE_LINE )    // ขณะ กำลังวาดระดับล่าง ในส่วนตี line ของ chart
+    {
+      auto line_dsc = chart_frame.draw_line_dsc();          // รายละเอียด line ที่กำลังจะวาดระดับล่าง
+      if( line_dsc->p1.x == chart_frame.coords()->x1 &&     // แสดงว่า กำลังวาดเส้นแนวนอน
+          line_dsc->p2.x == chart_frame.coords()->x2 )
+      {
+        line_dsc->dash_width = line_dsc->dash_gap = 4;      // ทำเป็นแนวนอนให้เป็นเส้นประ
+      }
+    }
+  });
 
     chart.size(chart_frame);
     chart.pad_hor(CHART_BLOCK_WIDTH/2);
@@ -95,6 +108,7 @@ void setup(){
       chart_add_temp(date.c_str(), random(CHART_Y_MIN, CHART_Y_MAX));
     });
 }
+
 void loop(){
   BlynkGO.update();
 }
