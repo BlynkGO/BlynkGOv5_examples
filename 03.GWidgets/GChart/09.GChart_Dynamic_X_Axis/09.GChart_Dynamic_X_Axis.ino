@@ -12,24 +12,21 @@
 GChart chart_frame;       // สำหรับตีเส้น chart
 GChart chart;             // สำหรับเป็น chart จริง
   chart_series_t *series; // series สำหรับเก็บข้อมูล
-
 GScale scale_x_chart;     // แกน x
 GScale scale_y_chart;     // แกน y
-
 SoftTimer timer_series_update;
 
 void chart_add_temp(String x_str, int32_t y_temp) {
   static std::vector<String> axis_x_txt_list;
   if( axis_x_txt_list.size() == 0){
-    axis_x_txt_list.resize(CHART_BLOCK_X_COUNT, "");        // เพิ่ม "" เปล่าๆ ไปจำนวน CHART_BLOCK_X_COUNT-1
+    axis_x_txt_list.resize(CHART_BLOCK_X_COUNT, "");  // เพิ่ม "" เปล่าๆ ไปจำนวน CHART_BLOCK_X_COUNT-1
   }
   if( axis_x_txt_list.size() == CHART_BLOCK_X_COUNT) {
     axis_x_txt_list.erase(axis_x_txt_list.begin());   // เอาตัวแรกออกจาก vector
-  }
+  }  
   axis_x_txt_list.push_back(x_str);
+  scale_x_chart.label_show(true);
   scale_x_chart.text_src(axis_x_txt_list);
-
-  // เพิ่มค่า y ให้ char+t
   chart.next_value(series, y_temp);
 }
 
@@ -45,8 +42,8 @@ void setup(){
   chart_frame.border_color(TFT_COLOR_HEX(0x202020));
   chart_frame.scrollable(false);
 
-    chart.size( (CHART_BLOCK_X_COUNT-1) * CHART_BLOCK_WIDTH + 10, CHART_BLOCK_Y_COUNT * CHART_BLOCK_HEIGHT);
-    chart.pad_hor(5);
+    chart.size(chart_frame);
+    chart.pad_hor(CHART_BLOCK_WIDTH/2);
     chart.range(CHART_Y_MIN, CHART_Y_MAX);
     chart.point_count(CHART_BLOCK_X_COUNT);
     chart.bg_opa(0);
@@ -84,23 +81,20 @@ void setup(){
     scale_y_chart.thickness(0);
     scale_y_chart.font_color(TFT_WHITE);
   
-    scale_x_chart.width(chart);
+    scale_x_chart.width((CHART_BLOCK_X_COUNT-1)*CHART_BLOCK_WIDTH);
     scale_x_chart.mode(SCALE_MODE_HOR_BOTTOM, CHART_BLOCK_X_COUNT);
     scale_x_chart.align(chart, ALIGN_BOTTOM, 0, 5);
     scale_x_chart.thickness(0);
     scale_x_chart.font_color(TFT_WHITE);
+    scale_x_chart.label_show(false);
 
     series = chart.createSerie(CHART_SERIE_COLOR);
     timer_series_update.setInterval(1000,[](){
-      static int d = 0;
-      d = (d+1)%32; if(d == 0) d = 1;
+      static int d = 0; d = (d+1)%32; if(d == 0) d = 1;
       String date = StringX::printf("%02d พ.ค.", d);
       chart_add_temp(date.c_str(), random(CHART_Y_MIN, CHART_Y_MAX));
     });
-
-
 }
-
 void loop(){
   BlynkGO.update();
 }
