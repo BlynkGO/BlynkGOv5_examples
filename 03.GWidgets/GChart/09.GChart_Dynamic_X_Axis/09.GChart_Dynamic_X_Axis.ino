@@ -105,7 +105,7 @@ void setup(){
     timer_series_update.setInterval(1000,[](){
       static int d = 0; d = (d+1)%32; if(d == 0) d = 1;
       String date = StringX::printf("%02d พ.ค.", d);
-      chart_add_temp(date.c_str(), random(CHART_Y_MIN, CHART_Y_MAX));
+      chart_add_temp(date, random(CHART_Y_MIN, CHART_Y_MAX));
     });
 }
 
