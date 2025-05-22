@@ -29,8 +29,7 @@ void setup(){
     anim.start();
   });
     truck_hydrolic_bar.setPoints(Point(201,240), Point(201,235));
-    truck_hydrolic_bar.thick(5);
-    truck_hydrolic_bar.color(TFT_WHITE);
+    truck_hydrolic_bar.thick(5, TFT_WHITE);
     truck_body.align(ALIGN_BOTTOM_LEFT);
     truck_bed.align(truck_body, ALIGN_IN_TOP_RIGHT);
 
