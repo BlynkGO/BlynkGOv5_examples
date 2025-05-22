@@ -44,6 +44,7 @@ void setup(){
       lb_degree = truck_deg;
       truck_bed.pivot(230,90);        // จุดหมุน
       truck_bed.rotation(truck_deg);  // หมุนไปกี่องศา
+      // วาดเส้น GLine เริ่มจาก จุด 201,240 และอีกจุด เป็นจุด 201,240 แต่หมุนไปเป็นองศาที่ต้องการรอบจุด 300,245 แบบหมุนตามเข็ม
       truck_hydrolic_bar.setPoints(Point(201,240), Point(201,240).rotate(truck_deg, Point(300,245), CLOCKWISE));
     }); 
 }
