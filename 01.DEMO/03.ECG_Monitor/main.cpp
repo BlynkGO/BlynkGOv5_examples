@@ -64,8 +64,7 @@ namespace SpO2 {
 
 
 // ค่าคงที่ของ ECG
-#define SAMPLE_RATE 100  // 100 Hz (ตัวอย่างต่อวินาที)
-#define PERIOD 1.0       // 1 วินาทีต่อรอบ ECG
+#define SAMPLE_RATE 45  // 45 Hz (ตัวอย่างต่อวินาที)
 
 // Gaussian ฟังก์ชันสำหรับ QRS Complex
 float gaussian(float x, float mean, float sigma, float amplitude) {
@@ -289,31 +288,13 @@ void setup(){
         float ecg_value = generateECG(t, A_P, A_QRS, A_T);
 
         series[i]->y_points[cur_idx] = ecg_value;
-        // เพื่อให้ดูเหมือนมีการเว้นช่วง ให้ใส่ที่ไม่มีข้อมูลให้ chart พ่วงท้าย 10 ข้อมูล เพิ่ม 
+        // ใส่ ไม่มีข้อมูลให้ chart พ่วงท้าย 10 ข้อมูล
         for(int j=cur_idx+1; j<= cur_idx+10; j++) {
           series[i]->y_points[ j%CHART_MAX_POINT_COUNT] = CHART_POINT_NONE;
         }
-        chart[i].invalidate();  // เพื่อทำการ update ตัว chart ใหม่ ด้วย series ที่เปลี่ยนแปลงไป
+        chart[i].invalidate();
       }
     });
-
-    // หากมี vector buffer  ที่ชื่อว่า ecg_data_list อยู่ ตัวอย่างใส่ดังนี้
-    // static SoftTimer timer_chart;
-    // timer_chart.setInterval(500,[](){
-    //   static int32_t cur_idx = -1;    
-    //     for(int i=0; i< ecg_data_list.size(); i++) {
-    //       cur_idx = (cur_idx+1)% CHART_MAX_POINT_COUNT;
-    //       series[i]->y_points[cur_idx] = ecg_data_list[i];
-    //     }
-    //     ecg_data_list.clear();  // หลังนำข้อมูล ecg_data_list ที่เป็น buffer สู่ series แล้วให้ เคลียร์ใน buffer ทิ้ง
-    //
-    //     // เพื่อให้ดูเหมือนมีการเว้นช่วง ให้ใส่ที่ไม่มีข้อมูลให้ chart พ่วงท้าย 10 ข้อมูล เพิ่ม 
-    //     for(int j=cur_idx+1; j<= cur_idx+10; j++) {
-    //       series[i]->y_points[ j%CHART_MAX_POINT_COUNT] = CHART_POINT_NONE;
-    //     }
-    //     chart[i].invalidate();  // เพื่อทำการ update ตัว chart ใหม่ ด้วย series ที่เปลี่ยนแปลงไป
-    //   }
-    // });
 
     HR::value(120);
     SpO2::value(36);
