@@ -12,7 +12,7 @@ IMAGE_DECLARE(img_heart_rate2);
 
 #define CHART_CELL_WIDTH            5
 #define CHART_CELL_HOR_BOX_NUM      60
-#define CHART_CELL_VER_BOX_NUM      24
+#define CHART_CELL_VER_BOX_NUM      25
 
 GContainer cont_ecg_monitor;
   GLabel lb_ecg_monitor("ECG POCKET MONITOR", cont_ecg_monitor);          // วิตเจ็ต ข้อความ title
@@ -131,7 +131,7 @@ void setup(){
       chart[i].grid_cell(c, r);                               // วางไว้ที่ grid_cell ที่กำหนด
       chart[i].type(CHART_TYPE_LINE);                         // ให้วาด chart เป็น กราฟเส้น
       chart[i].point_count(CHART_MAX_POINT_COUNT);            // จำนวนจุดทั้งหมดใน chart
-      chart[i].range(CHART_AXIS_PRIMARY_Y, -120, 120);        // ค่าแกน Y อยุ่ระหว่าง -120 ถึง 120  ( ให้ค่าที่รับมา x100 เสียก่อน ค่อยกำหนดใส่ chart)
+      chart[i].range(CHART_AXIS_PRIMARY_Y, -100, 150);        // ค่าแกน Y อยุ่ระหว่าง -120 ถึง 120  ( ให้ค่าที่รับมา x100 เสียก่อน ค่อยกำหนดใส่ chart)
       chart[i].div_line_count(CHART_CELL_VER_BOX_NUM+1, CHART_CELL_HOR_BOX_NUM+1);    // ตีเส้นตารางจำนวน 24+1 เส้นแนวนอน 60+1 เส้นแนวตั้ง
       chart[i].border(0);                                     // ไม่ต้องมีขอบ
       chart[i].line_color(TFT_PALETTE_LIGHTEN(TFT_PALETTE_RED,3)); // ตีเส้นตารางด้วยพาเลทสีแดง สีอ่อน 3 ระดับ
@@ -149,8 +149,12 @@ void setup(){
              line_dsc->p2.x == chart[ii].coords()->x2 )
           {
             // หากกราฟิกระดับล่าง กำลังตีเส้นแนวนอน เส้นที่ 2, 12, 22
-            if(line_dsc->base.id1 == 2 || line_dsc->base.id1 == 12 || line_dsc->base.id1 == 22) {
+            // if(line_dsc->base.id1 == 2 || line_dsc->base.id1 == 12 || line_dsc->base.id1 == 22) {
+            if(line_dsc->base.id1%5 == 0 && line_dsc->base.id1 > 0) {
               line_dsc->opa = 180;                            // ให้โปร่งใสมากกว่าปกติที่เคยกำหนดไว้ 50 ขึ้นมาเป็น 180 (จะทำให้ดูเหมือนเข้มขึ้น)
+              // if(line_dsc->base.id1==15){                     // เส้นที่ id 15 ให้เป็นเส้นสีดำ
+              //   line_dsc->color = TFT_COLOR(TFT_BLACK);
+              // }
             }
           }
           else
@@ -158,7 +162,7 @@ void setup(){
              line_dsc->p2.y == chart[ii].coords()->y2 )
           {
             // หากกราฟิกระดับล่าง กำลังตีเส้นแนวตั้ง ทุกๆ เส้นที่ 10 ที่ไม่ใช่เส้นแรก
-            if(line_dsc->base.id1%10 == 0 && line_dsc->base.id1 > 0) {
+            if(line_dsc->base.id1%5 == 0 && line_dsc->base.id1 > 0) {
               line_dsc->opa = 180;                            // ให้โปร่งใสมากกว่าปกติที่เคยกำหนดไว้ 50 ขึ้นมาเป็น 180 (จะทำให้ดูเหมือนเข้มขึ้น)
             }
           }
@@ -178,13 +182,14 @@ void setup(){
       int8_t r = 1 + i;
       int8_t c = 0;
       chart_scale[i].grid_cell(c,r, GRID_ALIGN_STRETCH, GRID_ALIGN_CENTER,9,0);
-      chart_scale[i].height(CHART_CELL_WIDTH* (CHART_CELL_VER_BOX_NUM-4));
-      chart_scale[i].range(-10, 10);
-      chart_scale[i].mode(SCALE_MODE_VER_LEFT, 3, 1);
+      // chart_scale[i].height(CHART_CELL_WIDTH* (CHART_CELL_VER_BOX_NUM-4));
+      chart_scale[i].height(CHART_CELL_WIDTH* (CHART_CELL_VER_BOX_NUM));
+      chart_scale[i].range(-10, 15);
+      chart_scale[i].mode(SCALE_MODE_VER_LEFT, 6, 1);
       chart_scale[i].tick_length(3,0);
       chart_scale[i].axis_thickness(0);
       chart_scale[i].label_show(true);
-      static const char * custom_labels[] = {"-1.0", "0", "1.0", NULL};
+      static const char * custom_labels[] = {"-1.0", "", "0", "", "1.0", "", NULL};
       chart_scale[i].text_src(custom_labels);                // ข้อความ ที่ เส้นขีดหลัก
       chart_scale[i].color(TFT_WHITE);
       chart_scale[i].font(prasanmit_25, TFT_WHITE);
@@ -199,10 +204,11 @@ void setup(){
           label_dsc->ofs_x = -10;                                   // ให้เลื่อน ไปทางซ้าย 10px
           if(String(label_dsc->text) == "-1.0" ){                   // หากกำลังวาด "-1.0" ในกราฟิกระดับล่าง
             label_dsc->ofs_y = -5;                                  // ให้ปรับเลื่อนขึ้น 5px
-          }else
-          if(String(label_dsc->text) == "1.0" ){                    // หากกำลังวาด "1.0" ในกราฟิกระดับล่าง
-            label_dsc->ofs_y =  5;                                  // ให้ปรับเลื่อนลง 5px
           }
+          // else
+          // if(String(label_dsc->text) == "1.0" ){                    // หากกำลังวาด "1.0" ในกราฟิกระดับล่าง
+          //   label_dsc->ofs_y =  5;                                  // ให้ปรับเลื่อนลง 5px
+          // }
         }
       });
     }
@@ -272,21 +278,22 @@ void setup(){
       static int s=-1;
       s = (s+1)%SAMPLE_RATE;
       float t = s / (float)SAMPLE_RATE;
-      // float ecg_value = generateECG(t);
 
+      static int32_t cur_idx = -1;    
+      cur_idx = (cur_idx+1)% CHART_MAX_POINT_COUNT;
       for(int i=0; i< 6; i++){
-        // float A_P = 8;   // P-wave เล็กลง
-        // float A_QRS = 85; // QRS Complex คมชัด
-        // float A_T = 18;  // T-wave สมจริง
-
         // ปรับความแรงของแต่ละส่วนของคลื่น
         float A_P = random(5,20);     //10;  // ความแรงของ P-wave
         float A_QRS = random(70,110); //80; // ความแรงของ QRS complex
         float A_T = random(10,30);    //15;  // ความแรงของ T-wave
         float ecg_value = generateECG(t, A_P, A_QRS, A_T);
 
-        // chart[i].addPoint(series[i], random(-80,80));
-        chart[i].addPoint(series[i],ecg_value);
+        series[i]->y_points[cur_idx] = ecg_value;
+        // ใส่ ไม่มีข้อมูลให้ chart พ่วงท้าย 10 ข้อมูล
+        for(int j=cur_idx+1; j<= cur_idx+10; j++) {
+          series[i]->y_points[ j%CHART_MAX_POINT_COUNT] = CHART_POINT_NONE;
+        }
+        chart[i].invalidate();
       }
     });
 

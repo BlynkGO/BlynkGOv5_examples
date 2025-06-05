@@ -21,9 +21,11 @@ void setup()
     series2 = chart.createSerie(TFT_RED);
 
   for(int i = 0; i < 10 ; i++) {
-    series1->y_points[i] = random(10, 50); // กำหนดค่าแบบใส่โดยตรง
+    series1->y_points[i] = random(10, 50); // กำหนดค่าแบบใส่โดยตรง;  หากตำแหน่งไหน ไม่ต้องการให้มีข้อมูล ใส่ series1->y_points[i] = CHART_POINT_NONE;
     series2->y_points[i] = random(50, 90);
   }
+  chart.invalidate();
+
 }
 
 void loop()
