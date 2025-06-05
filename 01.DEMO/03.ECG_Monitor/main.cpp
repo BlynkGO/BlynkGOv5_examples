@@ -308,8 +308,8 @@ void setup(){
     //     }
     //     ecg_data_list.clear();  // หลังนำข้อมูล ecg_data_list ที่เป็น buffer สู่ series แล้วให้ เคลียร์ใน buffer ทิ้ง
     //
-    //     // เพื่อให้ดูเหมือนมีการเว้นช่วง ให้ใส่ที่ไม่มีข้อมูลให้ chart พ่วงท้าย 10 ข้อมูล เพิ่ม 
-    //     for(int j=cur_idx+1; j<= cur_idx+10; j++) {
+    //     // เพื่อให้ดูเหมือนมีการเว้นช่วง ให้ใส่ที่ไม่มีข้อมูลให้ chart พ่วงท้าย 15 ข้อมูล เพิ่ม 
+    //     for(int j=cur_idx+1; j<= cur_idx+15; j++) {
     //       series[i]->y_points[ j%CHART_MAX_POINT_COUNT] = CHART_POINT_NONE;
     //     }
     //     chart[i].invalidate();  // เพื่อทำการ update ตัว chart ใหม่ ด้วย series ที่เปลี่ยนแปลงไป
