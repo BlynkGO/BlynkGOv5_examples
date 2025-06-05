@@ -290,8 +290,8 @@ void setup(){
         float ecg_value = generateECG(t, A_P, A_QRS, A_T);
 
         series[i]->y_points[cur_idx] = ecg_value;
-        // ใส่ ไม่มีข้อมูลให้ chart พ่วงท้าย 20 ข้อมูล
-        for(int j=cur_idx+1; j<= cur_idx+20; j++) {
+        // ใส่ ไม่มีข้อมูลให้ chart พ่วงท้าย 15 ข้อมูล
+        for(int j=cur_idx+1; j<= cur_idx+15; j++) {
           series[i]->y_points[ j%CHART_MAX_POINT_COUNT] = CHART_POINT_NONE;
         }
         chart[i].invalidate();// เพื่อทำการ update ตัว chart ใหม่ ด้วย series ที่เปลี่ยนแปลงไป
