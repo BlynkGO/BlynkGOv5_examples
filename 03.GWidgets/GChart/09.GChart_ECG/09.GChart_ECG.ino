@@ -97,7 +97,6 @@ void setup() {
   });
   series = chart.createSerie(TFT_PALETTE(TFT_PALETTE_BLUE)); // สร้าง serie เส้นกราฟ ด้วยเส้นสีพาเลทน้ำเงิน
   chart.line_width(2, GPART_ITEMS);                 // ความหนาของเส้นกราฟ (เส้น series)
-  // chart.line_opa(180, GPART_ITEMS);                 // ความโปร่งใสของเส้นกราฟ (เส้น series);
 
   scale_axis_y.height(CHART_CELL_WIDTH* CHART_CELL_VER_BOX_NUM);
   scale_axis_y.range(CHART_Y_MIN, CHART_Y_MAX);
