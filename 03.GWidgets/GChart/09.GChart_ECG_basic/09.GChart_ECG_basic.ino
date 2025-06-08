@@ -17,40 +17,8 @@ GChart chart;
 
 GScale scale_axis_y;  // เส้น scale แกน y สำหรับ chart
 
-// Gaussian ฟังก์ชันสำหรับ QRS Complex
-float gaussian(float x, float mean, float sigma, float amplitude) {
-  return amplitude * exp(-pow(x - mean, 2) / (2 * pow(sigma, 2)));
-}
-
-// Exponential Decay สำหรับ P-wave และ T-wave
-float exp_decay(float x, float mean, float scale, float amplitude) {
-  return amplitude * exp(-fabs(x - mean) / scale);
-}
-
 // ฟังก์ชันสร้างค่าคลื่น ECG ให้ใกล้เคียงความเป็นจริง
-float generateECG(float t, float A_P, float A_QRS, float A_T) {
-  if( t <= 0.15 || t>=0.8) return 0;
-
-  float ecg = 0;
-
-  // P-wave: ใช้ Exponential Decay เพื่อให้ลักษณะโค้งสมจริง
-  ecg += exp_decay(t, 0.2, 0.15, A_P);
-
-  // QRS Complex: ใช้ Gaussian Mixture Model
-  // ecg += gaussian(t, 0.5, 0.02, A_QRS)  // Q
-  //      - gaussian(t, 0.52, 0.01, A_QRS * 1.5)  // R (Peak สูง)
-  //      + gaussian(t, 0.54, 0.015, A_QRS * 0.7); // S
-
-  ecg += gaussian(t, 0.5, 0.02, A_QRS);         // Q
-  ecg += gaussian(t, 0.52, 0.01, A_QRS * 1.5);  // R (param#3ลด Peak สูง)
-  ecg -= gaussian(t, 0.54, 0.015, A_QRS * 0.7);  // S
-
-  // T-wave: ใช้ Exponential Decay
-  ecg += exp_decay(t, 0.75, 0.2, A_T);
-
-  return constrain(ecg, -80, 80);
-}
-
+float generateECG(float t, float A_P, float A_QRS, float A_T);
 
 void setup() {
   Serial.begin(115200); Serial.println();
@@ -138,4 +106,39 @@ void setup() {
 
 void loop() {
   BlynkGO.update();
+}
+
+//---------------------------------------
+// Gaussian ฟังก์ชันสำหรับ QRS Complex
+float gaussian(float x, float mean, float sigma, float amplitude) {
+  return amplitude * exp(-pow(x - mean, 2) / (2 * pow(sigma, 2)));
+}
+
+// Exponential Decay สำหรับ P-wave และ T-wave
+float exp_decay(float x, float mean, float scale, float amplitude) {
+  return amplitude * exp(-fabs(x - mean) / scale);
+}
+
+// ฟังก์ชันสร้างค่าคลื่น ECG ให้ใกล้เคียงความเป็นจริง
+float generateECG(float t, float A_P, float A_QRS, float A_T) {
+  if( t <= 0.15 || t>=0.8) return 0;
+
+  float ecg = 0;
+
+  // P-wave: ใช้ Exponential Decay เพื่อให้ลักษณะโค้งสมจริง
+  ecg += exp_decay(t, 0.2, 0.15, A_P);
+
+  // QRS Complex: ใช้ Gaussian Mixture Model
+  // ecg += gaussian(t, 0.5, 0.02, A_QRS)  // Q
+  //      - gaussian(t, 0.52, 0.01, A_QRS * 1.5)  // R (Peak สูง)
+  //      + gaussian(t, 0.54, 0.015, A_QRS * 0.7); // S
+
+  ecg += gaussian(t, 0.5, 0.02, A_QRS);         // Q
+  ecg += gaussian(t, 0.52, 0.01, A_QRS * 1.5);  // R (param#3ลด Peak สูง)
+  ecg -= gaussian(t, 0.54, 0.015, A_QRS * 0.7);  // S
+
+  // T-wave: ใช้ Exponential Decay
+  ecg += exp_decay(t, 0.75, 0.2, A_T);
+
+  return constrain(ecg, -80, 80);
 }
