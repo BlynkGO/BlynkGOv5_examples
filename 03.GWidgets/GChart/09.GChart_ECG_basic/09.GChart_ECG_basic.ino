@@ -3,7 +3,7 @@
 #define DATA_SAMPLING_HZ            13      // จำนวนรับข้อมูล กี่ครั้งต่อวินาที (Hz) 
 
 #define CHART_CELL_WIDTH            10      // ขนาดกว้าง px ของ ช่องเล็กๆของเส้นกระดาษกราฟ
-#define CHART_CELL_HOR_BOX_NUM      60      // จำนวนช่อง ในแนวนอนทั้งหมด   (แทน 120 วินาที)
+#define CHART_CELL_HOR_BOX_NUM      60      // จำนวนช่อง ในแนวนอนทั้งหมด
 #define CHART_CELL_VER_BOX_NUM      20      // จำนวนช่อง ในแนวตั้งทั้งหมด
 
 #define CHART_Y_MIN                 -100
