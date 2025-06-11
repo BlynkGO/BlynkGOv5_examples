@@ -25,7 +25,6 @@ void setup(){
   cont_frame.GRID_CELL( GRID_COL{ 60, GRID_FR(1), 30}, GRID_ROW{GRID_CONTENT, 40, 280, 50});
   cont_frame.padding(0,20,0,0,0);
   cont_frame.font_color(TFT_WHITE);
-
     chart_rangebar_bp.grid_cell(1,2, GRID_ALIGN_STRETCH, GRID_ALIGN_END);
     chart_rangebar_bp.bg_opa(0);
     chart_rangebar_bp.range(40, 160);
@@ -163,9 +162,7 @@ void setup(){
             draw_label_dsc.color = TFT_COLOR(TFT_PALETTE_DARKEN(TFT_PALETTE_GRAY,1));
             draw_label_dsc.font = &prasanmit_15;
 
-            point_t txt_date_size;
-            lv_text_get_size(&txt_date_size, buf, draw_label_dsc.font, 0,0,LV_COORD_MAX, (lv_text_flag_t) 0);
-            label_area = { 0, 0, txt_date_size.x, txt_date_size.y };
+            text_get_area(&label_area, &draw_label_dsc);
             area_align(&rect_area, &label_area, ALIGN_TOP);
             chart_rangebar_bp.softdrawLabel(draw_label_dsc, label_area);
 
@@ -175,9 +172,7 @@ void setup(){
             draw_label_dsc.color = TFT_COLOR(TFT_PALETTE_DARKEN(TFT_PALETTE_GRAY,1));
             draw_label_dsc.font = &prasanmit_15;
 
-            point_t txt_sysdia_info_size;
-            lv_text_get_size(&txt_sysdia_info_size, buf, draw_label_dsc.font, 0,0,LV_COORD_MAX, (lv_text_flag_t) 0);
-            label_area = { 0, 0, txt_sysdia_info_size.x, txt_sysdia_info_size.y };
+            text_get_area(&label_area, &draw_label_dsc);
             area_align(&rect_area, &label_area, ALIGN_LEFT, 10, 3);
             chart_rangebar_bp.softdrawLabel(draw_label_dsc, label_area);
 
@@ -187,9 +182,7 @@ void setup(){
             draw_label_dsc.color = TFT_COLOR(TFT_BLACK);
             draw_label_dsc.font = &prasanmit_20;
 
-            point_t txt_sysdia_val_size;
-            lv_text_get_size(&txt_sysdia_val_size, buf, draw_label_dsc.font, 0,0,LV_COORD_MAX, (lv_text_flag_t) 0);
-            label_area = { 0, 0, txt_sysdia_val_size.x, txt_sysdia_val_size.y };
+            text_get_area(&label_area, &draw_label_dsc);
             area_align(&rect_area, &label_area, ALIGN_RIGHT, -10, 3 - (prasanmit_20.base_line-prasanmit_15.base_line)/2 );
             chart_rangebar_bp.softdrawLabel(draw_label_dsc, label_area);
 
@@ -199,10 +192,7 @@ void setup(){
             draw_label_dsc.color = TFT_COLOR(TFT_PALETTE_DARKEN(TFT_PALETTE_GRAY,1));
             draw_label_dsc.font = &prasanmit_15;
 
-            point_t txt_hr_info_size;
-            lv_text_get_size(&txt_hr_info_size, buf, draw_label_dsc.font, 0,0,LV_COORD_MAX, (lv_text_flag_t) 0);
-
-            label_area = { 0, 0, txt_hr_info_size.x, txt_hr_info_size.y };
+            text_get_area(&label_area, &draw_label_dsc);
             area_align(&rect_area, &label_area, ALIGN_LEFT, 10, 18);
             chart_rangebar_bp.softdrawLabel(draw_label_dsc, label_area);
             //------------------------------------------
@@ -212,12 +202,9 @@ void setup(){
             draw_label_dsc.color = TFT_COLOR(TFT_BLACK);
             draw_label_dsc.font = &prasanmit_20;
 
-            point_t txt_hr_val_size;
-            lv_text_get_size(&txt_hr_val_size, buf, draw_label_dsc.font, 0,0,LV_COORD_MAX, (lv_text_flag_t) 0);
-            label_area = { 0, 0, txt_hr_val_size.x, txt_hr_val_size.y };
+            text_get_area(&label_area, &draw_label_dsc);
             area_align(&rect_area, &label_area, ALIGN_RIGHT, -10, 18 - (prasanmit_20.base_line-prasanmit_15.base_line)/2 );
             chart_rangebar_bp.softdrawLabel(draw_label_dsc, label_area);
-
           }
         }
       }else if(event == EVENT_RELEASED){
