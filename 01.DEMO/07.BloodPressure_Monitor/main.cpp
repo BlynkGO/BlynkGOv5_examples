@@ -28,22 +28,22 @@ void setup(){
     chart_rangebar_bp.grid_cell(1,2, GRID_ALIGN_STRETCH, GRID_ALIGN_END);
     chart_rangebar_bp.bg_opa(0);
     chart_rangebar_bp.range(40, 160);
-    chart_rangebar_bp.point_count(24);       // จำนวนแท่ง rangebar ในหน้า chart_rangebar
-    chart_rangebar_bp.div_line_count(7, 1);  // ตีตารางเส้น แนวนอน 7 เส้น แนวตั้ง 1 เส้น
-    chart_rangebar_bp.pad_column(15);        // ระยะห่างระหว่าง แท่ง bar
+    chart_rangebar_bp.point_count(24);                              // จำนวนแท่ง rangebar ในหน้า chart_rangebar
+    chart_rangebar_bp.div_line_count(7, 1);                         // ตีตารางเส้น แนวนอน 7 เส้น แนวตั้ง 1 เส้น
+    chart_rangebar_bp.pad_column(15);                               // ระยะห่างระหว่าง แท่ง bar
     chart_rangebar_bp.line_dash_width(1);
     chart_rangebar_bp.line_dash_gap(2);
-    chart_rangebar_bp.bg_opa(OPA_100, GPART_SELECTED);      // GPART_SELECTED สำหรับ PART ส่วน touch popup area
+    chart_rangebar_bp.bg_opa(OPA_100, GPART_SELECTED);              // GPART_SELECTED สำหรับ PART ส่วน touch popup area
     chart_rangebar_bp.bg_color(TFT_WHITE, GPART_SELECTED);
 
     // ทำการ hook การวาดกราฟิกขณะกำลังวาดระดับล่าง
-    chart_rangebar_bp.hookDrawTask(true);                            // เปิดให้สามารถดักการวาดกราฟิกระดับล่างได้ด้วย
+    chart_rangebar_bp.hookDrawTask(true);                           // เปิดให้สามารถดักการวาดกราฟิกระดับล่างได้ด้วย
     chart_rangebar_bp.onDrawTask(GWIDGET_CB{                        // เมื่อมีการวาดกราฟิกระดับล่าง
-      if( chart_rangebar_bp.draw_part() == GPART_MAIN &&             // ขณะ กราฟิกระดับล่าง กำลังวาด ในส่วน main ของ chart
-          chart_rangebar_bp.draw_type() == DRAW_TASK_TYPE_LINE )     // ขณะ กราฟิกระดับล่าง กำลังวาด ตีเส้น line ของ chart
+      if( chart_rangebar_bp.draw_part() == GPART_MAIN &&            // ขณะ กราฟิกระดับล่าง กำลังวาด ในส่วน main ของ chart
+          chart_rangebar_bp.draw_type() == DRAW_TASK_TYPE_LINE )    // ขณะ กราฟิกระดับล่าง กำลังวาด ตีเส้น line ของ chart
       {
-        auto line_dsc = chart_rangebar_bp.draw_line_dsc();           // ดึงค่ารายละเอียดของ line ที่กำลังจะใช้วาดระดับล่าง
-        if(line_dsc->p1.x == chart_rangebar_bp.coords()->x1 &&       // หาก กำลังวาดเส้นแนวนอน (เนื่องจากไปเท่าระยะต้นและปลายของแนวนอน)
+        auto line_dsc = chart_rangebar_bp.draw_line_dsc();          // ดึงค่ารายละเอียดของ line ที่กำลังจะใช้วาดระดับล่าง
+        if(line_dsc->p1.x == chart_rangebar_bp.coords()->x1 &&      // หาก กำลังวาดเส้นแนวนอน (เนื่องจากไปเท่าระยะต้นและปลายของแนวนอน)
           line_dsc->p2.x == chart_rangebar_bp.coords()->x2 )
         {
           // หากกำลังวาดกราฟิกระดับล่าง กำลังตีเส้นแนวนอน โดยนับจากเส้นที่ อยู่ตรงกลางแนวนอน
@@ -60,19 +60,17 @@ void setup(){
       GChartRangeBar *p_rangebar = (GChartRangeBar*) widget;
       static int32_t pressed_id = CHART_POINT_NONE;
       if(event == EVENT_DRAW_POST_END){
-        uint32_t id = p_rangebar->pressed_point();       // point id ที่มีการ กดสัมผัส pressed เข้ามา
+        uint32_t id = p_rangebar->pressed_point();                      // id ที่มีการ กดสัมผัส pressed เข้ามา
         if(id == CHART_POINT_NONE || id == pressed_id) return;
         pressed_id = id;
-        auto _ser_bp = chart_rangebar_bp.series_first();
-        auto _ser_hr = chart_line_hr.series_first();
-        if(_ser_bp != NULL && _ser_hr != NULL) {
+        if(series_bp != NULL && series_hr != NULL) {
           point_t p;
-          p_rangebar->point_pos_by_id(_ser_bp, pressed_id, NULL, &p);        // ตำแหน่งของ point id สำหรับ series ที่ต้องการ
-          uint32_t col_w = p_rangebar->column_width();
-          int32_t bp_DIA, bp_SYS, hr;
+          p_rangebar->point_pos_by_id(series_bp, pressed_id, NULL, &p); // ตำแหน่งของ point id สำหรับ series ที่ต้องการ
+          uint32_t col_w = p_rangebar->column_width();                  // ความกว้างของ แท่ง rangebar
 
-          chart_rangebar_bp.get_value_by_id(_ser_bp, pressed_id, &bp_DIA, &bp_SYS);
-          chart_line_hr.get_value_by_id(_ser_hr, pressed_id, &hr);
+          int32_t bp_DIA, bp_SYS, hr;
+          chart_rangebar_bp.get_value_by_id(series_bp, pressed_id, &bp_DIA, &bp_SYS);   // รับค่า min, max ของ แท่งกราฟ rangebar จาก series ที่ id ที่ต้องการ
+          chart_line_hr.get_value_by_id(series_hr, pressed_id, &hr);                    // รับค่า ของ กราฟเส้น จากจาก series ที่ id ที่ต้องการ
 
           if(bp_SYS != CHART_POINT_NONE && bp_DIA != CHART_POINT_NONE && hr != CHART_POINT_NONE) {
             Serial.printf("[press_data] (%d) %d - %d : %d\n", pressed_id, bp_DIA, bp_SYS, hr);
@@ -108,7 +106,7 @@ void setup(){
               rect_area.x1 = rect_area.x2 - rect_area_width;
             }
 
-            p_rangebar->softdrawRect(rect_dsc, rect_area);
+            p_rangebar->softdrawRect(rect_dsc, rect_area);  // วาดระดับล่าง softdraw สี่เหลี่ยม 
             //------------------------------------------
             draw_triangle_dsc_t draw_triangle_dsc;
             draw_triangle_dsc_init(&draw_triangle_dsc);
@@ -131,7 +129,7 @@ void setup(){
               draw_triangle_dsc.p[1].x = draw_triangle_dsc.p[2].x - 10;
             }
 
-            p_rangebar->softdrawTriangle(draw_triangle_dsc);
+            p_rangebar->softdrawTriangle(draw_triangle_dsc);  // วาดระดับล่าง softdraw สามเหลี่ยม 
 
             //------------------------------------------
             draw_line_dsc_t draw_line_dsc;
@@ -143,7 +141,7 @@ void setup(){
             draw_line_dsc.p1.y = rect_area.y1+20;
             draw_line_dsc.p2.y = draw_line_dsc.p1.y;
             
-            p_rangebar->softdrawLine(draw_line_dsc);
+            p_rangebar->softdrawLine(draw_line_dsc);          // วาดระดับล่าง softdraw เส้น
 
             //------------------------------------------
             char buf[128];
@@ -157,9 +155,9 @@ void setup(){
             draw_label_dsc.color = TFT_COLOR(TFT_PALETTE_DARKEN(TFT_PALETTE_GRAY,1));
             draw_label_dsc.font = &prasanmit_15;
 
-            text_get_area(&label_area, &draw_label_dsc);
-            area_align(&rect_area, &label_area, ALIGN_TOP);
-            p_rangebar->softdrawLabel(draw_label_dsc, label_area);
+            text_get_area(&label_area, &draw_label_dsc);              // พื้นที่ที่ครอบข้อความ
+            area_align(&rect_area, &label_area, ALIGN_TOP);           // จัดให้พื้นที่ข้อความ ไว้ชิดบน ของพื้นที่สี่เหลี่ยม
+            p_rangebar->softdrawLabel(draw_label_dsc, label_area);    // วาดระดับล่าง softdraw ข้อความ
 
             //------------------------------------------
             snprintf(buf, sizeof(buf), SYMBOL_DUMMY"SYS/DIA");
