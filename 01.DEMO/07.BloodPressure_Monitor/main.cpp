@@ -57,68 +57,64 @@ void setup(){
       }
     });
     chart_rangebar_bp.event_cb([](GWIDGET, event_t event){
-      static bool _draw_post_end = false;
+      GChartRangeBar *p_rangebar = (GChartRangeBar*) widget;
       static int32_t pressed_id = CHART_POINT_NONE;
       if(event == EVENT_DRAW_POST_END){
-        _draw_post_end = true;
-        pressed_id = chart_rangebar_bp.pressed_point();       // point id ที่มีการ กดสัมผัส pressed เข้ามา
-        if(pressed_id == CHART_POINT_NONE) return;
+        uint32_t id = p_rangebar->pressed_point();       // point id ที่มีการ กดสัมผัส pressed เข้ามา
+        if(id == CHART_POINT_NONE || id == pressed_id) return;
+        pressed_id = id;
         auto _ser_bp = chart_rangebar_bp.series_first();
         auto _ser_hr = chart_line_hr.series_first();
         if(_ser_bp != NULL && _ser_hr != NULL) {
-          point_t p1,p2;
-          chart_rangebar_bp.point_pos_by_id(_ser_bp, pressed_id, NULL, &p1);        // ตำแหน่งของ point id สำหรับ series ที่ต้องการ
-          chart_line_hr.point_pos_by_id(_ser_hr, pressed_id, &p2);            // ตำแหน่งของ point id สำหรับ series ที่ต้องการ
-          uint32_t col_w = chart_rangebar_bp.column_width();
-          int32_t * y_array_min = chart_rangebar_bp.y_array_min(_ser_bp);    // ค่า y_array min ของกราฟ series ที่ต้องการ
-          int32_t * y_array_max = chart_rangebar_bp.y_array_max(_ser_bp);    // ค่า y_array max ของกราฟ series ที่ต้องการ
-          int32_t bp_DIA = y_array_min[(_ser_bp->start_point + pressed_id) % chart_rangebar_bp.point_count()]; // ค่า ของ series ณ ตำแหน่ง point id ที่สัมผัสใเข้ามา
-          int32_t bp_SYS = y_array_max[(_ser_bp->start_point + pressed_id) % chart_rangebar_bp.point_count()]; // ค่า ของ series ณ ตำแหน่ง point id ที่สัมผัสใเข้ามา
+          point_t p;
+          p_rangebar->point_pos_by_id(_ser_bp, pressed_id, NULL, &p);        // ตำแหน่งของ point id สำหรับ series ที่ต้องการ
+          uint32_t col_w = p_rangebar->column_width();
+          int32_t bp_DIA, bp_SYS, hr;
 
-          int32_t * y_array     = chart_line_hr.y_array(_ser_hr);    // ค่า y_array ของกราฟ series ที่ต้องการ
-          int32_t hr = y_array[(_ser_hr->start_point + pressed_id) % chart_line_hr.point_count()]; 
+          chart_rangebar_bp.get_value_by_id(_ser_bp, pressed_id, &bp_DIA, &bp_SYS);
+          chart_line_hr.get_value_by_id(_ser_hr, pressed_id, &hr);
 
           if(bp_SYS != CHART_POINT_NONE && bp_DIA != CHART_POINT_NONE && hr != CHART_POINT_NONE) {
             Serial.printf("[press_data] (%d) %d - %d : %d\n", pressed_id, bp_DIA, bp_SYS, hr);
 
             draw_rect_dsc_t rect_dsc;
-            chart_rangebar_bp.init_draw_rect_dsc(GPART_SELECTED, rect_dsc);
+            p_rangebar->init_draw_rect_dsc(GPART_SELECTED, rect_dsc);
             draw_rect_dsc_init(&rect_dsc); //?
-            rect_dsc.bg_color = TFT_COLOR(chart_rangebar_bp.bg_color(GPART_SELECTED));
-            rect_dsc.bg_opa = chart_rangebar_bp.bg_opa(GPART_SELECTED);//LV_OPA_50;
-            rect_dsc.radius = chart_rangebar_bp.radius(GPART_SELECTED);
+            rect_dsc.bg_color = TFT_COLOR(p_rangebar->bg_color(GPART_SELECTED));
+            rect_dsc.bg_opa = p_rangebar->bg_opa(GPART_SELECTED);//LV_OPA_50;
+            rect_dsc.radius = p_rangebar->radius(GPART_SELECTED);
 
             area_t rect_area;
-            rect_area.x1 = chart_rangebar_bp.obj->coords.x1 + p1.x - 100/2 - chart_rangebar_bp.padding_left(GPART_SELECTED); //- 20;
-            rect_area.x2 = chart_rangebar_bp.obj->coords.x1 + p1.x + 100/2 + chart_rangebar_bp.padding_right(GPART_SELECTED); // + 20;
-            rect_area.y1 = chart_rangebar_bp.obj->coords.y1 + p1.y - 70    + chart_rangebar_bp.padding_top(GPART_SELECTED); //- 30;
-            rect_area.y2 = chart_rangebar_bp.obj->coords.y1 + p1.y - 10    + chart_rangebar_bp.padding_bottom(GPART_SELECTED); //- 10;
+            rect_area.x1 = p_rangebar->obj->coords.x1 + p.x - 100/2 - p_rangebar->padding_left(GPART_SELECTED); //- 20;
+            rect_area.x2 = p_rangebar->obj->coords.x1 + p.x + 100/2 + p_rangebar->padding_right(GPART_SELECTED); // + 20;
+            rect_area.y1 = p_rangebar->obj->coords.y1 + p.y - 70    + p_rangebar->padding_top(GPART_SELECTED); //- 30;
+            rect_area.y2 = p_rangebar->obj->coords.y1 + p.y - 10    + p_rangebar->padding_bottom(GPART_SELECTED); //- 10;
 
             // ถ้า touch popup area สูงเกิน chart ให้ กดต่ำลงมา
-            if( rect_area.y1 < chart_rangebar_bp.obj->coords.y1) {
-              rect_area.y1 = chart_rangebar_bp.obj->coords.y1 + abs(chart_rangebar_bp.padding_top(GPART_SELECTED));
+            if( rect_area.y1 < p_rangebar->obj->coords.y1 + p_rangebar->border() + abs(p_rangebar->padding_top(GPART_SELECTED))) {
+              rect_area.y1 = p_rangebar->obj->coords.y1 + p_rangebar->border()+ abs(p_rangebar->padding_top(GPART_SELECTED));
               rect_area.y2 = rect_area.y1 + 60;
             }
             // ถ้า touch popup area ด้านซ้ายน้อยกว่า chart ให้เข้าไป chart
-            if( rect_area.x1 < chart_rangebar_bp.obj->coords.x1) {
+            if( rect_area.x1 < p_rangebar->obj->coords.x1 + p_rangebar->border() + abs(p_rangebar->padding_left(GPART_SELECTED))) {
               int32_t rect_area_width = rect_area.x2 - rect_area.x1;
-              rect_area.x1 = chart_rangebar_bp.obj->coords.x1 + abs(chart_rangebar_bp.padding_left(GPART_SELECTED));
+              rect_area.x1 = p_rangebar->obj->coords.x1+ p_rangebar->border() + abs(p_rangebar->padding_left(GPART_SELECTED));
               rect_area.x2 = rect_area.x1 + rect_area_width;
             }
             // ถ้า touch popup area ด้านขวามากกว่า chart ให้เข้าไป chart
-            if( rect_area.x2 > chart_rangebar_bp.obj->coords.x2) {
+            if( rect_area.x2 > p_rangebar->obj->coords.x2 - p_rangebar->border() - abs(p_rangebar->padding_right(GPART_SELECTED))) {
               int32_t rect_area_width = rect_area.x2 - rect_area.x1;
-              rect_area.x2 = chart_rangebar_bp.obj->coords.x2 - abs(chart_rangebar_bp.padding_right(GPART_SELECTED));
+              rect_area.x2 = p_rangebar->obj->coords.x2 - p_rangebar->border() - abs(p_rangebar->padding_right(GPART_SELECTED));
               rect_area.x1 = rect_area.x2 - rect_area_width;
             }
 
-            chart_rangebar_bp.softdrawRect(rect_dsc, rect_area);
+            p_rangebar->softdrawRect(rect_dsc, rect_area);
             //------------------------------------------
             draw_triangle_dsc_t draw_triangle_dsc;
             draw_triangle_dsc_init(&draw_triangle_dsc);
             draw_triangle_dsc.bg_color = TFT_COLOR(chart_rangebar_bp.bg_color(GPART_SELECTED));
             draw_triangle_dsc.bg_opa = OPA_100;
-            draw_triangle_dsc.p[0].x = chart_rangebar_bp.obj->coords.x1 + p1.x + col_w/2;
+            draw_triangle_dsc.p[0].x = chart_rangebar_bp.obj->coords.x1 + p.x + col_w/2;
             draw_triangle_dsc.p[0].y = rect_area.y2+10;
             draw_triangle_dsc.p[1].x = draw_triangle_dsc.p[0].x - 5;
             draw_triangle_dsc.p[1].y = rect_area.y2;
@@ -135,7 +131,7 @@ void setup(){
               draw_triangle_dsc.p[1].x = draw_triangle_dsc.p[2].x - 10;
             }
 
-            chart_rangebar_bp.softdrawTriangle(draw_triangle_dsc);
+            p_rangebar->softdrawTriangle(draw_triangle_dsc);
 
             //------------------------------------------
             draw_line_dsc_t draw_line_dsc;
@@ -147,7 +143,7 @@ void setup(){
             draw_line_dsc.p1.y = rect_area.y1+20;
             draw_line_dsc.p2.y = draw_line_dsc.p1.y;
             
-            chart_rangebar_bp.softdrawLine(draw_line_dsc);
+            p_rangebar->softdrawLine(draw_line_dsc);
 
             //------------------------------------------
             char buf[128];
@@ -163,7 +159,7 @@ void setup(){
 
             text_get_area(&label_area, &draw_label_dsc);
             area_align(&rect_area, &label_area, ALIGN_TOP);
-            chart_rangebar_bp.softdrawLabel(draw_label_dsc, label_area);
+            p_rangebar->softdrawLabel(draw_label_dsc, label_area);
 
             //------------------------------------------
             snprintf(buf, sizeof(buf), SYMBOL_DUMMY"SYS/DIA");
@@ -173,7 +169,7 @@ void setup(){
 
             text_get_area(&label_area, &draw_label_dsc);
             area_align(&rect_area, &label_area, ALIGN_LEFT, 10, 3);
-            chart_rangebar_bp.softdrawLabel(draw_label_dsc, label_area);
+            p_rangebar->softdrawLabel(draw_label_dsc, label_area);
 
             //------------------------------------------
             snprintf(buf, sizeof(buf), SYMBOL_DUMMY"%d/%d", bp_SYS, bp_DIA);
@@ -183,7 +179,7 @@ void setup(){
 
             text_get_area(&label_area, &draw_label_dsc);
             area_align(&rect_area, &label_area, ALIGN_RIGHT, -10, 3 - (prasanmit_20.base_line-prasanmit_15.base_line)/2 );
-            chart_rangebar_bp.softdrawLabel(draw_label_dsc, label_area);
+            p_rangebar->softdrawLabel(draw_label_dsc, label_area);
 
             //------------------------------------------
             snprintf(buf, sizeof(buf), SYMBOL_DUMMY"Pulse");
@@ -193,7 +189,7 @@ void setup(){
 
             text_get_area(&label_area, &draw_label_dsc);
             area_align(&rect_area, &label_area, ALIGN_LEFT, 10, 18);
-            chart_rangebar_bp.softdrawLabel(draw_label_dsc, label_area);
+            p_rangebar->softdrawLabel(draw_label_dsc, label_area);
             //------------------------------------------
 
             snprintf(buf, sizeof(buf), SYMBOL_DUMMY"%d", hr);
@@ -203,14 +199,9 @@ void setup(){
 
             text_get_area(&label_area, &draw_label_dsc);
             area_align(&rect_area, &label_area, ALIGN_RIGHT, -10, 18 - (prasanmit_20.base_line-prasanmit_15.base_line)/2 );
-            chart_rangebar_bp.softdrawLabel(draw_label_dsc, label_area);
+            p_rangebar->softdrawLabel(draw_label_dsc, label_area);
           }
         }
-      }else if(event == EVENT_RELEASED){
-        if(_draw_post_end){
-          _draw_post_end = false;
-        }
-        pressed_id = CHART_POINT_NONE;
       }
     });
 
