@@ -150,13 +150,12 @@ void setup(){
             chart_rangebar_bp.softdrawLine(draw_line_dsc);
 
             //------------------------------------------
-            draw_label_dsc_t draw_label_dsc;
-            draw_label_dsc_init(&draw_label_dsc);
-            draw_label_dsc.text_local = 1;
-            draw_label_dsc.align = LV_TEXT_ALIGN_LEFT;
-
             char buf[128];
             area_t label_area;
+
+            draw_label_dsc_t draw_label_dsc;
+            draw_label_dsc_init(&draw_label_dsc);
+
             snprintf(buf, sizeof(buf), SYMBOL_DUMMY"%s %02d:00-%02d:59", today_date, pressed_id, pressed_id);
             draw_label_dsc.text = buf;
             draw_label_dsc.color = TFT_COLOR(TFT_PALETTE_DARKEN(TFT_PALETTE_GRAY,1));
