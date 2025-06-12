@@ -19,6 +19,7 @@ class GDataMonitor : public GContainer {
       GContainer::padding(2);
       GContainer::radius(7);
       GContainer::flag_widget1(true);
+      GContainer::font(prasanmit_20, TFT_WHITE);
         lb_title.parent(this);          // บังคับ
         lb_title.grid_cell(0,0,3,1, GRID_ALIGN_STRETCH, GRID_ALIGN_CENTER);
         lb_title.text_align(TEXT_ALIGN_CENTER);
@@ -62,7 +63,6 @@ class GDataMonitor : public GContainer {
         page_body.layout(LAYOUT_COL_L,5,5,10,10,0);
           lb_data_monitor.parent(page_body);
           lb_data_monitor = "";
-          lb_data_monitor.font(prasanmit_15, TFT_WHITE);
     }
     // พิมพ์ธรรมดา (ไม่ขึ้นบรรทัดใหม่)
     inline void print(String new_data) {
@@ -118,13 +118,10 @@ class GDataMonitor : public GContainer {
       return _max_data_count;
     }
 
-    inline void font(const font_t&font)             { create(); lb_data_monitor.font(font);   }
-    inline void font_color(color_t c)               { create(); lb_data_monitor.color(c);     }
-    inline void font(const font_t&font, color_t c)  { create(); lb_data_monitor.font(font, c);}
-
   private:
     // ฟังก์ชันภายในใช้ update GLabel และ scroll
     inline void update_label_and_scroll() {
+      create();
       String combined;
       for (size_t i = 0; i < data_list.size(); ++i) {
         combined += data_list[i];
@@ -133,6 +130,7 @@ class GDataMonitor : public GContainer {
         }
       }
       lb_data_monitor = combined;
+      lb_data_monitor.color(GContainer::font_color());
 
       if(lb_data_monitor.width() > page_body.content_width()){
         page_body.scrollbar(SCROLLBAR_AUTO, true, true);
@@ -164,12 +162,12 @@ void setup(){
   BlynkGO.begin();
 
   DataMon.size(300, 200);
+  DataMon.font(prasanmit_20);
   
   static SoftTimer timer;
   timer.setInterval(1000,[](){
     DataMon.printf("Data %d\n", random(0xFFFF));
   });
-
 }
 
 void loop(){
