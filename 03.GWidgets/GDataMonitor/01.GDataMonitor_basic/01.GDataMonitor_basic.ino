@@ -167,7 +167,7 @@ void setup(){
   
   static SoftTimer timer;
   timer.setInterval(1000,[](){
-    DataMon.println(StringX::printf("Data %d", random(0xFFFF)));
+    DataMon.printf("Data %d\n", random(0xFFFF));
   });
 
 }
