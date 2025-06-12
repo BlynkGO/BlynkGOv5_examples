@@ -5,6 +5,7 @@ class GDataMonitor : public GContainer {
     GDataMonitor(GWidget& parent=GScreen) : GContainer(parent)  {} // บังคับให้มี
     GLabel lb_title;
     GLabel lb_control;
+    GLabel lb_clear;
     GPage  page_body;
     GLabel lb_data_monitor;
     std::vector<String> data_list;
@@ -14,12 +15,12 @@ class GDataMonitor : public GContainer {
       GContainer::create();             // บังคับ
       GContainer::size(300,200);
       GContainer::min_size(150,150);
-      GContainer::GRID_CELL(GRID_COL{GRID_FR(1), GRID_CONTENT}, GRID_ROW{GRID_CONTENT, GRID_FR(1)});
+      GContainer::GRID_CELL(GRID_COL{GRID_FR(1), GRID_CONTENT, GRID_CONTENT}, GRID_ROW{GRID_CONTENT, GRID_FR(1)});
       GContainer::padding(2);
       GContainer::radius(7);
       GContainer::flag_widget1(true);
         lb_title.parent(this);          // บังคับ
-        lb_title.grid_cell(0,0,2,1, GRID_ALIGN_STRETCH, GRID_ALIGN_CENTER);
+        lb_title.grid_cell(0,0,3,1, GRID_ALIGN_STRETCH, GRID_ALIGN_CENTER);
         lb_title.text_align(TEXT_ALIGN_CENTER);
         lb_title.bg_opa(255);
         lb_title.bg_color(TFT_PALETTE(TFT_PALETTE_BLUE));
@@ -30,19 +31,32 @@ class GDataMonitor : public GContainer {
         lb_control.parent(this);
         lb_control = SYMBOL_PLAY;
         lb_control.font(prasanmit_20, TFT_WHITE);
-        lb_control.padding_left(10);
+        lb_control.color(TFT_COLOR_HSV(0,0,20), GSTATE_PRESSED);
+        lb_control.padding_left(5);
         lb_control.padding_right(10);
-        lb_control.grid_cell(1,0, GRID_ALIGN_STRETCH, GRID_ALIGN_CENTER);
+        lb_control.grid_cell(2,0, GRID_ALIGN_STRETCH, GRID_ALIGN_CENTER);
         lb_control.clickable(true);
         lb_control.onClicked(GWIDGET_CB{
           GDataMonitor* _p_mon = (GDataMonitor*) (widget->user_data());
           _p_mon->flag_widget1(!_p_mon->flag_widget1());
           _p_mon->lb_control = _p_mon->flag_widget1()?  SYMBOL_PLAY : SYMBOL_PAUSE;
+        }, this);
 
+        lb_clear.parent(this);
+        lb_clear = SYMBOL_TRASH;
+        lb_clear.font(prasanmit_20, TFT_WHITE);
+        lb_clear.color(TFT_COLOR_HSV(0,0,20), GSTATE_PRESSED);
+        lb_clear.padding_left(5);
+        lb_clear.padding_right(5);
+        lb_clear.grid_cell(1,0, GRID_ALIGN_STRETCH, GRID_ALIGN_CENTER);
+        lb_clear.clickable(true);
+        lb_clear.onClicked(GWIDGET_CB{
+          GDataMonitor* _p_mon = (GDataMonitor*) (widget->user_data());
+          _p_mon->clear();
         }, this);
 
         page_body.parent(this);         // บังคับ
-        page_body.grid_cell(0,1, 2, 1, GRID_ALIGN_STRETCH, GRID_ALIGN_STRETCH);
+        page_body.grid_cell(0,1, 3, 1, GRID_ALIGN_STRETCH, GRID_ALIGN_STRETCH);
         page_body.color(TFT_COLOR_HSV(0,0,20));
         page_body.radius(5);
         page_body.layout(LAYOUT_COL_L,5,5,10,10,0);
@@ -119,9 +133,18 @@ class GDataMonitor : public GContainer {
         }
       }
       lb_data_monitor = combined;
+
+      if(lb_data_monitor.width() > page_body.content_width()){
+        page_body.scrollbar(SCROLLBAR_AUTO, true, true);
+      }else{
+        page_body.scrollbar(SCROLLBAR_AUTO, false, true);
+      }
       // scroll เฉพาะตอนอยู่ในสถานะ run
       if (this->flag_widget1()) {
         page_body.scroll_to_y(COORD_MAX, ANIM_OFF);
+        if(lb_data_monitor.width() > page_body.content_width()){
+          page_body.scroll_to_x(COORD_MAX, ANIM_OFF);
+        }
       }
     }
 
