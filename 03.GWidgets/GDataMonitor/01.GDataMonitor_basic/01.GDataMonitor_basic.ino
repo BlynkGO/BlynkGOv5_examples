@@ -162,7 +162,7 @@ void setup(){
   BlynkGO.begin();
 
   DataMon.size(300, 200);
-  DataMon.font(prasanmit_20);
+  // DataMon.font(prasanmit_30);  // เปลี่ยน font
   
   static SoftTimer timer;
   timer.setInterval(1000,[](){
