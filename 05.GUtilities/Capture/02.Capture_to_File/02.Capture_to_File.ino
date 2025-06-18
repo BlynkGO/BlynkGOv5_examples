@@ -29,12 +29,12 @@ void setup(){
   lb_capture_status.show(false);
 
   mywidget.onClicked(GWIDGET_CB{
-    // นามสกุลที่แปลงได้คือ .bmp  .jpg  .png ( สำหรับ png ใช้ได้สำหรับจอ BeeNeXT รุ่นที่มี PSRAM เท่านั้น)
-    bool ret = mywidget.capture("mywidget.bmp");
+    // นามสกุลที่แปลงได้คือ .bmp  .jpg  .png ( สำหรับ png ใช้ได้สำหรับวิตเจ็ตที่มีบางส่วนโปร่งใส และ เป็นจอ BeeNeXT รุ่นที่มี PSRAM เท่านั้น)
+    bool ret = mywidget.capture("mywidget.jpg");
 
-    // bool ret = mywidget.capture("SD:://mywidget.bmp");       // สำหรับบังคับ save ลง SD
-    // bool ret = mywidget.capture("SPIFFS:://mywidget.bmp");   // สำหรับบังคับ save ลง SPIFFS
-    // bool ret = mywidget.capture("LITTLEFS:://mywidget.bmp"); // สำหรับบังคับ save ลง LITTLEFS
+    // bool ret = mywidget.capture("SD:://mywidget.jpg");       // สำหรับบังคับ save ลง SD
+    // bool ret = mywidget.capture("SPIFFS:://mywidget.jpg");   // สำหรับบังคับ save ลง SPIFFS
+    // bool ret = mywidget.capture("LITTLEFS:://mywidget.jpg"); // สำหรับบังคับ save ลง LITTLEFS
 
     lb_capture_status.show(true);
     lb_capture_status = ( ret )? "capture saved!" : "capture failed!";
