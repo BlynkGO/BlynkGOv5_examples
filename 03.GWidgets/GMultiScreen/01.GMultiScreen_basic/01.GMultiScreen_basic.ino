@@ -11,7 +11,7 @@ void setup(){
   // multiscreen.color(TFT_BLUE);               // ใส่สีพื้นหลัง
   // multiscreen.image(your_background_image);  // ใส่รูปที่ต้องการทำพื้นหลัง
   multiscreen.addScreen(5);                     // เพิ่ม 5 screen ย่อย
-  Serial.println( multiscreen.child_num());
+  Serial.println( multiscreen.num());
   for(int i=0; i< 5; i++){
     label[i] = "หน้า" + String(i+1);
     label[i].parent(multiscreen[i]);            // วิตเจ็ตลูกที่ต้องการไปวางไว้ตาม หน้า screen ที่ต้องการ
