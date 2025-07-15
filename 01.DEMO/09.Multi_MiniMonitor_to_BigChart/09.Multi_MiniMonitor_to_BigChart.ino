@@ -96,7 +96,7 @@ void setup(){
     chart_body.point_count(30);
     chart_body.line_color(TFT_COLOR_HSV(0,0,40));
     chart_body.border_color(TFT_COLOR_HSV(0,0,40));
-    chart_body.div_line_count(5+1,0);
+    chart_body.div_line_count(5, 0);
     chart_body.update_mode(CHART_UPDATE_MODE_SHIFT);
       series_body= chart_body.createSerie(TFT_BLUE);
 
