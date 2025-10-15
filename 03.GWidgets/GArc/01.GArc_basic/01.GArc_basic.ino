@@ -41,7 +41,7 @@ void setup()
   //-------------------------
   // arc.mode(ARC_MODE_SYMMETRICAL);// กำหนด arc mode : ARC_MODE_NORMAL โหมดปกติ, ARC_MODE_REVERSE โหมดกลับทิศ, ARC_MODE_SYMMETRICAL โหมดสมมาตร
   // arc.bg_enable(true);           // ให้แสดง arc พื้นหลังด้วย
-  // arc.angle_offset(120);         // มุมเริ่มต้น นับจากแกน X-axis ทางคณิตศาสตร์ (หมุนตามเข็ม) : ค่าเริ่มต้น 135 องศา
+  // arc.angle_offset(120);         // มุมเริ่มต้น นับจากแกน X-axis ทางคณิตศาสตร์ (หมุนตามเข็ม) : ค่าเริ่มต้น 120 องศา
   // arc.bg_angle(0,270);           // arc พื้นหลัง เริ่มแสดงจาก มุม 0-270 องศา นับจาก มุมเริ่มต้น angle_offset (โดย arc.bg_enable(true); ด้วยถึงจะมองเห็น )
   // arc.angle(45,150);             // วาด arc แบบ กำหนดด้วยมุม โดยเริ่มจาก มุมเริ่มต้น angle_offset หมุนตามเข็มเสมอ ไม่ขึ้นกับ arc mode
   // arc.range(0,100);              // range ของค่าที่จะใช้กับ arc (หากไม่ใส่ จะเป็นช่วง 0-100 อัตโนมัติ)

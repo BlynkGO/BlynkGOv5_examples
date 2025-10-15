@@ -3,7 +3,7 @@
 // ภาพสำหรับทำพื้นหลัง
 IMAGE_DECLARE(img_smartfarm_bg);
 
-// รูปตรงกลาง ของ circle menu ไว้กด
+// รูป ของ expand menu ไว้กด
 IMAGE_DECLARE(img_lettuce_s);
 
 // icon สำหรับปุ่ม menu 6 ปุ่ม
