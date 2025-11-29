@@ -21,7 +21,7 @@ void setup(){
   truck.align(ALIGN_CENTER,0,-40);
   truck.onClicked(GWIDGET_CB{
     static GAnimation anim;
-    anim.init(truck, [](GWidget *widget, int32_t v){
+    anim.init(truck, [](GWIDGET, int32_t v){
       int l = BlynkGO.width() + truck.width();
       int x = (v <= l/2)? -v : l-v;
       truck.translate_x(x);

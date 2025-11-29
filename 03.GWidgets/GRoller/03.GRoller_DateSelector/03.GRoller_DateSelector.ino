@@ -16,7 +16,7 @@ GLabel lbDate;
   String mm = "มกราคม";
   String yy = "2510";
 
-void roller_onValueChange(GWidget *widget){
+void roller_onValueChange(GWIDGET){
   dd  = roller_day  .toString();
   mm  = roller_month.toString();
   yy  = roller_year .toString();

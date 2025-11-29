@@ -14,7 +14,7 @@ uint8_t minute = 0;
 uint8_t second = 0;
 
 
-void roller_onValueChange(GWidget *widget){
+void roller_onValueChange(GWIDGET){
   hour    = roller_hour   .toInt();
   minute  = roller_minute .toInt();
   second  = roller_second .toInt();
