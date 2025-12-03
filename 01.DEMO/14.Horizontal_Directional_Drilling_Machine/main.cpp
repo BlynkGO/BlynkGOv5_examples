@@ -183,7 +183,7 @@ void setup(){
       int32_t rod_id = slider_rod.value();
       lb_rod_id = rod_id;
       lb_elevation_m = StringX::printf("%.2f", depth_m[rod_id]);
-      for (int i = 0; i <= 84 ; i++) {
+      for (int i = 0; i < 84 ; i++) {
         if(i<= rod_id){
           series_rod_working->y_points[i] = depth_m[i] *10000;
         } else {
