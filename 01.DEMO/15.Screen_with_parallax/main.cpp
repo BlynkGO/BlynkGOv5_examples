@@ -36,7 +36,7 @@ void setup() {
   cont_main.position(0,0);
 
   for (int i = 0; i < 3; i++) {
-    // screen เป็นลูกของ cont_main
+    // page เป็นลูกของ cont_main
     screen[i].size(w, h);
     screen[i].parent(cont_main);
     screen[i].bg_opa(0);
@@ -60,8 +60,8 @@ void setup() {
   // ------------------------
   page_main.event_cb([](GWIDGET, event_t event){
     static int32_t scroll_start = 0;  // บันทึกตำแหน่งเริ่มต้น scroll
-    int screen_count = 3;               // จำนวน screen ทั้งหมด (3 หน้า)
-    int screen_w = w;                   // ความกว้างของแต่ละ screen (800px)
+    int screen_count = 3;               // จำนวน page ทั้งหมด (3 หน้า)
+    int screen_w = w;                   // ความกว้างของแต่ละ page (800px)
 
     // เมื่อผู้ใช้เริ่มเลื่อน
     if(event == EVENT_SCROLL_BEGIN){
@@ -73,12 +73,12 @@ void setup() {
 
       // วนลูปแต่ละ screen และปรับตำแหน่ง background image
       for(int i = 0; i < screen_count; i++){
-        // คำนวณจุดกึ่งกลางของ screen ที่ i
+        // คำนวณจุดกึ่งกลางของ page ที่ i
         int32_t cont_center = i*screen_w + screen_w/2;
         // คำนวณจุดกึ่งกลางที่กำลังแสดงบนหน้าจอ
         int32_t widget_center = scroll_x + screen_w/2;
 
-        // คำนวณ ratio ว่า screen ห่างจากจุดกึ่งกลางหน้าจอแค่ไหน (-1 ถึง 1)
+        // คำนวณ ratio ว่า page ห่างจากจุดกึ่งกลางหน้าจอแค่ไหน (-1 ถึง 1)
         float ratio = float(cont_center - widget_center)/(screen_w/2.0f);
         if(ratio < -1.0f) ratio = -1.0f;  // จำกัดค่าต่ำสุด
         if(ratio > 1.0f) ratio = 1.0f;    // จำกัดค่าสูงสุด
@@ -97,14 +97,14 @@ void setup() {
     // เมื่อผู้ใช้ปล่อยการเลื่อน (snap to page)
     else if(event == EVENT_SCROLL_END){
       int32_t scroll_x = page_main.scroll_x();
-      // คำนวณ screen index ที่ใกล้ที่สุด
+      // คำนวณ page index ที่ใกล้ที่สุด
       int page_index = (scroll_x + screen_w/2)/screen_w;
 
-      // จำกัดค่า screen index ให้อยู่ในช่วง
+      // จำกัดค่า page index ให้อยู่ในช่วง
       if(page_index < 0) page_index = 0;
       if(page_index >= screen_count) page_index = screen_count-1;
 
-      // Snap ไปที่ screen ที่เลือกแบบ smooth animation (200ms)
+      // Snap ไปที่ page ที่เลือกแบบ smooth animation (200ms)
       page_main.scroll_to_x(page_index * screen_w, ANIM_ON);
       page_main.anim_duration(200, GPART_SCROLLBAR);
     }
