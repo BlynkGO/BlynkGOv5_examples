@@ -1,13 +1,13 @@
 #include <BlynkGOv5.h>
 
-IMG_DECLARE(img_background_800x480);
-IMG_DECLARE(img_apple);
-IMG_DECLARE(img_banana);
-IMG_DECLARE(img_coconut);
-IMG_DECLARE(img_grape);
-IMG_DECLARE(img_lemon);
-IMG_DECLARE(img_mango);
-IMG_DECLARE(img_water_melon);
+IMAGE_DECLARE(img_background_800x480);
+IMAGE_DECLARE(img_apple);
+IMAGE_DECLARE(img_banana);
+IMAGE_DECLARE(img_coconut);
+IMAGE_DECLARE(img_grape);
+IMAGE_DECLARE(img_lemon);
+IMAGE_DECLARE(img_mango);
+IMAGE_DECLARE(img_water_melon);
 
 #define RADIUS_A       200
 #define RADIUS_B       80
