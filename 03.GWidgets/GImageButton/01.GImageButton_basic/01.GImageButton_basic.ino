@@ -1,5 +1,4 @@
 #include <BlynkGOv5.h>
-#include "GImageButton2.h"
 
 IMAGE_DECLARE(img_btn_released);
 IMAGE_DECLARE(img_btn_pressed);
