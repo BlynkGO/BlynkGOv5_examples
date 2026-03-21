@@ -1,12 +1,12 @@
 #include <BlynkGOv5.h>
 
-IMAGE_DECLARE(img_hand);
+IMAGE_DECLARE(img_hand);        // รูป เข็มหน้าปัด ให้เป็นแนวนอน ชี้ไปทางแกน X ทิศ +
 
 GScale scale_line;
-  GLine line_needle(scale_line);
+  GLine line_needle(scale_line);                // วิตเจ็ตเส้น ทำเป็นเข้มหน้าปัด ให้เป็นลูกของ GScale
 
 GScale scale_image;
-  GImage image_needle(img_hand, scale_image);
+  GImage image_needle(img_hand, scale_image);   // วิตเจ็ตรูป เข็มหน้าปัด ให้เป็นลูกของ GScale
 
 void setup() {
   Serial.begin(9600); Serial.println();
@@ -49,13 +49,13 @@ void setup() {
   scale_image.tick_length(10,5);
   scale_image.angle_range(270);
   scale_image.angle_offset(135);
-    image_needle.align(ALIGN_CENTER,47,-2);
-    image_needle.pivot(3,4);
+    image_needle.align(ALIGN_CENTER,47,-2);     // วางให้ รูปเข็มหน้าปัด มาอยู่กลาง GScale ที่เป็นแม่
+    image_needle.pivot(3,4);                    // กำหนดจุดหมุน ให้ระยะ x และ y เข้าไป ถึงจุดหมุน ของ รูป เข็มหน้าปัด ให้เป็นแนวนอน ชี้ไปทางแกน X ทิศ +
     image_needle.color(TFT_RED);
 
     static GAnimation anim_scale_image;
     anim_scale_image.init(scale_image,[](GWIDGET, int32_t v){
-      scale_image.image_needle_value(image_needle, v);
+      scale_image.image_needle_value(image_needle, v);    // กำหนดค่าของ value ให้วิตเจ็ตเข็มหน้าปัด ด้วย value ที่อยู่ระหว่าง range ของ scale
     }, 10,40, 1000, true, true );
     anim_scale_image.create();
 
