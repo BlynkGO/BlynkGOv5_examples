@@ -1,5 +1,7 @@
 #include <BlynkGOv5.h>
 
+FONT_DECLARE(prasanmit_15);
+
 GRect rect;
   GArc arc(rect);
     GRect  info(arc);
