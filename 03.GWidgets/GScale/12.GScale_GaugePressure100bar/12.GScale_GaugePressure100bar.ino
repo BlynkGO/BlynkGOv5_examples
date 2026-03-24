@@ -3,7 +3,6 @@
 FONT_DECLARE(prasanmit_15);
 FONT_DECLARE(prasanmit_18);
 
-IMAGE_DECLARE(img_gauge_100bar);
 IMAGE_DECLARE(img_gauge_dial);
 IMAGE_DECLARE(img_gauge_needle);
 
