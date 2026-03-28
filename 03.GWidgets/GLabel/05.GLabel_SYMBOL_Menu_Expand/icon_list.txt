@@ -1,0 +1,9 @@
+# นำไปแปลง ด้วยคำสั่ง 
+# > iconconv icon_list.txt --size 30
+dew_point f879
+directions_walk e536
+fire_check  fffa8
+mode_fan_2  fffd0
+more_horiz  e5d3    # สัญลักษณ์ ...
+more_vert e5d4
+climate_mini_split  f8b5  # แอร์
