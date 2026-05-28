@@ -17,14 +17,23 @@ void setup()
 
   chart.point_count(10);
 
-    series1 = chart.createSerie(TFT_BLUE);
-    series2 = chart.createSerie(TFT_RED);
+  series1 = chart.createSerie(TFT_BLUE);
+  series2 = chart.createSerie(TFT_RED);
 
-  for(int i = 0; i < 10 ; i++) {
-    series1->y_points[i] = random(10, 50);  // กำหนดค่าแบบ direct input ใส่โดยตรง;  หากตำแหน่งไหน ไม่ต้องการให้มีข้อมูล ใส่ series1->y_points[i] = CHART_POINT_NONE;
-    series2->y_points[i] = random(50, 90);
+  // กำหนดค่าแบบ direct input ใส่โดยตรง;  
+  // หากตำแหน่งไหน ไม่ต้องการให้มีข้อมูล ให้ใส่ CHART_POINT_NONE
+  // เช่น chart.y_array(series1)[5] = CHART_POINT_NONE;
+  //  ==> ค่า y ตำแหน่งที่ 5 ของ series1 ไม่มีข้อมูล กราฟ series1 จะข้ามไม่มีการวาดจุดนี้ไป
+  for(int i = 0; i < chart.point_count() ; i++) {
+    chart.y_array(series1)[i] = random(10, 50);   
+    chart.y_array(series2)[i] = random(50, 90);
+    // หรือ ใช้แบบนี้ก็ได้
+    // series1->y_points[i] = random(10, 50);
+    // series2->y_points[i] = random(50, 90);
   }
-  chart.refresh();                          // ให้มีด้วยหลัง มีการ ใส่แบบ direct input ให้ series
+
+  // *** สำคัญ *** ให้มีคำสั่งนี้ ด้วยหลัง มีการ ใส่ค่าแบบ direct input ให้ series แล้ว
+  chart.refresh();
 }
 
 void loop()

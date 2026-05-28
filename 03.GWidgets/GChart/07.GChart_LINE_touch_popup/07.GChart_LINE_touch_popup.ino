@@ -6,7 +6,6 @@ GChart chart;
 GScale scale_x_chart;
 GScale scale_y_chart;
 
-
 void setup()
 {
   Serial.begin(9600);
@@ -38,7 +37,7 @@ void setup()
   series1 = chart.createSerie(TFT_RED);
 
   // คำนวณความกว้างแท่ง bar
-  int32_t chart_bar_width = (chart.width() - (chart.point_count()-1) * chart.pad_column() )/  chart.point_count();
+  int32_t chart_bar_width = chart.bar_width();
 
   scale_x_chart.size(chart.width() - chart_bar_width - chart.pad_left() - chart.pad_right(), 50);
   scale_x_chart.align(chart, ALIGN_BOTTOM);

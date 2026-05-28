@@ -62,11 +62,17 @@ void setup(){
     chart.bg_opa(0);
     chart.line_width(0);
     chart.border(0);
+    
+    // จุดบน serie
+    chart.size(8, 8, GPART_INDICATOR);
+    chart.color(TFT_BLACK, GPART_INDICATOR);
+    chart.border(2, CHART_SERIE_COLOR, GPART_INDICATOR);
+
     chart.draw_grad(true);
     chart.touch_popup(true, [](chart_series_t* series, uint32_t id, int32_t value)->String{
       return StringX::printf("%d" SYMBOL_DEGREE "C", value);   // ค่าที่สัมผัส จะอยู่ระหว่าง 0-100 มาจัด format เองได้
     });
-    chart.chart_type(CHART_TYPE_LINE);
+    chart.chart_type(CHART_TYPE_LINE | CHART_TYPE_POINT);
 
     // สีพื้นหลัง touch popup
     chart.color(TFT_PALETTE_DARKEN(TFT_PALETTE_GRAY,2), GPART_SELECTED);
@@ -79,13 +85,6 @@ void setup(){
         timer_series_update.resume();
       });
     });
-
-    // จุดบน serie
-    chart.size(8, 8, GPART_INDICATOR);
-    // chart.style_width(8, GPART_INDICATOR);
-    // chart.style_height(8, GPART_INDICATOR);
-    chart.color(TFT_BLACK, GPART_INDICATOR);
-    chart.border(2, CHART_SERIE_COLOR, GPART_INDICATOR);
 
     scale_y_chart.height(chart_frame);
     scale_y_chart.mode(SCALE_MODE_VER_LEFT, CHART_BLOCK_Y_COUNT+1);

@@ -25,7 +25,18 @@ void setup()
       auto fill_dsc = chart.draw_fill_dsc();
       int32_t * y_array = chart.y_array(chart.series_next()); // ค่า pointer ของ y_array ของ series แรกสุด (ในทีนี้มี serie เดียว)
       int32_t value = y_array[chart.draw_id2()];              // ค่า y_array ณ id ที่เป็น id ที่กำลังวาดแท่ง ; value นี้จะมีค่า 0-100
-      fill_dsc->color = TFT_COLOR(TFT_COLOR_MIX(TFT_GREEN, TFT_RED, map(value, 0, 100, 0, 255))); // ปรับสีแท่งกราฟ ตาม id ที่ต้อฃการ
+      // กำหนดสีตามช่วง (Color Range)
+      if(value <= 20) {
+        fill_dsc->color = TFT_COLOR(TFT_RED);
+      } else if(value <= 40) {
+        fill_dsc->color = TFT_COLOR(TFT_ORANGE);
+      } else if(value <= 60) {
+        fill_dsc->color = TFT_COLOR(TFT_GREEN);
+      } else if(value <= 80) {
+        fill_dsc->color = TFT_COLOR(TFT_BLUE);
+      } else {
+        fill_dsc->color = TFT_COLOR(TFT_VIOLET);
+      }
     }
   });
 

@@ -23,7 +23,7 @@ void setup()
     series1 = chart.createSerie(TFT_BLUE);
     series2 = chart.createSerie(TFT_RED);
 
-  for(int i = 0; i < 10 ; i++) {
+  for(int i = 0; i < chart.point_count() ; i++) {
     chart.addPoint(series1, random(10, 50));    // ค่าใหม่เพิ่มต่อท้าย serie1 โดยต้องเปลี่ยนเป็นค่า 0-100
     chart.addPoint(series2, random(50, 90));
   }
