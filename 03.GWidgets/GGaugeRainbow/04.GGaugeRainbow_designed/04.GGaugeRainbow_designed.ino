@@ -4,7 +4,7 @@
 class GMyGaugeRainbow : public GGaugeRainbow 
 {
   public:
-    GMyGaugeRainbow(GWidget&parent=GScreen) : GGaugeRainbow(parent) {}
+    GMyGaugeRainbow(GPARENT) : GGaugeRainbow(parent) {}
     String _title;
     String _unit;
 

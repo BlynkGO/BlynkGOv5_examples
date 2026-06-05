@@ -2,7 +2,7 @@
 
 class MyWidget : public GRect {
   public:
-    MyWidget(GWidget&parent=GScreen) : GRect(parent)  {}
+    MyWidget(GPARENT) : GRect(parent)  {}
     GLabel  label;
     GGaugeRainbow gauge;
     void create(){

@@ -10,7 +10,7 @@
 class GMyGaugeRainbow : public GGaugeRainbow
 {
   public:
-    GMyGaugeRainbow(GWidget&parent=GScreen) : GGaugeRainbow(parent) {}
+    GMyGaugeRainbow(GPARENT) : GGaugeRainbow(parent) {}
     String _title = "Title";
     void create(){
       if(this->isCreated()) return;

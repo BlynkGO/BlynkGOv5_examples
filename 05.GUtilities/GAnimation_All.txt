@@ -1,0 +1,829 @@
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!! ตัวอย่าง: 01.GAnimation_basic
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+FILE: 01.GAnimation_basic.ino
+----------------------------------------
+#include <BlynkGOv5.h>
+
+IMAGE_DECLARE(img_football);                      // ประกาศทรัพยากร รูป c file ก่อนนำไปใช้ตามวิตเจ็ตต่างๆ
+
+GImage football(img_football);                    // วิตเจ็ตรูปภาพ football โดยโหลดรูป แบบ c file
+GAnimation animation[2];                          // ประกาศตัวแปร GAnimation 2 ชุด
+
+void setup() {
+  Serial.begin(115200); Serial.println();
+  BlynkGO.begin();
+  BlynkGO.fillScreen(TFT_GREEN);
+  
+  football.create();
+  
+  // กำหนดให้ animation ใช้สำหรับ วิตเจ็ตรูปภาพ football 
+  // ด้วยการปรับค่ามุม ด้วยฟังกชั่น ANIM_ANGLE (ฟังกชั่นภายใน BlynkGO ที่เตรียมไว้ให้ )
+  // โดย ให้ปรับ ค่ามุมหมุนจาก 0 ไป 360 (ตามเข็มจาก 12 นาฬิกา) ภายใน 4 วินาที 
+  animation[0].init(football, ANIM_ANGLE, 0, 360, 4000);
+  animation[0].repeat_count(ANIM_REPEAT_INFINITE);      // ให้มีการเล่นซ้ำไปเรื่อยๆ หลัง animation ครบรอบ
+  animation[0].start();                                 // ทำการลงทะเบียนให้ animation[0] เริ่มทำงาน
+
+  // กำหนดให้ animation ใช้สำหรับ วิตเจ็ตรูปภาพ football 
+  // ด้วยการเปลี่ยนตำแหน่ง x ของวิตเจ็ต ด้วยฟังกชั่น ANIM_X (ฟังกชั่นภายใน BlynkGO ที่เตรียมไว้ให้ )
+  // เริ่มจาก x = -football.width() ไปจนถึง x = BlynkGO.width() ภายใน 10 วินาที
+  animation[1].init(football, ANIM_X, -football.width(), BlynkGO.width(), 10000 );
+  animation[1].repeat_count(ANIM_REPEAT_INFINITE);      // ให้มีการเล่นซ้ำไปเรื่อยๆ  หลัง animation ครบรอบ
+  animation[1].start();                                 // ทำการลงทะเบียนให้ animation[1] เริ่มทำงาน
+
+}
+
+void loop() {
+  BlynkGO.update();
+}
+
+
+
+
+
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!! ตัวอย่าง: 02.GAnimation_FanSwitch
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+FILE: 02.GAnimation_FanSwitch.ino
+----------------------------------------
+#include <BlynkGOv5.h>
+
+IMAGE_DECLARE(img_fan_part01);
+IMAGE_DECLARE(img_fan_part02);
+IMAGE_DECLARE(img_fan_part03);
+
+GImage fan(img_fan_part01);
+  GImage fan_blade(img_fan_part02, fan);
+  GImage fan_guard(img_fan_part03, fan);
+
+GContainer fan_switch(LAYOUT_ROW_M, 6, 6, 6, 6, 3);
+  GButton btn[4];
+
+void setup()
+{
+  Serial.begin(9600);
+  Serial.println();
+  BlynkGO.begin();
+
+  fan.align(ALIGN_CENTER);
+    fan_blade.center(93, 90);
+    fan_guard.center(93, 90);
+
+  fan_switch.color(TFT_COLOR_HEX(0xf6b666));
+  fan_switch.radius(30);
+  for(int i = 0; i < 4; i++) {
+    btn[i] = (i == 0) ? String("OFF") : String(i);
+    btn[i].size(60, 40);
+    btn[i].mode(BUTTON_SWITCH);
+    btn[i].font(prasanmit_25);
+    btn[i].radius(RADIUS_CIRCLE);
+    btn[i].parent(fan_switch);
+    btn[i].onClicked(GWIDGET_CB {
+      static GAnimation anim_fan;
+      int ii = (GButton *)widget - &btn[0];
+      for(int i = 0; i < 4; i++) {
+        if(i != ii || i == 0) {
+          btn[i].OFF();
+        }
+      }
+      switch(ii) {
+        case 0:
+          anim_fan.del();
+          break;
+        case 1:
+          anim_fan.init(fan_blade, ANIM_ANGLE, 360, 0, 1000, true);
+          anim_fan.start();
+          break;
+        case 2:
+          anim_fan.init(fan_blade, ANIM_ANGLE, 360, 0, 600, true);
+          anim_fan.start();
+          break;
+        case 3:
+          anim_fan.init(fan_blade, ANIM_ANGLE, 360, 0, 300, true);
+          anim_fan.start();
+          break;
+      }
+    });
+    fan_switch.align(fan, ALIGN_BOTTOM, 0, 20);
+  }
+}
+
+void loop()
+{
+  BlynkGO.update();
+}
+
+
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!! ตัวอย่าง: 03.GAnimation_path_type
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+FILE: 03.GAnimation_path_type.ino
+----------------------------------------
+/* For 800 x 480 px */
+
+#include <BlynkGOv5.h>
+
+IMAGE_DECLARE(img_racing);
+IMAGE_DECLARE(img_mario);
+IMAGE_DECLARE(img_luigi);
+IMAGE_DECLARE(img_peach);
+IMAGE_DECLARE(img_toad);
+IMAGE_DECLARE(img_turtle);
+IMAGE_DECLARE(img_yoshi);
+
+GImage racing(img_racing);
+GImage mario(img_mario);
+GImage luigi(img_luigi);
+GImage peach(img_peach);
+GImage toad(img_toad);
+GImage turtle(img_turtle);
+GImage yoshi(img_yoshi);
+
+GImage* pp[6] = { &mario, &luigi, &peach, &toad, &turtle, &yoshi};
+GAnimation a[6];
+anim_path_type_t path_type[6] = {
+  ANIM_PATH_LINEAR,         // ปกติ ค่าเพิ่มแบบ liner, 
+  ANIM_PATH_EASE_IN,        // ค่า จากค่อยๆช้า->เร็ว,      เช่น ลูกบอล กลิ้งลงจากทางชัน, ลูกบอลกระเด้ง ที่สม่ำเสมอไปเรื่อยๆ
+  ANIM_PATH_EASE_OUT,       // ค่า จากเร็ว->ช้าลง, 
+  ANIM_PATH_EASE_IN_OUT,    // ค่า จากค่อยๆช้า->เร็ว->ช้า,  เช่น ลูกตุ้ม Pendulum
+  ANIM_PATH_OVERSHOOT,      
+  ANIM_PATH_BOUNCE, 
+};
+
+GLabel lb_path[6] = {
+  "การเคลื่อนที่แบบ เชิงเส้น",
+  "การเคลื่อนที่แบบ EASE IN",
+  "การเคลื่อนที่แบบ EASE OUT",
+  "การเคลื่อนที่แบบ EASE IN OUT",
+  "การเคลื่อนที่แบบ OVERSHOOT",
+  "การเคลื่อนที่แบบ เด้ง",
+};
+
+
+GButton btn;
+void setup() {
+  Serial.begin(9600);
+  BlynkGO.begin();
+
+  racing.align(ALIGN_CENTER);
+  for(int i=0; i<6; i++){
+    lb_path[i].center(400, 40+20+80*i);
+    pp[i]->center(35,40+80*i);
+    a[i].init(pp[i],ANIM_X,3,690, 3000, path_type[i]);
+  }
+  a[0].completed_cb([](GANIMATION){  
+    static SoftTimer timer;
+    timer.delay(2000,[](){
+      btn.show(true);
+    });
+  });
+
+  btn ="Start";
+  btn.font(prasanmit_20);
+  btn.align(ALIGN_BOTTOM_RIGHT,-150,-5);
+  btn.onClicked(GWIDGET_CB{
+    static uint8_t state=1;
+    switch(state){
+      case 0:
+        for(int i=0;i<6; i++){
+          pp[i]->center(35,40+80*i);
+        }
+        state = 1;
+        break;
+      case 1:
+        btn.show(false);
+        for(int i=0;i<6; i++){
+          a[i].start();
+        }
+        state = 0;
+        break;
+    }
+  });
+
+}
+
+void loop(){
+  BlynkGO.update();
+}
+
+
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!! ตัวอย่าง: 04.GAnimation_custom_path
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+FILE: 04.GAnimation_custom_path.ino
+----------------------------------------
+#include <BlynkGOv5.h>
+
+#define CHART_POINTS_NUM 256
+
+GContainer cont(
+  GRID_CELL_COL {GRID_FR(1), 200, GRID_FR(1)},
+  GRID_CELL_ROW {30, 15, 15, GRID_FR(1)}
+);
+  GRect anim_obj(cont);
+  GLabel lb_p1(cont);
+  GLabel lb_p2(cont);
+  GSlider slider_p1(cont);
+  GSlider slider_p2(cont);
+  GButton btn_run(cont);
+  GChart  chart(cont);
+    chart_series_t * ser;
+
+void G_refer_chart_cubic_bezier()
+{
+  for(uint16_t i = 0; i <= CHART_POINTS_NUM; i ++) {
+    uint32_t t = i * (1024 / CHART_POINTS_NUM);
+    int32_t step = lv_bezier3(t, 0, slider_p1.toInt(), slider_p2.toInt(), 1024);
+    chart.value_by_id2(ser, i, t, step);
+  }
+  chart.refresh();
+}
+
+void setup()
+{
+  Serial.begin(9600); Serial.println();
+  BlynkGO.begin(); BlynkGO.fillScreen(TFT_BLACK);
+
+  cont.size(320, 240);
+  cont.padding(10);
+
+  anim_obj.size(20, 20);
+  anim_obj.color(TFT_PALETTE(TFT_PALETTE_RED));
+  anim_obj.grid_cell(0,0);
+
+  lb_p1 = "p1:0";
+  lb_p1.font(prasanmit_15, TFT_BLACK);
+  lb_p1.grid_cell(0,1);
+  lb_p1.grid_cell_align(GRID_ALIGN_START, GRID_ALIGN_CENTER);
+
+  lb_p2 = "p2:0";
+  lb_p2.font(prasanmit_15, TFT_BLACK);
+  lb_p2.grid_cell(0,2);
+  lb_p2.grid_cell_align(GRID_ALIGN_START, GRID_ALIGN_CENTER);
+
+  slider_p1.range(0, 1024);
+  slider_p1.width(190);
+  slider_p1.grid_cell(1,1);
+
+  slider_p2.range(0, 1024);
+  slider_p2.width(190);
+  slider_p2.grid_cell(1,2);
+
+  slider_p1.onValueChanged(GWIDGET_CB {
+    lb_p1 = StringX::printf("p1:%d", slider_p1.toInt());
+    G_refer_chart_cubic_bezier();
+  });
+  slider_p2.onValueChanged(GWIDGET_CB {
+    lb_p2 = StringX::printf("p2:%d", slider_p2.toInt());
+    G_refer_chart_cubic_bezier();
+  });
+
+  btn_run = SYMBOL_PLAY;
+  btn_run.grid_cell(2, 1);
+  btn_run.grid_cell_span(1, 2);
+  btn_run.grid_cell_align(GRID_ALIGN_STRETCH, GRID_ALIGN_STRETCH);
+  btn_run.onClicked(GWIDGET_CB{
+    static GAnimation anim;
+    int32_t end = cont.content_width() - anim_obj.width();
+    anim.init(anim_obj, [](GWIDGET, int32_t value){
+      anim_obj.translate_x(value);
+    }, 0, end, 2000);
+
+    anim.path_cb([](int32_t cur_time, int32_t total_time, int32_t start_value, int32_t end_value)->int32_t
+    {
+      uint32_t t = map(cur_time, 0, total_time, 0, 1024);
+      int32_t step = lv_bezier3(t, 0, slider_p1.toInt(), slider_p2.toInt(), 1024);
+      int32_t new_value;
+      new_value = step * (end_value - start_value);
+      new_value = new_value >> 10; // คือ new_value/2^10
+      new_value += start_value;
+      return new_value;
+    });
+    anim.start();
+  });
+
+
+  chart.type(CHART_TYPE_SCATTER);
+  chart.range(CHART_AXIS_PRIMARY_X, 0, 1024);
+  chart.range(CHART_AXIS_PRIMARY_Y, 0, 1024);
+  chart.point_count(CHART_POINTS_NUM);
+  chart.grid_cell(0, 3);
+  chart.grid_cell_span(3, 1);
+
+  ser = chart.createSerie(TFT_PALETTE(TFT_PALETTE_RED));
+
+  G_refer_chart_cubic_bezier();
+
+}
+
+void loop()
+{
+  BlynkGO.update();
+}
+
+
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!! ตัวอย่าง: 05.GAnimation_MyWidget_BOUNCE
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+FILE: 05.GAnimation_MyWidget_BOUNCE.ino
+----------------------------------------
+#include <BlynkGOv5.h>
+
+class MyWidget : public GRect {
+  public:
+    MyWidget(GWidget& parent= GScreen) : GRect(parent)  { }
+
+    GLabel lb_title;
+    GLabel lb_value;
+
+    void create(){
+      if(!this->isCreated()) {
+        GRect::create();
+        GRect::size(200,120);
+        GRect::radius(20);
+        GRect::border(5, TFT_COLOR_HSV(240, 100, 80));
+        GRect::padding_hor(10);
+        GRect::padding_ver(10);
+        lb_title.parent(this);
+        lb_title.position(0,0);
+        lb_title.font(prasanmit_20);
+        lb_title = "Title";
+        lb_value.parent(this);
+        lb_value.font(BebasNeueBold_num_45);
+        lb_value.align(ALIGN_BOTTOM,0,-10);
+        lb_value = String(0.00,2);
+      }
+    }
+
+    inline void title(String title)     { create(); lb_title = title;           }
+    inline void value(float value)      { create(); lb_value = String(value,2); }
+};
+
+MyWidget mytemp;
+MyWidget myhumid;
+GButton  btn_anim;
+
+void setup() {
+  Serial.begin(115200); Serial.println();
+  BlynkGO.begin();
+
+  mytemp.title("อุณหภูมิ");
+  mytemp.value(23.54);
+  mytemp.align(ALIGN_CENTER, -mytemp.width()/2-5);
+
+  myhumid.title("ความชื้น");
+  myhumid.value(89.45);
+  myhumid.align(ALIGN_CENTER, myhumid.width()/2+5);
+
+  btn_anim = "Animation";
+  btn_anim.align(ALIGN_BOTTOM,0,-20);
+  btn_anim.onClicked(GWIDGET_CB{
+    mytemp .update_position();            // อัพเดตตำแหน่งให้เป็น ตำแหน่งแบบสมบูรณ์
+    myhumid.update_position();            // อัพเดตตำแหน่งให้เป็น ตำแหน่งแบบสมบูรณ์
+    static GAnimation anim;
+    anim.init([](void*, int32_t v){
+      mytemp .posX(map(v,0,1024,-mytemp.width(),BlynkGO.width()/2 - mytemp.width() - 5));
+      myhumid.posX(map(v,0,1024,BlynkGO.width(),BlynkGO.width()/2 + 5));
+    }, 0, 1024, 1000, ANIM_PATH_BOUNCE);  // ค่า v เริ่มตั้งแต่ 0 ถึง 1024 ภายในเวลา 1000 ms โดย v มีการเปลี่ยนแปลงค่าแบบวิถีค่าเด้ง (ANIM_PATH_BOUNCE)
+    anim.start();
+  });
+}
+
+void loop() {
+  BlynkGO.update();
+}
+
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!! ตัวอย่าง: 06.GTimeline_basic
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+FILE: 06.GTimeline_basic.ino
+----------------------------------------
+#include <BlynkGOv5.h>
+
+#define RECT_WIDTH    90
+#define RECT_HEIGHT   70
+
+GContainer cont_rect(LAYOUT_ROW_M,10,10,10,10,20);
+  GRect rect1(cont_rect);
+  GRect rect2(cont_rect);
+  GRect rect3(cont_rect);
+
+GSlider slider_timeline;
+GLabel  lb_timeline;
+
+GButton btn(BUTTON_SWITCH);
+
+GTimeline timeline;
+  GAnimation anim1;
+  GAnimation anim2;
+  GAnimation anim3;
+
+void setup() {
+  Serial.begin(9600);
+  BlynkGO.begin();
+
+  cont_rect.bg_opa(0);
+    rect1.size(RECT_WIDTH, RECT_HEIGHT);
+    rect2.size(RECT_WIDTH, RECT_HEIGHT);
+    rect3.size(RECT_WIDTH, RECT_HEIGHT);
+
+  slider_timeline.align(cont_rect, ALIGN_BOTTOM,0,30);
+  slider_timeline.range(0, PROGRESS_MAX);                 // PROGRESS_MAX = 65535
+  slider_timeline.onValueChanged(GWIDGET_CB{
+    timeline = slider_timeline.toInt();                   // กำหนดค่า progress ปัจจุบันให้ timeline (อยุ่ระหว่าง 0- PROGRESS_MAX = 65535)
+    lb_timeline = timeline.progress_ms() + String(" ms"); // แสดงค่า progress ในหน่วย ms (ค่าระหว่าง 0- playtime)
+  });
+  lb_timeline = "0 ms";
+  lb_timeline.align(slider_timeline, ALIGN_BOTTOM,0,20);
+  
+  btn = SYMBOL_STOP " หยุด";
+  btn.align(slider_timeline,ALIGN_TOP, 0, -RECT_HEIGHT -30 - 50);
+  btn.event_cb(GWIDGET_EVENT_CB{
+    static bool is_longpressed;
+    switch(event){
+      case EVENT_PRESSED:
+        is_longpressed = false;
+        break;
+      case EVENT_LONG_PRESSED:
+        is_longpressed = true;
+        timeline.stop();
+        btn.OFF();
+        btn = SYMBOL_STOP " หยุด";
+        break;
+      case EVENT_CLICKED:
+        if(is_longpressed) { btn.OFF(); return; }
+        if(btn.isON()) {
+          timeline.start();
+          btn = SYMBOL_PLAY " เล่น";
+        }else{
+          timeline.pause();
+          btn = SYMBOL_PAUSE " หยุดชั่วคราว";
+        }
+        break;
+    }
+  });
+
+  anim1.init(rect1, [](GWIDGET, int32_t v){
+    rect1.size( map(v,0,1024,0,RECT_WIDTH),  map(v,0,1024,0,RECT_HEIGHT));
+  }, 0,1024,300);                       // ค่า v : 0-1024 ใน 300 ms โดย ค่าเพิ่มแบบ LINEAR
+
+  anim2.init(rect2, [](GWIDGET, int32_t v){
+    rect2.size( map(v,0,1024,0,RECT_WIDTH),  map(v,0,1024,0,RECT_HEIGHT));
+  }, 0,1024,300, ANIM_PATH_EASE_OUT);   // ค่า v : 0-1024 ใน 300 ms โดย ค่าเพิ่มแบบ EASE_OUT  (เร็วไปช้า)
+
+  anim3.init(rect3, [](GWIDGET, int32_t v){
+    rect3.size( map(v,0,1024,0,RECT_WIDTH),  map(v,0,1024,0,RECT_HEIGHT));
+  }, 0,1024,300, ANIM_PATH_OVERSHOOT);  // ค่า v : 0-1024 ใน 300 ms โดย ค่าเพิ่มแบบ OVERSHOOT (ค่าพุ่งไปเกินระดับจุดหมายเล็กๆแล้วเข้าสู่ค่าจุดหมาย)
+
+  timeline.add(0  , anim1);     // timeline ณ เวลา ms : 0    ให้เริ่มเล่น anim1
+  timeline.add(200, anim2);     // timeline ณ เวลา ms : 200  ให้เริ่มเล่น anim2
+  timeline.add(400, anim3);     // timeline ณ เวลา ms : 400  ให้เริ่มเล่น anim3
+  timeline.progress_ms(200);
+
+  Serial.println(timeline.playtime());  // แสดงระยะเวลา timeline ทั้งหมด (ms)
+
+  // เมื่อ timeline กำลังทำงาน ค่า progress จะ เปลี่ยนไป ระหว่าง 0 -- PROGRESS_MAX = 65535
+  timeline.onProgress([](GTIMELINE){
+    slider_timeline = timeline.toInt();                     // progress ของ timeline มีค่า 0 -- PROGRESS_MAX = 65535
+    lb_timeline = timeline.progress_ms() + String(" ms");   // แสดงค่า progress ในหน่วย ms (ค่าระหว่าง 0- playtime)
+  });
+
+  // เมื่อ timeline ทำงานไปจนจบในรอบ ทิศทาง นั้นๆ
+  timeline.onCompleted([](GTIMELINE){
+    if(btn.isON()){
+      timeline.reverse(!timeline.reverse());  // กลับทิศทาง จากเดิม
+      timeline.start();
+    }
+  });
+
+  // timeline.progress_ms(200);       // กำหนดค่าเริ่มต้น ให้ timeline ไปเริ่มที่ เวลา ms : 200
+
+}
+
+void loop(){
+  BlynkGO.update();
+}
+
+
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!! ตัวอย่าง: 07.GTimeline_GAnim_onStart_onCompleted
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+FILE: 07.GTimeline_GAnim_onStart_onCompleted.ino
+----------------------------------------
+#include <BlynkGOv5.h>
+
+GTimeline timeline;
+  GAnimation anim[3];
+
+GContainer cont_btn(LAYOUT_ROW_M, 10, 10, 10, 10, 30);
+  GButton btn_forward("Forward", cont_btn);
+  GButton btn_backward("Backward", cont_btn);
+
+void setup()
+{
+  Serial.begin(9600);
+  Serial.println();
+  BlynkGO.begin();
+
+  for(int i = 0; i < 3; i++) {
+    anim[i].init([](void * var, int32_t v) {
+      int ii = (GAnimation *) var - &anim[0];
+      Serial.printf("%*s[GAnim %d] %d\n", 20 * ii, "", ii, v);
+    }, 0, 1024, 300, (i==1)? ANIM_PATH_BOUNCE : ANIM_PATH_LINEAR);
+    anim[i].var(&anim[i]);
+    anim[i].onStart([](GANIM) {
+      int ii = a - &anim[0];
+      Serial.printf("%*s[GAnim %d] start!!\n", 20 * ii, "", ii);
+    });
+    anim[i].onCompleted([](GANIM) {
+      int ii = a - &anim[0];
+      Serial.printf("%*s[GAnim %d] completed\n", 20 * ii, "", ii);
+    });
+    timeline.add(200 * i, anim[i]);
+  }
+
+  cont_btn.bg_opa(0);
+  btn_forward.onClicked(GWIDGET_CB {
+    timeline.reverse(false);
+    timeline.progress(0);
+    Serial.println("-------------------------------------------------");
+    Serial.println("  Timeline Forward");
+    Serial.println("-------------------------------------------------");
+    timeline.start();
+  });
+  btn_backward.onClicked(GWIDGET_CB {
+    timeline.reverse(true);
+    timeline.progress(PROGRESS_MAX);
+    Serial.println("-------------------------------------------------");
+    Serial.println("  Timeline Backward");
+    Serial.println("-------------------------------------------------");
+    timeline.start();
+  });
+}
+
+void loop()
+{
+  BlynkGO.update();
+}
+
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!! ตัวอย่าง: 08.GTimeline_mario_kart
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+FILE: 08.GTimeline_mario_kart.ino
+----------------------------------------
+#include <BlynkGOv5.h>
+
+IMAGE_DECLARE(img_mario);
+
+GRect racing;
+GRect racing_border1;
+GRect racing_border2;
+
+GImage mario(img_mario);
+
+GContainer cont_btn(LAYOUT_ROW_M, 10, 10, 10, 10, 30);
+  GButton btn_new("new", cont_btn);
+  GButton btn_play_pause("pause/play", cont_btn);
+
+GTimeline timeline;
+  GAnimation anim1;
+  GAnimation anim2;
+  GAnimation anim3;
+  GAnimation anim4;
+
+void setup()
+{
+  Serial.begin(9600);
+  Serial.println();
+  BlynkGO.begin();
+  BlynkGO.fillScreen(TFT_WHITE);
+
+  racing.border(100, TFT_COLOR_HSV(0, 0, 10));
+  racing.radius(RADIUS_CIRCLE);
+  racing.bg_opa(0);
+
+  racing_border1.bg_opa(0);
+  racing_border1.border(5, TFT_PALETTE_LIGHTEN(TFT_PALETTE_RED, 1));
+  racing_border1.radius(RADIUS_CIRCLE);
+  racing_border2.size(racing.width() - 2 * racing.border() + 10, racing.height() - 2 * racing.border() + 10);
+  racing_border2.bg_opa(0);
+  racing_border2.border(5, TFT_PALETTE_LIGHTEN(TFT_PALETTE_RED, 1));
+  racing_border2.radius(RADIUS_CIRCLE);
+
+  mario.center(220, 50);
+
+  cont_btn.bg_opa(0);
+
+  btn_new.onClicked(GWIDGET_CB {
+    auto rand1 = (random(0, 100) > 90) ?  random(2000, 2500) : random(300, 1200);
+    auto rand2 = (random(0, 100) > 90) ?  random(800, 1500)  : random(200, 500);
+    auto rand3 = (random(0, 100) > 90) ?  random(3000, 4000) : random(600, 1200);
+    auto rand4 = (random(0, 100) > 90) ?  random(800, 1500)  : random(300, 300);
+
+    anim1.init(mario, [](GWIDGET, int32_t v) {
+      mario.rotation(0);
+      mario.center(v, 50);
+    }, 220, 600, rand1, (anim_path_type_t) random(4));
+
+    anim2.init(mario, [](GWIDGET, int32_t v) {
+      if(! timeline.isProgressing()) return;
+      Point point_control[4] = { {600, 50}, {805.37, 70.44}, {816.55, 394.75}, {600, 430}};
+      Point p;
+
+      mario.rotation(map(v, 0, 1024, 0, 180));
+      mario.center(p.bezier(float(v) / 1024, point_control, 4));
+    }, 0, 1024, rand2, (anim_path_type_t) random(4));
+
+    anim3.init(mario, [](GWIDGET, int32_t v) {
+      if(! timeline.isProgressing()) return;
+      mario.rotation(180);
+      mario.center(v, 430);
+    }, 600, 220, rand3, (anim_path_type_t) random(4));
+
+    anim4.init(mario, [](GWIDGET, int32_t v) {
+      if(! timeline.isProgressing()) return;
+
+      Point point_control[4] = { {220, 430}, {52, 375.37}, {29.26, 54.79}, {220, 50}};
+      Point p;
+
+      mario.rotation(map(v, 0, 1024, 180, 360));
+      mario.center(p.bezier(float(v) / 1024, point_control, 4));
+    }, 0, 1024, rand4, (anim_path_type_t) random(4));
+
+    Serial.printf("[rand] %d %d %d %d\n", rand1, rand2, rand3, rand4);
+    timeline.create();
+    timeline.add(0, anim1);
+    timeline.add(rand1, anim2);
+    timeline.add(rand1 + rand2, anim3);
+    timeline.add(rand1 + rand2 + rand3, anim4);
+
+    timeline.onCompleted([](GTIMELINE) {
+      btn_new.event_send(EVENT_CLICKED);
+      timeline.start();
+    });
+    timeline.progress(0);
+  });
+  btn_new.event_send(EVENT_CLICKED);
+
+  btn_play_pause.onClicked(GWIDGET_CB {
+    (timeline.isProgressing())? timeline.pause() : timeline.start();
+  });
+}
+
+void loop()
+{
+  BlynkGO.update();
+}
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!! ตัวอย่าง: 09.GAnimation_TruckDumper
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+FILE: 09.GAnimation_TruckDumper.ino
+----------------------------------------
+#include <BlynkGOv5.h>
+
+IMAGE_DECLARE(img_truck_dump_body);
+IMAGE_DECLARE(img_truck_dump_bed);
+
+GRect  truck;
+  GLine  truck_hydrolic_bar(truck);
+  GImage truck_body(img_truck_dump_body, truck);
+  GImage truck_bed(img_truck_dump_bed,truck);
+
+GContainer controller;
+  GSlider slider(controller);
+  GLabel lb_degree(controller);
+
+void setup(){
+  Serial.begin(9600); Serial.println();
+  BlynkGO.begin();
+
+  truck.size(350,310);
+  truck.bg_opa(0);
+  truck.align(ALIGN_CENTER,0,-40);
+  truck.onClicked(GWIDGET_CB{
+    static GAnimation anim;
+    anim.init(truck, [](GWIDGET, int32_t v){
+      int l = BlynkGO.width() + truck.width();
+      int x = (v <= l/2)? -v : l-v;
+      truck.translate_x(x);
+    }, 0, BlynkGO.width() + truck.width(), 1000);
+    anim.start();
+  });
+    truck_hydrolic_bar.setPoints(Point(201,240), Point(201,235));
+    truck_hydrolic_bar.thick(5, TFT_WHITE);
+    truck_body.align(ALIGN_BOTTOM_LEFT);
+    truck_bed.align(truck_body, ALIGN_IN_TOP_RIGHT);
+
+  controller.bg_opa(0);
+  controller.layout(LAYOUT_COL_M, 10, 10, 20, 20, 10);
+  controller.align(ALIGN_BOTTOM,0,-20);
+    lb_degree = 0;
+    lb_degree.color(TFT_WHITE);
+    slider.range(0,60);
+    slider.onValueChanged(GWIDGET_CB{
+      int truck_deg = slider.toInt();
+      lb_degree = truck_deg;
+      truck_bed.pivot(230,90);        // จุดหมุน
+      truck_bed.rotation(truck_deg);  // หมุนไปกี่องศา
+      // วาดเส้น GLine เริ่มจาก จุด 201,240 และอีกจุด เป็นจุด 201,240 แต่หมุนไปเป็นองศาที่ต้องการรอบจุด 300,245 แบบหมุนตามเข็ม
+      truck_hydrolic_bar.setPoints(Point(201,240), Point(201,240).rotate(truck_deg, Point(300,245), CLOCKWISE));
+    }); 
+}
+
+void loop(){
+  BlynkGO.update();
+}
+
+
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!! ตัวอย่าง: 10.MyWidget_Bouncing
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+FILE: 10.MyWidget_Bouncing.ino
+----------------------------------------
+#include <BlynkGOv5.h>
+
+class MyWidget : public GRect {
+  public:
+    MyWidget(GPARENT) : GRect(parent)  {}
+    GLabel  label;
+    GGaugeRainbow gauge;
+    void create(){
+      if(this->isCreated()) return;
+      GRect::create();
+      GRect::size(BlynkGO.width()-20, (BlynkGO.height()-30)/2);
+      GRect::color(TFT_BLACK);
+      GRect::border(1, TFT_WHITE);
+      GRect::radius(20);
+        label.parent(this);
+        label = "TEMP";
+        label.color(TFT_SILVER);
+        label.position(20, 10);
+        gauge.parent(this);
+        gauge.size(170,170);
+        gauge.align(ALIGN_CENTER,0,20);
+    }
+    inline void title(String t)       { create(); label = t;          }
+    inline void value(float v)        { create(); gauge = v;          }
+    inline void decimal(uint8_t d)    { create(); gauge.decimal(d);   }
+    inline void operator =(float v)   { this->value(v);               }
+};
+
+MyWidget temp, humid;
+
+void setup(){
+  Serial.begin(9600); Serial.println();
+  BlynkGO.begin();
+
+  temp.title("TEMP");   temp.align  (ALIGN_TOP    ,0, 10);
+  humid.title("HUMID"); humid.align (ALIGN_BOTTOM ,0,-10);
+  temp = 59.23;
+  humid = 80.53;
+
+  static GRect touch_area;
+  touch_area.bg_opa(0);
+  touch_area.onClicked(GWIDGET_CB{
+    temp  = random(1000, 5000)/100.0;
+    humid = random(6000, 9500)/100.0;
+    static GAnimation anim; // ตัวสร้าง Animation
+    anim.init([](void*, int32_t v){
+      temp.align  (ALIGN_TOP    , 0, map(v,0,4096, -temp.height() ,  10));
+      humid.align (ALIGN_BOTTOM , 0, map(v,0,4096,  humid.height(), -10));
+    }, 0, 4096, 800 /*ms*/, ANIM_PATH_BOUNCE);  // ให้ค่า ตั้งแต่ 0 ถึง 1024 ใน 800ms และค่าเป็นแบบเด้งได้
+    anim.start();
+  });
+}
+
+void loop(){
+  BlynkGO.update();
+}
+
+

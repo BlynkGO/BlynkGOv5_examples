@@ -18,7 +18,7 @@ class GTeamScore : public GContainer {
     GLabel lb_score[2];
     GRect rect_touch[2];
 
-    GTeamScore(GWidget&parent = GScreen) : GContainer(parent) {}
+    GTeamScore(GPARENT) : GContainer(parent) {}
     void create(){
       if(!this->isCreated()) {
         GContainer::create();
@@ -69,7 +69,7 @@ class GBoxInfo : public GContainer {
   public:
     GLabel lb_key;
     GLabel lb_value;
-    GBoxInfo(GWidget&parent = GScreen) : GContainer(parent) {}
+    GBoxInfo(GPARENT) : GContainer(parent) {}
     void create(){
       if(!this->isCreated()){
         GContainer::create();

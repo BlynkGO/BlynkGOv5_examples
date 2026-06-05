@@ -24,7 +24,7 @@ FONT_DECLARE(material_icon_40);
 
 class GSwitchMod : public GSwitch {
   public:
-    GSwitchMod(GWidget&parent=GScreen):GSwitch(parent) {}
+    GSwitchMod(GPARENT):GSwitch(parent) {}
     void create(){
       if(GSwitch::isCreated()) return;
       GSwitch::create();
@@ -80,7 +80,7 @@ class GSwitchMod : public GSwitch {
 
 class GHomeSwitch : public GRect {
   public:
-  GHomeSwitch(GWidget&parent=GScreen) : GRect(parent)   { }
+  GHomeSwitch(GPARENT) : GRect(parent)   { }
 
   GLabel lb_power_icon;
   GLabel lb_name;

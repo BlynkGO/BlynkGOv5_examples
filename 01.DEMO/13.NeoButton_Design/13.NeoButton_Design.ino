@@ -3,7 +3,7 @@
 
 class GNeoButton : public GRect
 { public:
-    GNeoButton(GWidget&parent=GScreen) : GRect(parent) {}
+    GNeoButton(GPARENT) : GRect(parent) {}
     GRect rect[2];
     GCircle cir[2];
     GRect stroke_rect0;
@@ -101,7 +101,7 @@ class GNeoButton : public GRect
 
 class GNeoButtonDark : public GNeoButton
 { public:
-    GNeoButtonDark(GWidget&parent=GScreen) : GNeoButton(parent) {}
+    GNeoButtonDark(GPARENT) : GNeoButton(parent) {}
     GRect rect[2];
     GCircle cir[2];
     GRect stroke_rect0;

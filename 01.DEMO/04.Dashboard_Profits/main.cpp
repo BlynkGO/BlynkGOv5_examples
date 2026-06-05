@@ -27,7 +27,7 @@ GContainer cont_frame;
 
 class GTrend : public GContainer {
   public:
-    GTrend(GWidget&parent=GScreen) : GContainer(parent)  {}
+    GTrend(GPARENT) : GContainer(parent)  {}
 
     GLabel lb_title;
     GLabel lb_value;

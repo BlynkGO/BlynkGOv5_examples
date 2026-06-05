@@ -1,0 +1,298 @@
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!! ตัวอย่าง: 01.GRect_basic
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+FILE: 01.GRect_basic.ino
+----------------------------------------
+#include <BlynkGOv5.h>
+
+GRect rect[9];
+
+void setup(){
+  Serial.begin(9600); Serial.println();
+
+  BlynkGO.begin();
+  BlynkGO.fillScreen(TFT_WHITE);
+
+  GScreen.layout(LAYOUT_GRID,10,10,10,10,20);
+
+  rect[0].size(80,30);
+  rect[0].color(TFT_RED);
+
+  rect[1].size(rect[0]);
+  rect[1].radius(10);
+  rect[1].color(TFT_PALETTE(TFT_PALETTE_BLUE));
+  rect[1].shadow(30,5, TFT_BLUE);
+
+  rect[2].size(rect[0]);
+  rect[2].radius(10);
+  rect[2].border(1, TFT_SILVER);
+  rect[2].shadow(8,1, TFT_BLACK);
+  rect[2].shadow_offset(5,5);
+
+  rect[3].size(rect[0]);
+  rect[3].color(TFT_PALETTE_LIGHTEN(TFT_PALETTE_PURPLE,2));
+  rect[3].border(5, TFT_PALETTE_DARKEN(TFT_PALETTE_PURPLE,1));
+  rect[3].rounded(true);
+
+  rect[4].size(rect[0]);
+  rect[4].color(TFT_PALETTE_DARKEN(TFT_PALETTE_GRAY,2));
+  rect[4].border(3, TFT_CYAN);
+  rect[4].border_side( (border_side_t) ( BORDER_SIDE_BOTTOM | BORDER_SIDE_TOP ) );     // ตีเส้นขอบเฉพาะด้านล่าง กับ ด้านบน
+
+  rect[5].size(rect[0]);
+  rect[5].color(TFT_BLUE, TFT_RED);
+  rect[5].grad_dir(GRAD_DIR_HOR);        // ไล่เฉดสีแนวนอน (ซ้าย->ขวา)
+  
+  rect[6].size(rect[0].width(), rect[0].height()*2);
+  rect[6].color(TFT_BLUE, TFT_RED);
+
+  rect[7].size(rect[6]);
+  rect[7].color(TFT_BLUE, TFT_RED);
+  rect[7].color_stop(100);
+
+  rect[8].size(rect[6]);
+  rect[8].color(TFT_BLUE, TFT_RED);
+  rect[8].color_stop(100);
+  rect[8].grad_stop(180);
+
+  for(int i=0; i<9; i++){
+    rect[i].onClicked(GWIDGET_CB{
+      int ii = (GRect*)widget - &rect[0];
+      if(rect[ii].ignore_layout()){
+        rect[ii].ignore_layout(false);
+        rect[ii].layer_id(ii);      // ย้ายมาไปเป็น layer ลูกลำดับที่ ii
+        rect[ii].size(80,(ii <5)? 30 : 60);
+      }else{
+        rect[ii].ignore_layout(true);
+        rect[ii].toForeground();    // ย้ายมาไว้บนสุด
+        rect[ii].size(PCT(80),PCT(80));
+      }
+    });
+  }
+}
+
+void loop(){
+  BlynkGO.update();
+}
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!! ตัวอย่าง: 02.GRect_with_background_image
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+FILE: 02.GRect_with_background_image.ino
+----------------------------------------
+#include <BlynkGOv5.h>
+
+IMAGE_DECLARE(img_background_box);
+
+GRect rect;
+  GLabel label(rect);
+
+void setup(){
+  Serial.begin(9600); Serial.println();
+  BlynkGO.begin();
+
+  rect.size(225,150);
+  rect.border(3, TFT_RED);
+  rect.image(img_background_box);   /* กำหนดภาพพื้นหลังไปได้เลย โดยไม่ต้องเปลืองเม็มในการสร้างวิตเจ็ต GImage */
+    label = "ข้อความ";
+    label.align(ALIGN_TOP);
+}
+
+void loop(){
+  BlynkGO.update();
+}
+
+
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!! ตัวอย่าง: 03.GRect_Neumorphism_design
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+FILE: 03.GRect_Neumorphism_design.ino
+----------------------------------------
+#include <BlynkGOv5.h>
+
+GRect rect;
+  GLabel label(rect);
+
+void setup()
+{
+  Serial.begin(9600); Serial.println();
+  BlynkGO.begin();
+  BlynkGO.fillScreen(TFT_COLOR_HEX(0xdcdcdc));
+
+  rect.size(150,66);
+  rect.color(TFT_COLOR_HEX(0xdcdcdc));
+  rect.radius(10);
+
+  /* แสงเงาของ rect กำหนดตามปกติ ในส่วนด้านเอียงล่าง */
+  rect.shadow(16, 2, TFT_COLOR_HEX(0x282828));
+  rect.shadow_opa(100);
+  rect.shadow_offset(5,5);
+  rect.font(prasanmit_20);
+
+  /* ทำการ hook การ draw กราฟิกระดับเพิ่มเติม โดยไม่เปลืองเม็มเพิ่มเป็นวิตเจ็ตใหม่ */
+  rect.hookDrawTask(true);
+  rect.onDrawTask(GWIDGET_CB{
+    if(DRAW_PART == DRAW_PART_MAIN) {       /* เมื่อการ draw กราฟิกระดับล่างของ rect กำลัง draw ในส่วน หลัก */
+      draw_rect_dsc_t rect_dsc;
+      draw_rect_dsc_init(&rect_dsc);
+      rect_dsc.bg_opa           = 0;
+      rect_dsc.radius           = rect.radius();
+      rect_dsc.shadow_color     = TFT_COLOR(TFT_WHITE);
+      rect_dsc.shadow_width     = rect.shadow_width();
+      rect_dsc.shadow_spread    = rect.shadow_spread();
+      rect_dsc.shadow_opa       = rect.shadow_opa();
+      rect_dsc.shadow_offset_x  = -rect.shadow_offset_x();
+      rect_dsc.shadow_offset_y  = -rect.shadow_offset_y();
+      draw_rect(DRAW_LAYER, &rect_dsc, DRAW_AREA);      /* draw กราฟิกระดับล่าง เพิ่มเติมในส่วนแสงเงา ด้านเอียงบน */
+    }
+  });
+    label = "กราฟิกแบบลอยตัว";
+}
+
+void loop()
+{
+  BlynkGO.update();
+}
+
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!! ตัวอย่าง: 04.GRect_Scrollable
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+FILE: 04.GRect_Scrollable.ino
+----------------------------------------
+#include <BlynkGOv5.h>
+
+GRect FrameScroll;            // วิตเจ็ตนอก ไว้ทำเป็นช่อง view สำหรับแสดง ตัว scroll
+  GRect rect(FrameScroll);    // วิตเจ็ตภายใน ที่มีขนาดใหญ่กว่า ช่อง view
+
+void setup(){
+  Serial.begin(9600); Serial.println();
+  BlynkGO.begin();
+
+  FrameScroll.size(300,300);                // ขนาด FrameScroll สำหรับเป็นช่อง view ให้เล็กกว่า สิ่งที่อยู่ภายในที่จะถูก scroll
+  FrameScroll.scrollable(true);             // กำหนดให้ สามารถ scroll ได้
+  FrameScroll.scrollbar(SCROLLBAR_OFF);     // ไม่ต้องแสดงแถบ scrollbar
+  FrameScroll.scroll_elastic(false);        // จุดเริ่มต้น และปลาย เวลา scroll ไปถึง ไม่ต้องมี การแสดงกราฟิกเด้ง
+  FrameScroll.bg_opa(0);                    // พื้นหลัง ไม่แสดง ใช้แค่ความสามารถด้าน scroll
+    rect.size(300, 1000);                   // วิตเจ็ตที่จะเป็น content ภายใน มีขนาดใหญ่กว่า FrameScroll
+    rect.color(TFT_BLUE, TFT_RED);
+    rect.align(ALIGN_TOP_LEFT);
+    rect.onDrawMain(GWIDGET_CB{             // วาดสิ่งต่างๆ ภายใน rect ด้วย กราฟิกระดับล่างเอง แบบ ไม่พึ่งวิตเจ็ต 
+      for(int i=0; i<20; i++){
+        // วาดเส้นระดับล่าง จากจุด 2 จุดที่กำหนด ความหนา 1 px แบบช่องประ กว้าง 4px ช่องเว้นประ 4px สีขาว โปร่งใส 30% (ประหยัดเม็มไม่ต้องใช้วิตเจ็ต GLine)
+        if(i>0) rect.softdrawLine(Point(0, i*50), Point(rect.width()-1,i*50), 1, 4, 4, TFT_WHITE, OPA_30);
+        // วาดข้อความระดับล่าง ด้วยฟอนต์ สี และจัดตำแหน่ง align ที่ต้องการ (ทำให้ประหยัดเม็มในการสร้างเป็นวิตเจ็ต GLabel)
+        rect.softdrawLabel(StringX::printf("%d",i*50), prasanmit_18, TFT_WHITE, ALIGN_TOP, 0, i*50);
+      }
+    });
+
+  //----------- Scroll มีการ Snape ที่ ทุกๆ 100 px --------------------
+  // 📌 เพิ่ม event ให้ Scroll มีการ Snap ทุกๆ 100px
+  //---------------------------------------------------------------
+  FrameScroll.event_cb([](GWIDGET, event_t event)  {
+    if(event == EVENT_SCROLL_END){
+      int32_t y = FrameScroll.scroll_y();  // ค่าตำแหน่ง scroll แกน y ปัจจุบัน
+      int32_t step = 100;
+      // หา step ที่ใกล้ที่สุด
+      int32_t y_snapped = ((y + step/2) / step) * step;
+      // สั่ง scroll แบบ smooth ไปยังตำแหน่ง snap
+      FrameScroll.scroll_to_y(y_snapped, 200); // 200ms animation
+    }
+  });
+
+  //----------- Best Snape ตาม vector snapes ---------------------
+  // 📌 เพิ่ม event ให้ Best Snap ตาม vector snaps
+  //--------------------------------------------------------------
+  // FrameScroll.event_cb([](GWIDGET, event_t event)  {
+  //   if(event == EVENT_SCROLL_END){
+  //     // กำหนดตำแหน่ง snap ตามต้องการ
+  //     std::vector<int32_t> snaps = {0, 75, 150, 200, 400, 600, 700};
+
+  //     int32_t y = FrameScroll.scroll_y();   // ตำแหน่งปัจจุบัน
+  //     int32_t best_snap = snaps[0];
+  //     int32_t best_diff = abs(y - snaps[0]);
+
+  //     // หา snap point ที่ใกล้ที่สุด
+  //     for(size_t i=1; i<snaps.size(); i++){
+  //       int32_t diff = abs(y - snaps[i]);
+  //       if(diff < best_diff){
+  //         best_diff = diff;
+  //         best_snap = snaps[i];
+  //       }
+  //     }
+
+  //     // scroll ไปยัง snap ที่ใกล้ที่สุด
+  //     FrameScroll.scroll_to_y(best_snap, 200);
+  //   }
+  // });
+}
+
+void loop(){
+  BlynkGO.update();
+}
+
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!! ตัวอย่าง: 05.GRect_MouseHover
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+FILE: 05.GRect_MouseHover.ino
+----------------------------------------
+// ตัวอย่างเฉพาะสำหรับ บน PC มีการใช้เมาส์ เมื่อเมาส์เลื่อนมาบน วิตเจ็ต
+// มีการปรับ design วิตเจ็ต เมื่อเมาส์เลื่อนมาบน วิตเจ็ตนั้นๆ
+
+#include <BlynkGOv5.h>
+
+GRect card;
+  GRect card2(card);
+  GLabel label(card);
+
+void setup(){
+  Serial.begin(9600); Serial.println();
+  BlynkGO.begin();
+
+  card.size(SIZE_CONTENT, SIZE_CONTENT);
+  card.padding(6,0,0,0);
+  card.color(TFT_CYAN);
+  card.border(0);
+  card.shadow(0);
+  card.font(prasanmit_40, TFT_WHITE);
+  card.radius(10);
+
+  // กำหนด attribute ต่างๆ สำหรับเมื่อเมาส์เลื่อนมาบน card (สำหรับ BlynkGO กระเพราหมูกรอบ บน PC)
+  card.border(1, TFT_CYAN, GSTATE_HOVERED);
+  card.shadow(10, 3, TFT_CYAN, GSTATE_HOVERED); // กำหนด ระยะกว้างแสงเงา และ ระยะฟุ้ง แสงเงา และสีแสงเงา เมื่อเมาส์เลื่อนมาบน card
+  card.shadow_offset(0, 0, GSTATE_HOVERED);     // กำหนดค่า ความเยื้องของแสงเงา เมื่อเมาส์เลื่อนมาบน card
+  card.transform_scale(270, GSTATE_HOVERED);  // 255 ขนาดเท่าเดิม  270 ขยายใหญ่ขึ้น เมื่อเมาส์เลื่อนมาบน card
+  card.font_color(TFT_WHITE, GSTATE_DEFAULT); // สีฟอนต์ ขณะปกติ
+  card.font_color(TFT_RED, GSTATE_HOVERED);   // สีฟอนต์ ขณะเมาส์เลื่อนมาบน card
+
+    label = "Hello ทดสอบ";                    // label จะมีสีฟอนต์ ตาม card ที่กำหนด
+
+    card2.size(label.width()+40, label.height());
+    card2.color(TFT_BLACK);
+    card2.radius(card.radius());
+    card2.clickable(false);
+    card2.border(1, TFT_CYAN);
+    card2.border_side(BORDER_SIDE_BOTTOM | BORDER_SIDE_RIGHT | BORDER_SIDE_LEFT);
+    card2.border_opa(120);
+    card2.layer_id(0);      // ย้ายไปไว้ล่างสุด ของ parent 'card'
+
+}
+
+void loop(){
+  BlynkGO.update();
+}
+
+
+

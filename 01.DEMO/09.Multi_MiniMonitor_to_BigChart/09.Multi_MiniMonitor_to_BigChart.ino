@@ -24,7 +24,7 @@ GContainer cont_frame;
 class GMiniMonitor : public GRect
 {
   public:
-    GMiniMonitor(GWidget&parent=GScreen) : GRect(parent)   {}  // บังคับใส่
+    GMiniMonitor(GPARENT) : GRect(parent)   {}  // บังคับใส่
     
     // GRect rect_mini_monitor(cont_frame);
     GLabel lb_title;

@@ -15,15 +15,15 @@ void anim_icon(){
   static SoftTimer t;
   if(!expanded){
     // ขยายออก
-    anim.init(cont, [](GWidget* widget, int32_t v){  cont.pad_column(v); }, -50, 20, 400);
-    anim.completed_cb([](GAnimation* a){ expanded = true; t.delay(2000, anim_icon); });
+    anim.init(cont, [](GWIDGET, int32_t v){  cont.pad_column(v); }, -50, 20, 400);
+    anim.completed_cb([](GANIMATION){ expanded = true; t.delay(2000, anim_icon); });
     anim.path_type(ANIM_PATH_EASE_OUT);
     anim.start();
   }else{
     // หดกลับ
     t.del();
-    anim.init(cont, [](GWidget* widget, int32_t v){ cont.pad_column(v); }, 20, -50, 400);
-    anim.completed_cb([](GAnimation* a){ 
+    anim.init(cont, [](GWIDGET, int32_t v){ cont.pad_column(v); }, 20, -50, 400);
+    anim.completed_cb([](GANIMATION){ 
       expanded = false;
       if(icon_clicked && last_icon > 0){
         icon_clicked = false;

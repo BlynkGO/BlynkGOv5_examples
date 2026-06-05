@@ -30,7 +30,7 @@ FONT_DECLARE(google_icon_arrow_20);
 // วิตเจ็ตสำหรับ กดเพิ่มลด ตั้งค่า  ใช้เป็น ส่วนประกอบ ภายใน GPID_Step ไว้กำหนดตั้งค่า PID Profile's PID Step ต่อไป
 class GSmartInput : public GContainer {
   public:
-    GSmartInput(GWidget&parent=GScreen) : GContainer(parent) { }
+    GSmartInput(GPARENT) : GContainer(parent) { }
 
     GTextArea ta;
     GButton btn[2];
@@ -134,7 +134,7 @@ class GSmartInput : public GContainer {
 // วิตเจ็ต PID Step สำหรับเป็น ตัว editor ปรับค่า step ของ PID Profile
 class GPID_Step : public GContainer {
   public:
-    GPID_Step(GWidget&parent=GScreen) : GContainer(parent) { }
+    GPID_Step(GPARENT) : GContainer(parent) { }
 
     GLabel lb_id;
     GSmartInput smart_input[3];

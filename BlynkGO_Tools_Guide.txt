@@ -1,0 +1,137 @@
+================================================================================
+  BlynkGO v5 — Tools Guide
+  fontconv / iconconv / imgconv
+  (วางไฟล์นี้ให้ AI อ่านก่อน generate code ที่ใช้ font / icon / image)
+================================================================================
+
+หมายเหตุ: tools ทั้งหมดรันใน folder เดียวกับ src/ ของ project
+  cd E:\...\project\src
+  fontconv ...
+  iconconv ...
+  imgconv  ...
+
+ผลลัพธ์ .c และ .h จะถูกสร้างใน folder นั้น
+จากนั้น ใน code ใช้ผ่าน FONT_DECLARE() / IMAGE_DECLARE()
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  1. fontconv  —  แปลง .ttf → font .c/.h สำหรับ BlynkGO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SYNTAX:
+  fontconv --font <path.ttf> --size <px> [-o <output_name>] [range_option]
+
+RANGE OPTIONS (เลือก 1 อย่าง):
+  -thai        Thai + Latin + Math          ← ใช้กับ font ภาษาไทย
+  -lao         Lao + Latin + Math
+  -eng         English Full + Latin + Math  ← default ถ้าไม่ระบุ
+  -eng_basic   English + Numbers only       ← ขนาดไฟล์เล็กสุด
+  -num         Numbers + Symbols only       ← ใช้กับ font ตัวเลข
+
+EXAMPLES:
+  fontconv --font Kanit.ttf       --size 30 -thai
+  fontconv --font Kanit.ttf       --size 30 -thai    -o kanit_thai_30
+  fontconv --font Roboto.ttf      --size 25 -eng
+  fontconv --font BebasNeue.ttf   --size 45 -num
+
+OUTPUT:
+  ไฟล์ชื่อ <name>_<size>.c  (ถ้าไม่ระบุ -o จะ auto-generate จากชื่อ font)
+
+ใช้ใน CODE:
+  FONT_DECLARE(kanit_30);          // ประกาศ global
+  label.font(kanit_30, TFT_WHITE); // ใช้กับ widget
+
+BUILT-IN FONTS (มีพร้อมใช้ ไม่ต้องแปลง):
+  prasanmit_20, prasanmit_25, prasanmit_30 (default),
+  prasanmit_35, prasanmit_40
+  BebasNeueBold_num_45
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  2. iconconv  —  แปลง Material Icon codepoint → icon font .c/.h
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SYNTAX:
+  iconconv <iconlist.txt> [--size <px>] [--name <output_name>]
+
+iconlist.txt FORMAT  (ชื่อ  codepoint):
+  wifi_full   E63E
+  wifi_2bar   E4D9
+  wifi_1bar   E4CA
+  wifi_off    E648
+  battery     E1A4
+
+  หา codepoint ได้จาก: https://fonts.google.com/icons
+  (เปิด icon ที่ต้องการ → ดูที่ Unicode codepoint)
+
+EXAMPLES:
+  iconconv iconlist.txt
+  iconconv iconlist.txt --size 30
+  iconconv iconlist.txt --size 30 --name my_icons_30
+
+OUTPUT:
+  ไฟล์ชื่อ <name>.c  หรือ auto-generate จากชื่อ iconlist
+
+ใช้ใน CODE:
+  FONT_DECLARE(my_icons_30);         // ประกาศ global
+  label.font(my_icons_30, TFT_WHITE);
+  label = "\uE63E";                  // ใส่ codepoint ตรงๆ
+
+  หรือ define เป็น symbol ให้ชัดเจน:
+  #define SYMBOL_WIFI  "\uE63E"
+  label = SYMBOL_WIFI;
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  3. imgconv  —  แปลง .png / .jpg / .bmp → image .c/.h สำหรับ BlynkGO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SYNTAX:
+  imgconv <image.png>        ← รูปทึบ (opaque)
+  imgconv <image.png> -t     ← รูปโปร่งใส (transparent / alpha)
+
+EXAMPLES:
+  imgconv background.png           → img_background.c
+  imgconv logo.png                 → img_logo.c
+  imgconv icon_sun.png   -t        → img_icon_sun.c   (โปร่งใส)
+  imgconv sprite.png     -t        → img_sprite.c     (โปร่งใส)
+
+OUTPUT:
+  ไฟล์ชื่อ img_<ชื่อรูป>.c  (auto-generate จากชื่อไฟล์)
+
+ใช้ใน CODE:
+  IMAGE_DECLARE(img_background);       // ประกาศ global
+  GImage bg(img_background);          // สร้าง widget
+  bg.size(800, 480);
+  bg.align(ALIGN_CENTER);
+
+  หรือเป็น background:
+  IMAGE_DECLARE(img_background);
+  GImage bg(img_background, GScreen); // parent = GScreen
+  bg.toBackground();                  // ส่งไปอยู่ layer ล่างสุด
+
+TIPS:
+  - รูปที่มี alpha channel (.png โปร่งใส) → ใช้ -t เสมอ
+  - รูป background เต็มจอ → resize ให้ตรงกับ screen ก่อน (เช่น 800×480)
+  - ยิ่งรูปใหญ่ยิ่งกิน Flash มาก ควร resize ก่อน imgconv
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  WORKFLOW ที่ AI ควรแนะนำใน code comment
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+เมื่อ AI generate code ที่ใช้ font / icon / image ใหม่
+ให้ใส่ comment บอก user ด้วยเสมอ เช่น:
+
+  // [fontconv]  fontconv --font Kanit.ttf --size 30 -thai
+  FONT_DECLARE(Kanit_30);
+
+  // [iconconv]  iconconv iconlist.txt --size 30 --name my_icons
+  FONT_DECLARE(my_icons);
+  #define SYMBOL_HOME  "\uE88A"
+
+  // [imgconv]   imgconv background.png
+  IMAGE_DECLARE(img_background);
+
+  // [imgconv]   imgconv logo.png -t
+  IMAGE_DECLARE(img_logo);
+
+================================================================================
+  END OF FILE
+================================================================================

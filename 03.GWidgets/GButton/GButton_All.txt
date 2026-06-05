@@ -1,0 +1,465 @@
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!! ตัวอย่าง: 01.GButton_basic
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+FILE: 01.GButton_basic.ino
+----------------------------------------
+#include <BlynkGOv5.h>
+
+GButton btn;                            // ปุ่มแบบ BUTTON_PUSH   (กดติด ปล่อยดับ)
+GButton btn_switch(BUTTON_SWITCH);      // ปุ่มแบบ BUTTON_SWITCH (กดติด กดดับ)
+GButton btn_home;
+
+void setup()
+{
+  Serial.begin(9600);
+  Serial.println();
+  BlynkGO.begin();
+
+  btn = "ปุ่มกด";
+  btn.align(ALIGN_CENTER, 0, -btn.height() / 2 - 10);
+  btn.onClicked(GWIDGET_CB {                   // ปุ่มแบบ BUTTON_PUSH ให้ดักสัมผัส clicked ด้วย onClicked
+    Serial.println("[btn] Clicked");
+  });
+
+  btn_switch = "ปุ่มสวิตซ์";
+  btn_switch.align(btn, ALIGN_BOTTOM, 0, 20);
+  btn_switch.ON();
+  btn_switch.onValueChanged(GWIDGET_CB {       // ปุ่มแบบ BUTTON_SWITCH ให้ดักการเปลี่ยนแปลง ด้วย onValueChanged
+    Serial.printf("[btn_switch] %s\n", btn_switch.isON() ? "ON" : "OFF");
+  });
+
+  btn_home = SYMBOL_HOME;                       // สัญลักษณ์ดูได้ที่ ตาราง ในหน้า https://github.com/BlynkGO/BlynkGO_font
+  btn_home.round_design();                      // ออกแบบให้เป็นแบบโค้งมน
+  btn_home.align(ALIGN_TOP_RIGHT, -10, 10);
+  btn_home.onClicked(GWIDGET_CB {
+    Serial.println("[HOME] clicked");
+  });
+
+}
+
+void loop()
+{
+  BlynkGO.update();
+}
+
+
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!! ตัวอย่าง: 02.GButton_design
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+FILE: 02.GButton_design.ino
+----------------------------------------
+#include <BlynkGOv5.h>
+
+IMAGE_DECLARE(img_laundry);
+
+GButton btn;
+GButton btn_with_image(img_laundry, "เครื่องซักผ้า");
+
+void setup()
+{
+  Serial.begin(9600); Serial.println();
+  BlynkGO.begin();
+  BlynkGO.fillScreen(TFT_WHITE);
+
+  GScreen.layout(LAYOUT_COL_M, 0, 0, 0, 0, 30);
+  GScreen.content_align(CONTENT_ALIGN_CENTER);
+
+  btn = "ปุ่มกด";
+
+  //-----------------------------------
+  // คำสั่ง ขนาด และตำแหน่ง
+  //-------------------------
+  // btn.size(150,100);                   // เปลี่ยนขนาดที่ต้องการเอง
+  // btn.width(150);                      // เปลี่ยนเฉพาะด้านกว้างเอง
+  // btn.height(100);                     // เปลี่ยนเฉพาะด้านสูงเอง
+
+  //-----------------------------------
+  // คำสั่งปรับแต่ง design
+  //-------------------------
+  // btn.font(prasanmit_40, TFT_BLACK);   // กำหนด font และสี font
+  // btn.color(TFT_CYAN);                 // สีพื้นหลัง
+  btn.color(TFT_VIOLET, GSTATE_PRESSED);  // สีพื้นหลัง ขณะมีสถานะถูกกด
+  // btn.border(3, TFT_BLUE);             // ขอบ และ สีขอบ
+  // btn.rounded(true);                   // ปุ่มทำแบบโค้งมน
+  // btn.shadow(30, 5, btn.color());      // shadow width, spread, color  ( ตัวอย่าง shadow spread ประมาณ 1/6 ของ shadow width)
+  // btn.shadow_offset(6,6);              // shadow offset
+
+  //-----------------------------------
+  // คำสั่งดักเหตุการณ์ : เมื่อมีการสัมผัส click เข้ามาที่ปุ่ม ให้ดักด้วย  onClicked(...)
+  // หากเป็นปุ่มแบบ BUTTON_SWITCH ให้ดักเมื่อมีการเปลี่ยนแปลงค่า ด้วย onValueChanged(...)
+  //-------------------------
+  btn.onClicked(GWIDGET_CB {
+    Serial.println("Clicked");
+  });
+
+  btn_with_image.rounded(true);
+  btn_with_image.padding_hor(30);         // ระยะช่องไฟ แนวนอน (ซ้าย & ขวา)
+  btn_with_image.onClicked(GWIDGET_CB {
+    Serial.println("Laundry Clicked");
+  });
+
+}
+
+void loop()
+{
+  BlynkGO.update();
+}
+
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!! ตัวอย่าง: 03.GButton_rotation
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+FILE: 03.GButton_rotation.ino
+----------------------------------------
+#include <BlynkGOv5.h>
+
+GButton btn;
+GLabel  label;
+
+void setup()
+{
+  Serial.begin(9600);
+  Serial.println();
+  BlynkGO.begin();
+  BlynkGO.fillScreen(TFT_WHITE);
+
+  btn = "ปุ่มกด";
+  btn.pivot(btn.centerpoint());   // จุดหมุนที่จุดกึ่งกลางปุ่ม
+  btn.rotation(90.0);             // หมุนไป 90 องศา (การหมุนจะมีการกินพื้นที่ เม็ม ควรใช้บน BeeNeXT ขนาด 4.3 นิ้วขึ้นไป)
+  btn.align(ALIGN_LEFT, 10);      // วางชิดซ้ายจอ เข้าไป 10px
+  btn.onClicked(GWIDGET_CB {
+    static int c;
+    label = String("ปุ่มกด ") + String(++c);
+  });
+
+}
+
+void loop()
+{
+  BlynkGO.update();
+}
+
+
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!! ตัวอย่าง: 04.GButton_advance_design
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+FILE: 04.GButton_advance_design.ino
+----------------------------------------
+/* ปรับแต่งกราฟิกดีไซน์ โดยใช้ GStyle เป็นการกำหนดที่ GStyle แล้วสามารถนำไปใช้ร่วมกับ วิตเจ็ตต่างๆ ได้ โดยลดการเปลืองเม็มไม่ต้องกำหนดแบบแยกกัน */
+
+#include <BlynkGOv5.h>
+
+GButton btn1;
+GButton btn2;
+
+void setup(){
+  Serial.begin(9600); Serial.println();
+  BlynkGO.begin();
+  BlynkGO.fillScreen(TFT_WHITE);
+
+  GScreen.layout(LAYOUT_COL_M, 0, 0, 0, 0, 30);
+  GScreen.content_align(CONTENT_ALIGN_CENTER);
+
+  static GStyle  style_default;
+    style_default.radius(8);
+    style_default.opa(OPA_100);
+    style_default.color( TFT_PALETTE(TFT_PALETTE_BLUE));
+    style_default.grad_color( TFT_PALETTE_DARKEN(LV_PALETTE_BLUE, 2));
+    style_default.grad_dir(GRAD_DIR_VER);
+
+    style_default.border_opa(OPA_40);
+    style_default.border(2, TFT_PALETTE(TFT_PALETTE_GRAY));
+
+    style_default.shadow(8, TFT_PALETTE(TFT_PALETTE_GRAY));
+    
+    style_default.shadow_offset(0,8);
+
+    style_default.outline_color(TFT_PALETTE(TFT_PALETTE_BLUE));
+    style_default.outline_opa(OPA_COVER);
+
+    style_default.padding(50);
+
+  static GStyle style_pressed;
+ 
+    style_pressed.outline(30);
+    style_pressed.outline_opa(OPA_0);
+
+    style_pressed.translate_y(5);
+    style_pressed.shadow_offset(0,3);
+    style_pressed.color(TFT_PALETTE_DARKEN(TFT_PALETTE_BLUE,2));
+    style_pressed.grad_color(TFT_PALETTE_DARKEN(TFT_PALETTE_BLUE,4));
+
+    static GTransition trans;
+    static style_prop_t props[] = {GSTYLE_OUTLINE, GSTYLE_OUTLINE_OPA, 0};
+    trans.init(props, ANIM_PATH_LINEAR, 300);
+
+    style_pressed.transition(trans);
+
+  btn1 ="ปุ่มกด1";
+    btn1.addStyle(style_default , GSTATE_DEFAULT);    // กำหนด style เมื่อปุ่มขณะปกติ
+    btn1.addStyle(style_pressed , GSTATE_PRESSED);    // กำหนด style เมื่อปุ่มขณะถูกกด
+  
+  btn2 ="ปุ่มกด2";
+  btn2.addStyle(style_default , GSTATE_DEFAULT);      // ใช้ GStyle ร่วมกับ btn1 ทำให้ประหยัดเม็มได้
+  btn2.addStyle(style_pressed , GSTATE_PRESSED);      // ใช้ GStyle ร่วมกับ btn1 ทำให้ประหยัดเม็มได้
+}
+
+void loop(){
+  BlynkGO.update();
+}
+
+
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!! ตัวอย่าง: 05.GButton_advance_design2
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+FILE: 05.GButton_advance_design2.ino
+----------------------------------------
+#include <BlynkGOv5.h>
+
+GButton btn;
+
+void setup()
+{
+  Serial.begin(9600);
+  Serial.println();
+  BlynkGO.begin();
+  BlynkGO.fillScreen(TFT_WHITE);
+
+  static GStyle  style_default;
+    static GTransition trans_default;
+    static style_prop_t props[] = {GSTYLE_TRANSFORM_WIDTH, GSTYLE_TRANSFORM_HEIGHT, GSTYLE_TEXT_LETTER_SPACE, 0};
+  trans_default.init(props,  ANIM_PATH_OVERSHOOT, 250, 100);
+  style_default.transition(trans_default);
+
+  static GStyle  style_pressed;
+    static GTransition trans_pressed;
+    trans_pressed.init(props, ANIM_PATH_EASE_IN_OUT, 250, 100);
+
+  style_pressed.transform_width(10);
+  style_pressed.transform_height(-10);
+  style_pressed.text_letter_space(10);
+  style_pressed.transition(trans_pressed);
+
+  btn = "ปุ่มเด้งดึ๋ง";
+  btn.addStyle(style_default, GSTATE_DEFAULT);
+  btn.addStyle(style_pressed, GSTATE_PRESSED);
+
+}
+
+void loop()
+{
+  BlynkGO.update();
+}
+
+
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!! ตัวอย่าง: 06.GButton_with_image
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+FILE: 06.GButton_with_image.ino
+----------------------------------------
+#include <BlynkGOv5.h>
+
+FONT_DECLARE(BebasNeueBold_num_45);
+
+GButton btn;
+  GLabel lb_extra(btn);
+
+void setup()
+{
+  Serial.begin(9600);
+  Serial.println();
+  BlynkGO.begin();
+  BlynkGO.fillScreen(TFT_WHITE);
+
+  btn = "อุณหภูมิ";
+  btn.font(prasanmit_20);
+  btn.GRID_CELL( GRID_COL { 100 }, GRID_ROW { GRID_CONTENT, GRID_CONTENT });
+    lb_extra = String(29.1, 1);
+    lb_extra.font(BebasNeueBold_num_45);
+    lb_extra.grid_cell(0,1, GRID_ALIGN_CENTER, GRID_ALIGN_CENTER,0,-5);
+}
+
+void loop()
+{
+  BlynkGO.update();
+}
+
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!! ตัวอย่าง: 07.GButton_with_layout
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+FILE: 07.GButton_with_layout.ino
+----------------------------------------
+#include <BlynkGOv5.h>
+
+FONT_DECLARE(BebasNeueBold_num_45);
+
+GButton btn;
+  GLabel lb_extra(btn);
+
+void setup()
+{
+  Serial.begin(9600);
+  Serial.println();
+  BlynkGO.begin();
+  BlynkGO.fillScreen(TFT_WHITE);
+
+  btn = "อุณหภูมิ";
+  btn.font(prasanmit_20);
+  btn.GRID_CELL( GRID_COL { 100 }, GRID_ROW { GRID_CONTENT, GRID_CONTENT });
+    lb_extra = String(29.1, 1);
+    lb_extra.font(BebasNeueBold_num_45);
+    lb_extra.grid_cell(0,1, GRID_ALIGN_CENTER, GRID_ALIGN_CENTER,0,-5);
+}
+
+void loop()
+{
+  BlynkGO.update();
+}
+
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!! ตัวอย่าง: 08.GButton_link_SquareLine
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+FILE: 06.GButton_link_SquareLine.ino
+----------------------------------------
+
+/***************************************************************************
+ *   HowTo
+ * -------------
+ *
+ * 1. ออกแบบกราฟิกด้วยโปรเแกรม squareline
+ * และกำหนดโฟลเดอร์ ที่จะ Export UI Files ได้ที่
+ * เมนู File > Project Settings > FILE EXPORT > UI Files Export Path
+ *
+ *    สำหรับ ArduinoIDE : ที๋โปรเแกรม squareline ให้กำหนด UI Files Export Path ไว้ที่ โฟลเดอร์ย่อย src/squareline ภายในโปรเจค ArduinoIDE นั้นๆ
+ *    สำหรับ PlatformIO : ที๋โปรเแกรม squareline ให้กำหนด UI Files Export Path ไว้ที่ โฟลเดอร์ย่อย squareline     ภายในโปรเจค PlatformIO นั้นๆ
+ *
+ * 2. สร้างวิตเจ็ต BlynkGO โดยทำการ ลิงค์วิตเจ็ต BlynkGO เข้ากับ ui ที่ออกแบบจาก squareline
+ *   (ui ต่างๆที่ออกแบบจาก squareline ที่จะเลือกทำการลิงค์วิตเจ็ต BlynkGO ดูได้ที่ squreline/ui.h)
+ *
+ * 3. หลัง ลิงค์วิตเจ็ต แล้ว
+ * จะสามารถ เรียกใช้ คำสั่ง BlynkGO API ต่างๆ เพื่อปรับเปลี่ยนกราฟิกภายหลังได้อีกตามต้องการ
+ * เช่น เปลี่ยนสี เปลี่ยนฟอนต์ เปลี่ยนขนาด และ maker สามารถกำหนดดักสัมผัสแบบต่างๆ ไปใช้งานได้ ฯลฯ
+ *
+ ***************************************************************************/
+
+#include <BlynkGOv5.h>
+
+#if defined(__has_include)
+  #if __has_include("src/squareline/ui.h")
+    #include "src/squareline/ui.h"        // ArduinoIDE
+  #endif
+  #if __has_include("squareline/ui.h")
+    #include "squareline/ui.h"            // PlatformIO
+  #endif
+#endif
+
+GButton btn;                        // วิตเจ็ตปุ่ม     ที่จะไป link กับ ui ที่ออกแบบจาก squareline
+GButton btn_switch(BUTTON_SWITCH);  // วิตเจ็ตปุ่มสวิตซ์ ที่จะไป link กับ ui ที่ออกแบบจาก squareline
+
+void setup()
+{
+  Serial.begin(9600);
+  Serial.println();
+  BlynkGO.begin();
+
+  //----------------------------------------------
+  // ออกแบบจาก squareline
+  // แล้วทำการ ลิงค์ เชื่อม widget กับ ui จาก squareline เฉพาะที่ต้องการ
+  // (ดู รายการ ui ต่างๆ ที่จะสามารถใช้ลิงค์ได้ ที่ไฟล์ squreline/ui.h)
+
+  BlynkGO   .link(ui_Screen1);      // ลิงค์ BlynkGO ไปที่ Screen หลัก ที่ออกแบบจาก squareline *** ต้องมี ***
+  btn       .link(ui_Button1);      // ลิงค์วิตเจ็ตปุ่ม กับ ui ที่ออกแบบจาก squareline
+  btn_switch.link(ui_Button2);      // ลิงค์วิตเจ็ตปุ่ม กับ ui ที่ออกแบบจาก squareline
+
+  //----------------------------------------------
+  // ปรับเปลี่ยนกราฟิกเพิ่มเติมจากที่ออกแบบจาก squareline และกำหนดดักสัมผัสใช้งานต่างๆ ภายหลังได้
+
+  btn = "ปุ่มกด";
+  btn.onClicked(GWIDGET_CB {
+    Serial.println("[btn] Clicked");
+  });
+
+  btn_switch = "ปุ่มสวิตซ์";
+  btn_switch.ON();
+  btn_switch.onValueChanged(GWIDGET_CB {
+    Serial.printf("[btn_switch] %s\n", btn_switch.isON() ? "ON" : "OFF");
+  });
+
+}
+
+void loop()
+{
+  BlynkGO.update();
+}
+
+
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!! ตัวอย่าง: 09.GButton_with_Symbol
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+FILE: 09.GButton_with_Symbol.ino
+----------------------------------------
+#include <BlynkGOv5.h>
+
+FONT_DECLARE(google_icon_trend_20);
+
+#define SYMBOL_TRENDING_UP        "\ue8e5"
+#define SYMBOL_TRENDING_FLAT      "\ue8e4"
+#define SYMBOL_TRENDING_DOWN      "\ue8e3"
+#define SYMBOL_TIMELINE           "\ue922"
+#define SYMBOL_CHART_DATA         "\ue473"
+#define SYMBOL_MENU               "\ue5d2"
+
+GButton btn;
+
+void setup(){
+  Serial.begin(9600); Serial.println();
+  BlynkGO.begin();
+
+  btn.setSymbol(SYMBOL_TRENDING_UP);
+  btn.symbol_font(google_icon_trend_20, TFT_RED);
+  btn.symbol_translate_y(2);
+  btn = "Hello";
+
+  btn.onClicked(GWIDGET_CB{
+    static int c=0;
+    c = (++c)%5;
+    switch(c){
+      case 0: btn.setSymbol(SYMBOL_TRENDING_UP);    break;
+      case 1: btn.setSymbol(SYMBOL_TRENDING_FLAT);  break;
+      case 2: btn.setSymbol(SYMBOL_TRENDING_DOWN);  break;
+      case 3: btn.setSymbol(SYMBOL_TIMELINE);       break;
+      case 4: btn.setSymbol(SYMBOL_CHART_DATA);     break;
+      case 5: btn.setSymbol(SYMBOL_MENU);           break;
+    }
+  });
+}
+
+void loop(){
+  BlynkGO.update();  
+}
+

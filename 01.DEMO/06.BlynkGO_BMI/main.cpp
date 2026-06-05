@@ -129,7 +129,7 @@ class GScalePicker : public GContainer {
 
 class GNumpad : public GRect {
   public:
-    GNumpad(GWidget&parent =GScreen) : GRect(parent)   {}   
+    GNumpad(GPARENT) : GRect(parent)   {}   
     GLabel lb_title;
     GContainer cont_numpad;
     GTextArea ta_numpad;

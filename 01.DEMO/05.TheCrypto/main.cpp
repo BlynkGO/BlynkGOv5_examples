@@ -19,7 +19,7 @@ String formatLargeNumber(uint64_t v);
 /* วิตเจ็ตสำหรับใช้เป็น element ของ ลิสต์ Crypto */
 class GCryptoBox : public GRect {
   public:
-    GCryptoBox(GWidget&parent=GScreen) : GRect(parent)   {}
+    GCryptoBox(GPARENT) : GRect(parent)   {}
 
     GLabel lb_no;                 /* # order */
     GImage image_coin_logo;       /* รูป logo */

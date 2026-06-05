@@ -2,7 +2,7 @@
 
 class GFanSwitch : public GContainer {
   public:
-    GFanSwitch(GWidget&parent=GScreen) : GContainer(parent) {}
+    GFanSwitch(GPARENT) : GContainer(parent) {}
     GLabel Label;
     GButton btn[4];
       color_t btn_color_ON[4] =  { TFT_SILVER, TFT_RED, TFT_GREEN, TFT_BLUE};

@@ -4,7 +4,7 @@
 
 class GMyGauge : public GContainer {
   public:
-    GMyGauge(GWidget&parent=GScreen) : GContainer(parent) {}
+    GMyGauge(GPARENT) : GContainer(parent) {}
     GLabel label;
     GGaugeRainbow gauge;
     void create(){

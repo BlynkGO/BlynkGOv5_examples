@@ -12,7 +12,7 @@ FONT_DECLARE(BebasNeue_Bold_35);
 
 class GCardValue : public GRect {
   public:
-    GCardValue(GWidget&parent=GScreen): GRect(parent)   {}
+    GCardValue(GPARENT): GRect(parent)   {}
     GLabel lb_title;
     GLabel lb_value;
     float _v;
@@ -34,7 +34,7 @@ class GCardValue : public GRect {
 
 class GItemStatus : public GRect {
   public:
-    GItemStatus(GWidget&parent=GScreen): GRect(parent)   {}
+    GItemStatus(GPARENT): GRect(parent)   {}
     GRect box;
     GLabel lb;
     bool _state = true;
@@ -79,7 +79,7 @@ class GItemStatus : public GRect {
 
 class GCardMachineState : public GRect {
   public:
-    GCardMachineState(GWidget&parent=GScreen): GRect(parent)   {}
+    GCardMachineState(GPARENT): GRect(parent)   {}
     GLabel lb_title;
     GLabel lb_symbol;
     void create(){
@@ -111,7 +111,7 @@ class GCardMachineState : public GRect {
 
 class G_MyICON : public GContainer {
   public:
-    G_MyICON(GWidget&parent=GScreen): GContainer(parent)   {}
+    G_MyICON(GPARENT): GContainer(parent)   {}
     GLabel lb_symbol;
     GLabel lb_name;
     void create(){

@@ -5,7 +5,7 @@
 
 class GDataMonitor : public GContainer {
   public:
-    GDataMonitor(GWidget& parent=GScreen) : GContainer(parent)  {} // บังคับให้มี
+    GDataMonitor(GPARENT=GScreen) : GContainer(parent)  {} // บังคับให้มี
     GLabel lb_title;
     GLabel lb_control;
     GLabel lb_clear;

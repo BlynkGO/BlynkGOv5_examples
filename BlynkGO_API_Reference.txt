@@ -1,0 +1,433 @@
+================================================================================
+  BlynkGO v5 — API Reference (auto-generated)
+  Source: E:\Projects\ArduinoNative\BlynkGO_KrapraoMuKrob_Full_950\lib\BeeUI\src\widgets
+================================================================================
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  CLASS HIERARCHY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+GObject           ← base ทุกอย่าง
+  └─ GWidget
+
+  GLayer
+  GMultiScreen  : GTileView
+  GObject
+    └─ GAnimImage  : GObject
+    └─ GArcLabel  : GObject
+    └─ GBar  : GObject
+      └─ GSlider  : GBar
+    └─ GButtonMatrix  : GObject
+      └─ GKeyboard  : GButtonMatrix
+    └─ GCalendar  : GObject
+    └─ GCanvas  : GObject
+    └─ GChart  : GObject
+    └─ GChartRangeBar  : GObject
+    └─ GCheckbox  : GObject
+    └─ GCircle  : GObject
+    └─ GContainer  : GObject
+      └─ GButton  : GContainer
+      └─ GIcon  : GContainer
+      └─ GMask  : GContainer
+      └─ GPage  : GContainer
+        └─ GList  : GPage
+      └─ GStep  : GContainer
+    └─ GDropdownList  : GObject
+    └─ GGaugeRainbow  : GObject
+    └─ GImage  : GObject
+    └─ GImageButton  : GObject
+    └─ GKeyUnlocker  : GObject
+    └─ GLabel  : GObject, String
+    └─ GLed  : GObject
+    └─ GLine  : GObject
+    └─ GLottie  : GObject
+    └─ GMenu  : GObject
+    └─ GMessageBox  : GObject
+      └─ GApp  : GMessageBox
+    └─ GPasscodeLock  : GObject
+    └─ GQRCode  : GObject
+    └─ GRoller  : GObject
+    └─ GSwitch  : GObject
+    └─ GTabView  : GObject
+    └─ GTextArea  : GObject
+      └─ GSpinbox  : GTextArea
+    └─ GTextAreaInputPad  : GObject
+    └─ GTile  : GObject
+    └─ GWiFiSetting  : GObject
+  GScaleSection
+  GSpan
+  GSpinner  : GArc
+  GTableColumn
+  GTimeline
+  GTransition
+  GVector
+  Grid
+  knob_class
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  CLASS API REFERENCE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+────────────────────────────────────────────────────────────
+  class knob_class
+────────────────────────────────────────────────────────────
+  (ไม่พบ public methods)
+
+────────────────────────────────────────────────────────────
+  class Grid
+────────────────────────────────────────────────────────────
+  (ไม่พบ public methods)
+  Macros / Helpers:
+    #define POINT_PRINTLN(point)    Serial.printf("[Point] %d,%d\n", (int)point.x, (int)point.y)
+    #define POINT_PRINTLN_F(point)  Serial.printf("[Point] %.2f,%.2f\n", point.x, point.y)
+
+────────────────────────────────────────────────────────────
+  class GVector
+────────────────────────────────────────────────────────────
+  (ไม่พบ public methods)
+
+────────────────────────────────────────────────────────────
+  class GTransition
+────────────────────────────────────────────────────────────
+  (ไม่พบ public methods)
+
+────────────────────────────────────────────────────────────
+  class GTimeline
+────────────────────────────────────────────────────────────
+  (ไม่พบ public methods)
+
+────────────────────────────────────────────────────────────
+  class GTableColumn
+────────────────────────────────────────────────────────────
+  (ไม่พบ public methods)
+
+────────────────────────────────────────────────────────────
+  class GSpinner : GArc
+────────────────────────────────────────────────────────────
+  (ไม่พบ public methods)
+
+────────────────────────────────────────────────────────────
+  class GSpan
+────────────────────────────────────────────────────────────
+  (ไม่พบ public methods)
+
+────────────────────────────────────────────────────────────
+  class GScaleSection
+────────────────────────────────────────────────────────────
+  (ไม่พบ public methods)
+
+────────────────────────────────────────────────────────────
+  class GObject
+────────────────────────────────────────────────────────────
+  (ไม่พบ public methods)
+
+────────────────────────────────────────────────────────────
+  class GWiFiSetting : GObject
+────────────────────────────────────────────────────────────
+  (ไม่พบ public methods)
+
+────────────────────────────────────────────────────────────
+  class GTile : GObject
+────────────────────────────────────────────────────────────
+  (ไม่พบ public methods)
+
+────────────────────────────────────────────────────────────
+  class GTextAreaInputPad : GObject
+────────────────────────────────────────────────────────────
+  (ไม่พบ public methods)
+
+────────────────────────────────────────────────────────────
+  class GTextArea : GObject
+────────────────────────────────────────────────────────────
+  (ไม่พบ public methods)
+  Macros / Helpers:
+    #define GPART_PLACEHOLDER_FLOAT         (gstate_t) (GPART_TEXTAREA_PLACEHOLDER | (int) GSTATE_EDITED)
+
+────────────────────────────────────────────────────────────
+  class GSpinbox : GTextArea
+────────────────────────────────────────────────────────────
+  (ไม่พบ public methods)
+
+────────────────────────────────────────────────────────────
+  class GTabView : GObject
+────────────────────────────────────────────────────────────
+  (ไม่พบ public methods)
+
+────────────────────────────────────────────────────────────
+  class GSwitch : GObject
+────────────────────────────────────────────────────────────
+  (ไม่พบ public methods)
+
+────────────────────────────────────────────────────────────
+  class GRoller : GObject
+────────────────────────────────────────────────────────────
+  (ไม่พบ public methods)
+
+────────────────────────────────────────────────────────────
+  class GQRCode : GObject
+────────────────────────────────────────────────────────────
+  (ไม่พบ public methods)
+
+────────────────────────────────────────────────────────────
+  class GPasscodeLock : GObject
+────────────────────────────────────────────────────────────
+  (ไม่พบ public methods)
+
+────────────────────────────────────────────────────────────
+  class GMessageBox : GObject
+────────────────────────────────────────────────────────────
+  (ไม่พบ public methods)
+
+────────────────────────────────────────────────────────────
+  class GApp : GMessageBox
+────────────────────────────────────────────────────────────
+  (ไม่พบ public methods)
+
+────────────────────────────────────────────────────────────
+  class GMenu : GObject
+────────────────────────────────────────────────────────────
+  (ไม่พบ public methods)
+
+────────────────────────────────────────────────────────────
+  class GLottie : GObject
+────────────────────────────────────────────────────────────
+  (ไม่พบ public methods)
+
+────────────────────────────────────────────────────────────
+  class GLine : GObject
+────────────────────────────────────────────────────────────
+  (ไม่พบ public methods)
+
+────────────────────────────────────────────────────────────
+  class GLed : GObject
+────────────────────────────────────────────────────────────
+  (ไม่พบ public methods)
+
+────────────────────────────────────────────────────────────
+  class GLabel : GObject, String
+────────────────────────────────────────────────────────────
+  (ไม่พบ public methods)
+  Macros / Helpers:
+    #define LABEL_TEXT_SELECTION_OFF          (0xFFFF)
+    #define TEXT_SELECTION_OFF                (LABEL_TEXT_SELECTION_OFF)
+
+────────────────────────────────────────────────────────────
+  class GKeyUnlocker : GObject
+────────────────────────────────────────────────────────────
+  (ไม่พบ public methods)
+
+────────────────────────────────────────────────────────────
+  class GImageButton : GObject
+────────────────────────────────────────────────────────────
+  (ไม่พบ public methods)
+
+────────────────────────────────────────────────────────────
+  class GImage : GObject
+────────────────────────────────────────────────────────────
+  (ไม่พบ public methods)
+
+────────────────────────────────────────────────────────────
+  class GGaugeRainbow : GObject
+────────────────────────────────────────────────────────────
+  (ไม่พบ public methods)
+
+────────────────────────────────────────────────────────────
+  class GDropdownList : GObject
+────────────────────────────────────────────────────────────
+  (ไม่พบ public methods)
+
+────────────────────────────────────────────────────────────
+  class GContainer : GObject
+────────────────────────────────────────────────────────────
+  (ไม่พบ public methods)
+
+────────────────────────────────────────────────────────────
+  class GStep : GContainer
+────────────────────────────────────────────────────────────
+  (ไม่พบ public methods)
+
+────────────────────────────────────────────────────────────
+  class GPage : GContainer
+────────────────────────────────────────────────────────────
+  (ไม่พบ public methods)
+
+────────────────────────────────────────────────────────────
+  class GList : GPage
+────────────────────────────────────────────────────────────
+  (ไม่พบ public methods)
+
+────────────────────────────────────────────────────────────
+  class GMask : GContainer
+────────────────────────────────────────────────────────────
+  (ไม่พบ public methods)
+
+────────────────────────────────────────────────────────────
+  class GIcon : GContainer
+────────────────────────────────────────────────────────────
+  (ไม่พบ public methods)
+
+────────────────────────────────────────────────────────────
+  class GButton : GContainer
+────────────────────────────────────────────────────────────
+  (ไม่พบ public methods)
+
+────────────────────────────────────────────────────────────
+  class GCircle : GObject
+────────────────────────────────────────────────────────────
+  (ไม่พบ public methods)
+
+────────────────────────────────────────────────────────────
+  class GCheckbox : GObject
+────────────────────────────────────────────────────────────
+  (ไม่พบ public methods)
+
+────────────────────────────────────────────────────────────
+  class GChartRangeBar : GObject
+────────────────────────────────────────────────────────────
+  (ไม่พบ public methods)
+
+────────────────────────────────────────────────────────────
+  class GChart : GObject
+────────────────────────────────────────────────────────────
+  (ไม่พบ public methods)
+  Macros / Helpers:
+    #define CHART_POINT_NONE          (INT32_MAX)
+
+────────────────────────────────────────────────────────────
+  class GCanvas : GObject
+────────────────────────────────────────────────────────────
+  (ไม่พบ public methods)
+  Macros / Helpers:
+    #define DRAW_BUF_DEFINE(name, _w, _h, _cf) \
+
+────────────────────────────────────────────────────────────
+  class GCalendar : GObject
+────────────────────────────────────────────────────────────
+  (ไม่พบ public methods)
+
+────────────────────────────────────────────────────────────
+  class GButtonMatrix : GObject
+────────────────────────────────────────────────────────────
+  (ไม่พบ public methods)
+
+────────────────────────────────────────────────────────────
+  class GKeyboard : GButtonMatrix
+────────────────────────────────────────────────────────────
+  (ไม่พบ public methods)
+
+────────────────────────────────────────────────────────────
+  class GBar : GObject
+────────────────────────────────────────────────────────────
+  Methods:
+    GBar(GWidget & parent = GScreen)                        : GObject(&parent)
+    GBar(GWidget* parent)                                   : GObject(parent)
+    void  create()
+    void  create(GWidget& parent)
+    void  create(GWidget* parent)
+    int   toInt()
+    void color(color_t color)
+    void color(color_t color, color_t grad_color)
+    void color(String color)
+    void color(String color, String grad_color)
+    color_t color()
+    color_t grad_color()
+    void grad_dir(grad_dir_t grad_dir)
+    grad_dir_t grad_dir()
+    void opa(uint8_t opa)
+    uint8_t  opa()
+    void bg_color(color_t color)
+    void bg_color(String color)
+    color_t  bg_color()
+    void bg_opa(uint8_t opa)
+    uint8_t  bg_opa()
+    void image(const img_t& img)
+    void image(const img_t* img)
+    const img_t* image()
+    void image_opa(uint8_t opa)
+    void image_tiled(bool enable)
+    void rounded(bool en)
+    void radius(uint16_t r)
+    void corner_radius(uint16_t r)
+    void direction(base_dir_t direction)
+    void value(int32_t value, bool anim_enable = true)
+    void start_value(int32_t start_value, bool anim_enable = true)
+    void value_range(int32_t start_value, int32_t value)
+    void range(int32_t min, int32_t max)
+    void mode(bar_mode_t mode)  // BAR_MODE_NORMAL,  BAR_MODE_SYMMETRICAL,  BAR_MODE_RANGE
+    void orientation(bar_orientation_t orient)
+    int32_t value()
+    int32_t start_value()
+    int32_t min_value()
+    int32_t max_value()
+    bar_mode_t mode()
+    bar_orientation_t orientation()
+    bool isSymmetrical()
+    area_t indic_area()
+
+────────────────────────────────────────────────────────────
+  class GSlider : GBar
+────────────────────────────────────────────────────────────
+  (ไม่พบ public methods)
+
+────────────────────────────────────────────────────────────
+  class GArcLabel : GObject
+────────────────────────────────────────────────────────────
+  (ไม่พบ public methods)
+
+────────────────────────────────────────────────────────────
+  class GAnimImage : GObject
+────────────────────────────────────────────────────────────
+  (ไม่พบ public methods)
+
+────────────────────────────────────────────────────────────
+  class GMultiScreen : GTileView
+────────────────────────────────────────────────────────────
+  (ไม่พบ public methods)
+
+────────────────────────────────────────────────────────────
+  class GLayer
+────────────────────────────────────────────────────────────
+  (ไม่พบ public methods)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  QUICK NOTES  (สิ่งที่ AI ต้องรู้)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ─ FONT ที่มีพร้อมใช้ (default) ─────────────────────────────
+  prasanmit_20, prasanmit_25, prasanmit_30 (default), prasanmit_35, prasanmit_40
+  Material_Icon_30, Material_Icon_40
+  BebasNeueBold_num_45
+
+  ─ padding() argument order ──────────────────────────────────
+  padding(top, bottom, left, right)
+  padding(all)   ← ทุกด้านเท่ากัน
+
+  ─ align() ───────────────────────────────────────────────────
+  widget.align(ALIGN_XX, x_offset, y_offset)
+  widget.align(ref_widget, ALIGN_XX, x_offset, y_offset)
+  widget.align_center(x_offset, y_offset)
+
+  ─ GRID_CELL ─────────────────────────────────────────────────
+  parent.GRID_CELL( GRID_COL{...}, GRID_ROW{...} )
+  child.grid_cell(col, row)
+  child.grid_cell(col, row, col_span, row_span)
+  GRID_FR(n)  = flexible fraction (คล้าย CSS fr)
+  PCT(n)      = n% ของ parent size
+
+  ─ Time functions ─────────────────────────────────────────────
+  hour(), minute(), second(), day(), month(), year()
+  wday()   ← 1=อาทิตย์ … 7=เสาร์  (ไม่ใช่ weekday())
+
+  ─ SoftTimer ─────────────────────────────────────────────────
+  static SoftTimer t;
+  t.setInterval(ms, callback);
+  t.setInterval(ms, callback, true);  // true = เรียก callback ทันที
+  t.delay(ms, callback);
+  t.del();
+
+  ─ StringX ───────────────────────────────────────────────────
+  StringX::printf("%02d:%02d", h, m)
+
+================================================================================
+  END OF FILE
+================================================================================

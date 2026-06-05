@@ -8,8 +8,8 @@ class GCell : public GContainer {
     /***********************
      * Constructor
      ***********************/
-    GCell(GWidget&parent=GScreen) : GContainer(parent)    {}
-    GCell(String topic, GWidget&parent=GScreen)
+    GCell(GPARENT) : GContainer(parent)    {}
+    GCell(String topic, GPARENT)
      : GContainer(parent), _topic(topic)                  {}
 
     /***********************
