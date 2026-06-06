@@ -29,7 +29,7 @@ RANGE OPTIONS (เลือก 1 อย่าง):
 
 EXAMPLES:
   fontconv --font Kanit.ttf       --size 30 -thai
-  fontconv --font Kanit.ttf       --size 30 -thai    -o kanit_thai_30
+  fontconv --font Kanit.ttf       --size 30 -thai    -o kanit_thai_30.c    ←  -o ต้องมี .c ด้วย
   fontconv --font Roboto.ttf      --size 25 -eng
   fontconv --font BebasNeue.ttf   --size 45 -num
 
@@ -70,8 +70,12 @@ EXAMPLES:
 OUTPUT:
   ไฟล์ชื่อ <name>.c  หรือ auto-generate จากชื่อ iconlist
 
+  และได้ <name>_List.h  ออกมาให้ เป็น file ที่ #define SYM_XXX  ออกมาให้
+
 ใช้ใน CODE:
+  #include "my_icons_List.h"         // file ที่ #define SYM_XXXX ออกมาให้ จาก iconconv
   FONT_DECLARE(my_icons_30);         // ประกาศ global
+
   label.font(my_icons_30, TFT_WHITE);
   label = "\uE63E";                  // ใส่ codepoint ตรงๆ
 
@@ -90,6 +94,8 @@ SYNTAX:
 EXAMPLES:
   imgconv background.png           → img_background.c
   imgconv logo.png                 → img_logo.c
+  imgconv background.jpg           → img_background.c
+  imgconv background.bmp           → img_background.c
   imgconv icon_sun.png   -t        → img_icon_sun.c   (โปร่งใส)
   imgconv sprite.png     -t        → img_sprite.c     (โปร่งใส)
 

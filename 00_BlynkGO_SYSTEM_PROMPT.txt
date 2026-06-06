@@ -1,5 +1,5 @@
 ================================================================================
-  BlynkGO v5 — SYSTEM PROMPT FOR AI CODE GENERATION
+  BlynkGO v5 — SYSTEM PROMPT FOR AI CODE GENERATION - HIGH PRIORITY - DO NOT BREAK CASTER
   วางไฟล์นี้พร้อมกับ 3 ไฟล์อื่น ทุกครั้งที่เริ่ม session ใหม่
   อ่านไฟล์นี้ก่อน แล้วจึงอ่าน 01, 02, 03 ตามลำดับ
 ================================================================================
@@ -70,8 +70,9 @@ COMMENT TEMPLATE สำหรับ custom icon font:
   // 2. รันคำสั่ง:
   //      iconconv iconlist.txt --size <px> --name <output_name>
   //    ตัวอย่าง:
-  //      iconconv iconlist.txt --size 30 --name ui_icons_30
-  // 3. จะได้ไฟล์ ui_icons_30.c ใน src/ → จึงค่อย build project
+  //      iconconv iconlist.txt --size 30 --name ui_icons
+  // 3. จะได้ไฟล์ ui_icons_30.c ใน src/
+  // 4. ให้ #include "dash_icons_List.h" ใน main.cpp → จึงค่อย build project
   // ────────────────────────────────────────────────────────────────────
   FONT_DECLARE(<output_name>);
   #define SYMBOL_<NAME>   "\u<CODEPOINT>"
@@ -125,6 +126,12 @@ EVENT CALLBACK:
         // code here
       });
 
+POSITION:
+  - widget.position(x, y)
+
+CENTER:
+  - widget.center(x, y)  ← centerpoint of widget place at x, y
+
 ALIGNMENT:
   - widget.align(ALIGN_XX)
   - widget.align(ALIGN_XX, x_offset, y_offset)
@@ -132,15 +139,38 @@ ALIGNMENT:
   - widget.align_center(x_offset, y_offset)
 
 PADDING:
-  - padding(top, bottom, left, right)   ← 4 ค่า
-  - padding(all)                        ← ทุกด้านเท่ากัน
+  - padding(top, bottom, left, right)                    ← 4 ค่า
+  - padding(top, bottom, left, right, gap)               ← 5 ค่า
+  - padding(top, bottom, left, right, gap_rol, gap_col)  ← 6 ค่า
+  - padding(all)                                         ← ทุกด้านเท่ากัน รวม gap (padding inner)
 
 GRID:
   - parent.GRID_CELL( GRID_COL{w1, w2, ...}, GRID_ROW{h1, h2, ...} )
   - child.grid_cell(col, row)
   - child.grid_cell(col, row, col_span, row_span)
-  - GRID_FR(n)  = flexible fraction
-  - PCT(n)      = n% ของ parent
+  - child.grid_cell(col, row, col_span, row_span, col_align, row_align)
+  - child.grid_cell(col, row, col_span, row_span, col_align, row_align, offset_x, offset_y)
+  - child.grid_cell(col, row, col_align, row_align)
+  - child.grid_cell(col, row, col_align, row_align, offset_x, offset_y)
+  - GRID_FR(n)      = flexible fraction — กิน space ที่เหลือตามสัดส่วน
+  - GRID_CONTENT    = col/row หดตาม child ที่ใหญ่สุดใน col/row นั้น
+  - <px>            = ขนาดตายตัว เช่น GRID_ROW{ 220, GRID_FR(1) }
+
+SIZE (ใช้ใน widget.size(w, h) / widget.width(w) / widget.height(h)):
+  - <px>            = ขนาดตายตัว เช่น widget.size(160, 160)
+  - PCT(n)          = n% ของ parent
+  - SIZE_CONTENT    = หดตาม content ข้างใน
+                      ⚠️ GRect default = PCT(100) ทั้ง width/height
+                         ถ้าใช้ GRID_CONTENT ใน parent → child GRect ต้องกำหนด
+                         height(SIZE_CONTENT) ด้วย ไม่งั้น GRID measure ผิด
+
+  CONSTRAINTS:
+  - widget.min_size(min_w, min_h)   = บังคับขนาดขั้นต่ำ
+  - widget.max_size(max_w, max_h)   = บังคับขนาดสูงสุด
+  - widget.min_width(w)             = บังคับความกว้างขั้นต่ำ
+  - widget.min_height(h)            = บังคับความสูงขั้นต่ำ
+  - widget.max_width(w)             = บังคับความกว้างสูงสุด
+  - widget.max_height(h)            = บังคับความสูงสูงสุด
 
 TIMER:
   - static SoftTimer t;
@@ -162,6 +192,20 @@ COLOR:
   - TFT_PALETTE(TFT_PALETTE_RED)
   - TFT_PALETTE_DARKEN(TFT_PALETTE_YELLOW, 2)
   - TFT_COLOR_HSV(hue, sat, val)
+  - "#RRGGBB"
+  - ❌ ห้ามใช้ color_hex(0x111314)
+  - ❌ ห้ามใช้ rgb(17, 19, 20)
+
+WIDGET DEFAULT BEHAVIOR:
+  - ทุก widget — default position = ALIGN_CENTER (ไม่ใช่ position(0,0) หรือ top-left)
+  - GRect      — default size = PCT(100) width และ PCT(100) height ของ parent
+                 (หดตาม padding ของ parent อัตโนมัติ)
+                 ถ้าต้องการเต็ม parent ไม่ต้องกำหนด size เลย
+                 ⚠️ ถ้าใช้ใน GRID_CONTENT row → ต้องกำหนด height(SIZE_CONTENT)
+                    เพื่อ override default PCT(100)
+  - GRect ใน GRID — default col_align/row_align = GRID_ALIGN_STRETCH
+                    จะยืดเต็ม grid cell นั้นๆ อัตโนมัติ
+                    ไม่ต้องระบุ GRID_ALIGN_STRETCH ซ้ำใน grid_cell()
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   SECTION 4b — WIDGET USAGE & CUSTOM CLASS PATTERN  ⚠️ CRITICAL
@@ -275,12 +319,152 @@ CORRECT CONSTRUCTOR FORMS:
   MyWidget(const char* text, GPARENT) : GBase(text, parent) {}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  SECTION 4c — API HALLUCINATION PREVENTION  ⚠️ CRITICAL
+  SECTION 4c — CWC (Custom Widget Class) RULE  ⚠️ CRITICAL
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-หลาย class ใน API Reference ระบุ "(ไม่พบ public methods)"
-นั่น ❌ ไม่ได้แปลว่า method เหล่านั้นไม่มี
-แต่หมายความว่า tool สแกนไม่เจอ → ต้องดูจาก 02_examples เท่านั้น
+── เมื่อไรต้องสร้าง CWC ──────────────────────────────────────────────────────
+
+  ✅ ถ้า widget ชนิดเดียวกันถูกสร้างซ้ำมากกว่า 1 ตัว ที่มี style/config เหมือนกัน
+     → ต้องสร้าง CWC แทนการ copy-paste code เสมอ
+     → ทำให้ code สั้นลง อ่านง่าย และแก้ไขที่เดียว
+
+  ตัวอย่างที่ต้องทำ CWC:
+    - Card หลายใบ layout เดียวกัน
+    - Sensor box หลายอัน (อุณหภูมิ, ความชื้น, ฯลฯ)
+    - ปุ่มหลายปุ่ม style เดียวกัน
+    - Row ข้อมูลซ้ำๆ ใน list / table
+
+── CWC PATTERN (ต้องทำตาม Section 4b PART 2 เสมอ) ───────────────────────────
+
+  ✅ ตัวอย่าง CWC สำหรับ SensorCard ที่ใช้ซ้ำ 4 ใบ:
+
+    class SensorCard : public GContainer {
+      public:
+        SensorCard(GPARENT) : GContainer(parent) {}
+
+        void create() {
+          if (GContainer::isCreated()) return;
+          GContainer::create();
+
+          GContainer::size(180, 100);
+          GContainer::bg_color(TFT_COLOR_HEX(0x1E1E1E));
+          GContainer::radius(12);
+          GContainer::border(0);
+
+          lb_title.parent(this);
+          lb_title.font(prasanmit_25, TFT_DARKGRAY);
+          lb_title.align(ALIGN_TOP_LEFT, 10, 8);
+
+          lb_value.parent(this);
+          lb_value.font(BebasNeueBold_num_45, TFT_WHITE);
+          lb_value.align(ALIGN_BOTTOM_LEFT, 10, -8);
+        }
+
+        void setTitle(const char* t)  { create(); lb_title = t; }
+        void setValue(float v, const char* unit) {
+          create();
+          lb_value = StringX::printf("%.1f %s", v, unit);
+        }
+
+        GLabel lb_title;
+        GLabel lb_value;
+    };
+
+    // ── Global ──
+    SensorCard card_temp;
+    SensorCard card_humi;
+    SensorCard card_co2;
+    SensorCard card_pm25;
+
+    void setup() {
+      BlynkGO.begin();
+
+      card_temp.setTitle("อุณหภูมิ");
+      card_temp.align(ALIGN_TOP_LEFT, 10, 10);
+
+      card_humi.setTitle("ความชื้น");
+      card_humi.align(ALIGN_TOP_LEFT, 200, 10);
+
+      card_co2.setTitle("CO₂");
+      card_co2.align(ALIGN_TOP_LEFT, 390, 10);
+
+      card_pm25.setTitle("PM2.5");
+      card_pm25.align(ALIGN_TOP_LEFT, 580, 10);
+    }
+
+    // ── ใช้งาน ──
+    card_temp.setValue(28.5, "°C");
+    card_humi.setValue(65.0, "%");
+
+── CWC RULES สรุป ─────────────────────────────────────────────────────────────
+
+  ✅ widget ซ้ำ > 1 ตัว + config เหมือนกัน → สร้าง CWC เสมอ
+  ✅ CWC ต้องทำตาม LAZY CREATION PATTERN (Section 4b PART 2) ทุกครั้ง
+  ✅ ตั้งชื่อ CWC ให้สื่อความหมาย เช่น SensorCard, StatBox, NavButton
+  ✅ public method ของ CWC ต้องเรียก create() บรรทัดแรกเสมอ
+  ✅ CWC ทำให้ setup() สั้นลงมาก — ย้าย config ทั้งหมดเข้าไปใน class
+  ❌ ห้าม copy-paste block เดิมซ้ำกัน — ถ้าซ้ำ ต้องทำ CWC
+
+
+CWC (Custom Widget Class) PATTERN — มี widget ลูก:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+class MyWidget : public GRect {
+  public:
+    GLabel lb_title;   // ① ประกาศเป็น value object เฉยๆ ห้ามทำอะไรในนี้
+
+    // ② constructor: รับ GPARENT ส่งต่อให้แม่เท่านั้น
+    //    ห้ามผูก parent ของลูก / ห้ามตั้งค่าอะไรทั้งสิ้น
+    MyWidget(GPARENT) : GRect(parent) {}
+
+    void create() {
+      if (GRect::isCreated()) return;  // ③ guard
+      GRect::create();                 // ④ สร้างแม่ก่อนเสมอ
+
+      // ⑤ ผูก parent ลูกในนี้ (ผ่าน BlynkGO.begin() แล้ว ปลอดภัย)
+      lb_title.parent(this);
+
+      // ⑥ ตั้งค่า widget ลูก
+      lb_title = "HELLO";
+      lb_title.font(prasanmit_25);
+    }
+
+    // ⑦ public methods เรียก create() บรรทัดแรกเสมอ
+    void title(String t) { create(); lb_title = t; }
+};
+
+กฎเหล็ก CWC:
+  ❌ ห้ามผูก parent ลูกใน constructor
+  ❌ ห้ามตั้งค่า widget ใดๆ ใน constructor
+  ❌ ห้ามเรียก create() จากภายนอก (BlynkGO จัดการเอง)
+  ✅ parent ลูกทุกตัวผูกใน create() เท่านั้น
+  ✅ public method ทุกตัวเรียก create() บรรทัดแรกเสมอ
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECTION 4d — API HALLUCINATION PREVENTION  ⚠️ CRITICAL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+── SOURCE OF TRUTH — ลำดับความน่าเชื่อถือ ────────────────────────────────────
+
+  ลำดับที่ 1 (สูงสุด) : 02_BlynkGOv5_examples_All.txt
+      → code ที่ compile และรันได้จริง คือหลักฐานที่เชื่อได้ 100%
+      → ถ้า example ใช้ method/pattern ไหน → ใช้แบบนั้นเสมอ
+
+  ลำดับที่ 2 : 01_BlynkGO_API_Reference.txt
+      → ใช้ยืนยัน method signature และ enum values
+      → ถ้า Reference มี method แต่ไม่มีใน example → ใช้ได้ แต่ระวัง
+      → ถ้า Reference บอก "(ไม่พบ public methods)" → ไม่ได้แปลว่าไม่มี
+         tool สแกนไม่เจอ → ให้ดู example แทน
+
+  ลำดับที่ 3 (ต่ำสุด) : ความรู้จากการเทรน AI
+      → ❌ ห้ามใช้โดยเด็ดขาด ถ้าขัดกับ example หรือ reference
+      → ❌ ห้าม "เดา" method ที่ไม่มีใน example และ reference
+
+── RULE สำคัญ ─────────────────────────────────────────────────────────────────
+
+  ✅ ทุก method ที่ generate ต้องปรากฏใน example หรือ reference อย่างใดอย่างหนึ่ง
+  ✅ ถ้า example และ reference ขัดกัน → เชื่อ example
+  ❌ ห้ามประดิษฐ์ method ใหม่ที่ไม่เคยปรากฏในทั้ง 2 แหล่ง เด็ดขาด
+  ❌ ถ้าไม่แน่ใจว่า method มีจริงไหม → บอก user แทน อย่า generate มั่ว
 
 RULE: ถ้า API Reference ไม่มี method → ดูจาก Examples ไฟล์ 02 ก่อนเสมอ
       ห้าม hallucinate method ที่ไม่เคยปรากฏใน Examples เด็ดขาด
@@ -301,7 +485,7 @@ RULE: ถ้า API Reference ไม่มี method → ดูจาก Example
     chart.border(px)
     chart.draw_grad(bool)
     chart.clickable(bool)
-    chart.createSerie(color)              ← คืน GChartSerie* หรือ serie_t
+    chart.createSerie(color)              ← คืน chart_series_t* 
     chart.addPoint(series, int32_t value)
     chart.series_color(series, color)
     chart.ext_y_array(series, y_points)
@@ -312,8 +496,9 @@ RULE: ถ้า API Reference ไม่มี method → ดูจาก Example
     add_value()         setValue()          pushData()
 
   ✅ PATTERN การประกาศ series:
-    GChartSerie* series;          // หรือ serie_t* series;
+    chart_series_t* series;          // หรือ serie_t* series;
     series = chart.createSerie(TFT_GREEN);
+    ❌ GChartSerie series;    // ห้ามใช้แบบนี้
 
   ✅ PATTERN การเพิ่มข้อมูล:
     chart.addPoint(series, (int32_t) value);
@@ -488,7 +673,20 @@ RULE: ถ้า API Reference ไม่มี method → ดูจาก Example
   [ ] ใช้ CHART_TYPE_LINE ไม่ใช่ GCHART_LINE
   [ ] ไม่มีการใช้ new / pointer สำหรับ widget — declare เป็น value เสมอ
   [ ] ไม่มี BlynkGO.container() — default parent คือ GScreen ใส่อัตโนมัติ
+  [ ] ทุก method ที่ใช้ปรากฏอยู่ใน example (02) หรือ reference (01) อย่างใดอย่างหนึ่ง
+  [ ] ไม่มี method ที่ "เดา" มาเองโดยไม่มีหลักฐานจาก example หรือ reference
+  [ ] ถ้า example กับ reference ขัดกัน → เชื่อ example เสมอ
+  [ ] ถ้าไม่แน่ใจว่า method มีจริง → แจ้ง user แทนที่จะเดา
+  [ ] widget ชนิดเดียวกัน config เหมือนกัน ซ้ำ > 1 ตัว → ทำ CWC แทน copy-paste
+  [ ] CWC ทุกตัวใช้ LAZY CREATION PATTERN (constructor รับ parent เท่านั้น, create() มี guard)
+  [ ] public method ของ CWC เรียก create() บรรทัดแรกเสมอ
+  [ ] ชื่อ CWC สื่อความหมาย (SensorCard, StatBox, NavButton ฯลฯ)
+  [ ] ไม่กำหนด size ให้ GRect โดยไม่จำเป็น — default PCT(100) อยู่แล้ว
+  [ ] ไม่ระบุ GRID_ALIGN_STRETCH ใน grid_cell() ของ GRect — เป็น default อยู่แล้ว
+  [ ] ไม่ใช้ position(0,0) เพื่อ reset ตำแหน่ง — default ทุก widget คือ ALIGN_CENTER
 
 ================================================================================
   END OF SYSTEM PROMPT
 ================================================================================
+
+หากเข้าใจกฎเหล็กทั้งหมดนี้แล้ว ให้ตอบสั้นๆ เพียงคำว่า "รับทราบ" เพื่อรอรับคำสั่งถัดไป

@@ -1,10 +1,11 @@
 ================================================================================
   BlynkGO v5 — API Reference (auto-generated)
-  Source: E:\Projects\ArduinoNative\BlynkGO_KrapraoMuKrob_Full_950\lib\BeeUI\src\widgets
+  Widgets : E:\Projects\ArduinoNative\BlynkGO_KrapraoMuKrob_Full_950\lib\BeeUI\src\widgets
+  Types   : E:\Projects\ArduinoNative\BlynkGO_KrapraoMuKrob_Full_950\lib\BeeUI\src\utils\BlynkGO_Type.h
 ================================================================================
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  CLASS HIERARCHY
+  SECTION 1 — CLASS HIERARCHY
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 GObject           ← base ทุกอย่าง
@@ -14,6 +15,9 @@ GObject           ← base ทุกอย่าง
   GMultiScreen  : GTileView
   GObject
     └─ GAnimImage  : GObject
+    └─ GArc  : GObject
+      └─ GGauge  : GArc
+      └─ GSpinner  : GArc
     └─ GArcLabel  : GObject
     └─ GBar  : GObject
       └─ GSlider  : GBar
@@ -49,6 +53,7 @@ GObject           ← base ทุกอย่าง
     └─ GRoller  : GObject
     └─ GSwitch  : GObject
     └─ GTabView  : GObject
+    └─ GTable  : GObject
     └─ GTextArea  : GObject
       └─ GSpinbox  : GTextArea
     └─ GTextAreaInputPad  : GObject
@@ -56,27 +61,251 @@ GObject           ← base ทุกอย่าง
     └─ GWiFiSetting  : GObject
   GScaleSection
   GSpan
-  GSpinner  : GArc
-  GTableColumn
   GTimeline
   GTransition
   GVector
   Grid
-  knob_class
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  CLASS API REFERENCE
+  SECTION 2 — ENUM TYPES  (จาก BlynkGO_Type.h)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-────────────────────────────────────────────────────────────
-  class knob_class
-────────────────────────────────────────────────────────────
-  (ไม่พบ public methods)
+  enum align_t
+    ALIGN_DEFAULT,  ALIGN_TOP_LEFT,  ALIGN_TOP_MID,  ALIGN_TOP_RIGHT
+    ALIGN_BOTTOM_LEFT,  ALIGN_BOTTOM_MID,  ALIGN_BOTTOM_RIGHT
+    ALIGN_LEFT_MID,  ALIGN_RIGHT_MID,  ALIGN_CENTER,  ALIGN_OUT_TOP_LEFT
+    ALIGN_OUT_TOP_MID,  ALIGN_OUT_TOP_RIGHT,  ALIGN_OUT_BOTTOM_LEFT
+    ALIGN_OUT_BOTTOM_MID,  ALIGN_OUT_BOTTOM_RIGHT,  ALIGN_OUT_LEFT_TOP
+    ALIGN_OUT_LEFT_MID,  ALIGN_OUT_LEFT_BOTTOM,  ALIGN_OUT_RIGHT_TOP
+    ALIGN_OUT_RIGHT_MID,  ALIGN_OUT_RIGHT_BOTTOM,  ALIGN_IN_TOP
+    ALIGN_OUT_TOP,  ALIGN_IN_BOTTOM,  ALIGN_OUT_BOTTOM,  ALIGN_LEFT_TOP
+    ALIGN_LEFT_BOTTOM,  ALIGN_IN_LEFT,  ALIGN_OUT_LEFT,  ALIGN_RIGHT_TOP
+    ALIGN_RIGHT_BOTTOM,  ALIGN_IN_RIGHT,  ALIGN_OUT_RIGHT,  ALIGN_TOP
+    ALIGN_BOTTOM,  ALIGN_LEFT,  ALIGN_RIGHT,  ALIGN_IN_TOP_LEFT
+    ALIGN_IN_TOP_MID,  ALIGN_IN_TOP_RIGHT,  ALIGN_IN_BOTTOM_LEFT
+    ALIGN_IN_BOTTOM_MID,  ALIGN_IN_BOTTOM_RIGHT,  ALIGN_IN_LEFT_TOP
+    ALIGN_IN_LEFT_MID,  ALIGN_IN_LEFT_BOTTOM,  ALIGN_IN_RIGHT_TOP
+    ALIGN_IN_RIGHT_MID,  ALIGN_IN_RIGHT_BOTTOM
+
+  enum anim_path_type_t
+    ANIM_PATH_LINEAR,  ANIM_PATH_EASE_IN,  ANIM_PATH_EASE_IN_OUT
+    ANIM_PATH_BOUNCE,  ANIM_PATH_STEP,  ANIM_PATH_CUSTOM_BEZIER3
+
+  enum bar_orientation_t
+    BAR_ORIENTATION_AUTO,  BAR_ORIENTATION_HORIZONTAL
+    BAR_ORIENTATION_VERTICAL
+
+  enum base_dir_t
+    BASE_DIR_LTR,  BASE_DIR_RTL,  BASE_DIR_AUTO,  BASE_DIR_NEUTRAL
+    BASE_DIR_WEAK
+
+  enum blend_mode_t
+    BLEND_MODE_NORMAL,  BLEND_MODE_ADDITIVE,  BLEND_MODE_SUBTRACTIVE
+    BLEND_MODE_MULTIPLY
+
+  enum border_side_t
+    BORDER_SIDE_NONE,  BORDER_SIDE_BOTTOM,  BORDER_SIDE_TOP
+    BORDER_SIDE_LEFT,  BORDER_SIDE_RIGHT,  BORDER_SIDE_FULL
+    BORDER_SIDE_INTERNAL
+
+  enum buttonmatrix_ctrl_t
+    _BUTTONMATRIX_WIDTH,  BUTTONMATRIX_CTRL_HIDDEN
+    BUTTONMATRIX_CTRL_NO_REPEAT,  BUTTONMATRIX_CTRL_DISABLED
+    BUTTONMATRIX_CTRL_CHECKABLE,  BUTTONMATRIX_CTRL_CHECKED
+    BUTTONMATRIX_CTRL_CLICK_TRIG,  BUTTONMATRIX_CTRL_RESERVED_1
+    BUTTONMATRIX_CTRL_RESERVED_2,  BUTTONMATRIX_CTRL_RESERVED_3
+    BUTTONMATRIX_CTRL_CUSTOM_1,  BUTTONMATRIX_CTRL_CUSTOM_2
+    _KEYBOARD_WIDTH,  KEYBOARD_CTRL_HIDDEN,  KEYBOARD_CTRL_NO_REPEAT
+    KEYBOARD_CTRL_DISABLED,  KEYBOARD_CTRL_CHECKABLE,  KEYBOARD_CTRL_CHECKED
+    KEYBOARD_CTRL_CLICK_TRIG,  KEYBOARD_CTRL_RESERVED_1
+    KEYBOARD_CTRL_RESERVED_2,  KEYBOARD_CTRL_RESERVED_3
+    KEYBOARD_CTRL_CUSTOM_1,  KEYBOARD_CTRL_CUSTOM_2
+
+  enum chart_axis_t
+    CHART_AXIS_PRIMARY_Y,  CHART_AXIS_SECONDARY_Y,  CHART_AXIS_PRIMARY_X
+    CHART_AXIS_SECONDARY_X,  CHART_AXIS_LAST
+
+  enum chart_update_mode_t
+    CHART_UPDATE_MODE_SHIFT,  CHART_UPDATE_MODE_CIRCULAR
+
+  enum color_format_t
+    COLOR_FORMAT_UNKNOWN,  COLOR_FORMAT_RAW,  COLOR_FORMAT_RAW_ALPHA
+    COLOR_FORMAT_L8,  COLOR_FORMAT_MASK,  COLOR_FORMAT_PRINTER
+    COLOR_FORMAT_I1,  COLOR_FORMAT_I2,  COLOR_FORMAT_I4,  COLOR_FORMAT_I8
+    COLOR_FORMAT_A8,  COLOR_FORMAT_RGB565,  COLOR_FORMAT_ARGB8565
+    COLOR_FORMAT_RGB565A8,  COLOR_FORMAT_AL88,  COLOR_FORMAT_RGB888
+    COLOR_FORMAT_ARGB8888,  COLOR_FORMAT_XRGB8888,  COLOR_FORMAT_A1
+    COLOR_FORMAT_A2,  COLOR_FORMAT_A4,  COLOR_FORMAT_YUV_START
+    COLOR_FORMAT_I420,  COLOR_FORMAT_I422,  COLOR_FORMAT_I444
+    COLOR_FORMAT_I400,  COLOR_FORMAT_NV21,  U,  V,  V,  U
+    COLOR_FORMAT_UYVY,  COLOR_FORMAT_YUV_END
+    COLOR_FORMAT_NATIVE_WITH_ALPHA,  COLOR_FORMAT_NATIVE_WITH_ALPHA
+    COLOR_FORMAT_NATIVE_WITH_ALPHA,  COLOR_FORMAT_NATIVE_WITH_ALPHA
+    COLOR_FORMAT_NATIVE_WITH_ALPHA
+
+  enum flag_t
+    FLAG_HIDDEN,  FLAG_CLICKABLE,  FLAG_CLICK_FOCUSABLE,  FLAG_CHECKABLE
+    FLAG_SCROLLABLE,  FLAG_SCROLL_ELASTIC,  FLAG_SCROLL_MOMENTUM
+    FLAG_SCROLL_ONE,  FLAG_SCROLL_CHAIN_HOR,  FLAG_SCROLL_CHAIN_VER
+    FLAG_SCROLL_CHAIN,  FLAG_SCROLL_ON_FOCUS,  FLAG_SCROLL_WITH_ARROW
+    FLAG_SNAPPABLE,  FLAG_PRESS_LOCK,  FLAG_EVENT_BUBBLE
+    FLAG_GESTURE_BUBBLE,  FLAG_ADV_HITTEST,  FLAG_IGNORE_LAYOUT
+    FLAG_FLOATING,  FLAG_SEND_DRAW_TASK_EVENTS,  FLAG_OVERFLOW_VISIBLE
+
+  enum grad_dir_t
+    GRAD_DIR_NONE,  GRAD_DIR_VER,  GRAD_DIR_HOR,  GRAD_DIR_LINEAR
+    GRAD_DIR_RADIAL,  GRAD_DIR_CONICAL
+
+  enum grid_align_t
+    GRID_ALIGN_START,  GRID_ALIGN_CENTER,  GRID_ALIGN_END
+    GRID_ALIGN_STRETCH,  GRID_ALIGN_SPACE_EVENLY,  GRID_ALIGN_SPACE_AROUND
+    GRID_ALIGN_SPACE_BETWEEN
+
+  enum gstate_t
+    GSTATE_DEFAULT,  GSTATE_RELEASED,  GSTATE_OFF,  GSTATE_ALT
+    GSTATE_CHECKED,  GSTATE_ON,  GSTATE_FOCUSED,  GSTATE_FOCUS_KEY
+    GSTATE_EDITED,  GSTATE_HOVERED,  GSTATE_PRESSED,  GSTATE_SCROLLED
+    GSTATE_DISABLED,  GSTATE_USER_1,  GSTATE_USER_2,  GSTATE_USER_3
+    GSTATE_USER_4,  GSTATE_CTRL,  GSTATE_CTRL_PRESSED,  GSTATE_ANY
+    G_DEFAULT,  G_OFF,  G_CHECKED,  G_ON,  G_FOCUSED,  G_FOCUS_KEY
+    G_EDITED,  G_HOVERED,  G_PRESSED,  G_SCROLLED,  G_DISABLED,  G_USER_1
+    G_USER_2,  G_USER_3,  G_USER_4,  G_ANY,  GPART_MAIN,  GPART_SCROLLBAR
+    GPART_INDICATOR,  bar,  switch,  GPART_SELECTED,  GPART_ITEMS
+    GPART_CURSOR,  GPART_CUSTOM_FIRST,  GPART_TEXTAREA_PLACEHOLDER
+    GPART_ANY,  GPART_CELL,  DRAW_PART_MAIN,  DRAW_PART_SCROLLBAR
+    DRAW_PART_INDICATOR,  DRAW_PART_KNOB,  DRAW_PART_SELECTED
+    DRAW_PART_ITEMS,  DRAW_PART_CELL,  DRAW_PART_CURSOR
+    DRAW_PART_CURSOR_FIRST
+
+  enum image_align_t
+    IMAGE_ALIGN_DEFAULT,  IMAGE_ALIGN_TOP_LEFT,  IMAGE_ALIGN_TOP_MID
+    IMAGE_ALIGN_TOP_RIGHT,  IMAGE_ALIGN_BOTTOM_LEFT,  IMAGE_ALIGN_BOTTOM_MID
+    IMAGE_ALIGN_BOTTOM_RIGHT,  IMAGE_ALIGN_LEFT_MID,  IMAGE_ALIGN_RIGHT_MID
+    IMAGE_ALIGN_CENTER,  IMAGE_ALIGN_AUTO_TRANSFORM,  IMAGE_ALIGN_STRETCH
+    IMAGE_ALIGN_TILE
+
+  enum keyboard_mode_t
+    KEYBOARD_MODE_TEXT_LOWER,  KEYBOARD_MODE_TEXT_UPPER
+    KEYBOARD_MODE_SPECIAL,  KEYBOARD_MODE_NUMBER,  KEYBOARD_MODE_USER_1
+    KEYBOARD_MODE_USER_2,  KEYBOARD_MODE_USER_3,  KEYBOARD_MODE_USER_4
+    KEYBOARD_MODE_TH_FULL,  KEYBOARD_MODE_TH_FULL_SHIFT
+    KEYBOARD_MODE_TH_MINI_0,  KEYBOARD_MODE_TH
+    KEYBOARD_MODE_TH_MINI_ALPHABET,  KEYBOARD_MODE_TH_MINI_1
+    KEYBOARD_MODE_TH_MINI_2,  KEYBOARD_MODE_TH_MINI_3
+    KEYBOARD_MODE_TH_MINI_4,  KEYBOARD_MODE_TH_MINI_5
+    KEYBOARD_MODE_TH_MINI_SARA,  KEYBOARD_MODE_TH_MINI_6
+    KEYBOARD_MODE_TH_MINI_7,  KEYBOARD_MODE_TH_MINI_8
+    KEYBOARD_MODE_TH_MINI_VANNAYUK,  KEYBOARD_MODE_TH_MINI_9
+    KEYBOARD_MODE_TH_MINI_NUMPAD,  KEYBOARD_MODE_TH_MINI_10
+    KEYBOARD_MODE_TH_MINI_11,  KEYBOARD_MODE_TH_MINI_12
+    KEYBOARD_MODE_EN_FULL,  KEYBOARD_MODE_EN_FULL_SHIFT
+    KEYBOARD_MODE_EN_FULL_NUMPAD,  KEYBOARD_MODE_EN_MINI_0
+    KEYBOARD_MODE_EN,  KEYBOARD_MODE_EN_MINI_LOWER,  KEYBOARD_MODE_EN_MINI_1
+    KEYBOARD_MODE_EN_MINI_2,  KEYBOARD_MODE_EN_MINI_3
+    KEYBOARD_MODE_EN_MINI_UPPER,  KEYBOARD_MODE_EN_MINI_4
+    KEYBOARD_MODE_EN_MINI_5,  KEYBOARD_MODE_EN_MINI_6,  KEYBOARD_MODE_NUMPAD
+    KEYBOARD_MODE_EN_MINI_NUMPAD,  KEYBOARD_MODE_EN_MINI_7
+    KEYBOARD_MODE_EN_MINI_8,  KEYBOARD_MODE_EN_MINI_9
+
+  enum long_mode_t
+    LABEL_LONG_WRAP,  LABEL_LONG_SCROLL,  LABEL_LONG_SCROLL_CIRCULAR
+    LABEL_LONG_CLIP
+
+  enum menu_mode_header_t
+    MENU_HEADER_TOP_FIXED,  MENU_HEADER_TOP_UNFIXED
+    MENU_HEADER_BOTTOM_FIXED
+
+  enum menu_mode_root_back_button_t
+    MENU_ROOT_BACK_BUTTON_DISABLED,  MENU_ROOT_BACK_BUTTON_ENABLED
+
+  enum roller_mode_t
+    ROLLER_MODE_NORMAL,  ROLLER_MODE_INFINITE
+
+  enum scale_mode_t
+    SCALE_MODE_HORIZONTAL_TOP,  SCALE_MODE_HORIZONTAL_BOTTOM
+    SCALE_MODE_VERTICAL_LEFT,  SCALE_MODE_VERTICAL_RIGHT
+    SCALE_MODE_ROUND_INNER,  SCALE_MODE_ROUND_OUTER,  SCALE_MODE_LAST
+    SCALE_MODE_HOR_TOP,  SCALE_MODE_HOR_BOTTOM,  SCALE_MODE_VER_LEFT
+    SCALE_MODE_VER_RIGHT,  SCALE_MODE_TOP,  SCALE_MODE_BOTTOM
+    SCALE_MODE_LEFT,  SCALE_MODE_RIGHT,  SCALE_MODE_ROUND
+
+  enum scroll_snap_t
+    SCROLL_SNAP_NONE,  SCROLL_SNAP_END,  SCROLL_SNAP_CENTER
+
+  enum scrollbar_mode_t
+    SCROLLBAR_MODE_OFF,  SCROLLBAR_MODE_ON,  SCROLLBAR_MODE_ACTIVE
+    SCROLLBAR_MODE_AUTO,  SCROLLBAR_OFF,  SCROLLBAR_ON,  SCROLLBAR_ACTIVE
+    SCROLLBAR_AUTO
+
+  enum span_mode_t
+    SPAN_MODE_FIXED,  SPAN_MODE_EXPAND,  SPAN_MODE_BREAK
+
+  enum span_overflow_t
+    SPAN_OVERFLOW_CLIP,  SPAN_OVERFLOW_ELLIPSIS,  SPAN_OVERFLOW_LAST
+
+  enum switch_orientation_t
+    SWITCH_ORIENTATION_AUTO,  SWITCH_ORIENTATION_HORIZONTAL
+    SWITCH_ORIENTATION_VERTICAL
+
+  enum table_cell_ctrl_t
+    TABLE_CELL_CTRL_MERGE_RIGHT,  TABLE_CELL_CTRL_TEXT_CROP
+    TABLE_CELL_CTRL_CUSTOM_1,  TABLE_CELL_CTRL_CUSTOM_2
+    TABLE_CELL_CTRL_CUSTOM_3,  TABLE_CELL_CTRL_CUSTOM_4
+
+  enum text_align_t
+    TEXT_ALIGN_AUTO,  TEXT_ALIGN_LEFT,  TEXT_ALIGN_CENTER,  TEXT_ALIGN_RIGHT
+    LABEL_ALIGN_AUTO,  LABEL_ALIGN_LEFT,  LABEL_ALIGN_CENTER
+    LABEL_ALIGN_RIGHT
+
+  enum text_decor_t
+    TEXT_DECOR_NONE,  TEXT_DECOR_UNDERLINE,  TEXT_DECOR_STRIKETHROUGH
+
+  enum vector_gradient_spread_t
+    VECTOR_GRADIENT_SPREAD_PAD,  VECTOR_GRADIENT_SPREAD_REPEAT
+    VECTOR_GRADIENT_SPREAD_REFLECT
+
+  enum vector_path_quality_t
+    VECTOR_PATH_QUALITY_MEDIUM,  VECTOR_PATH_QUALITY_HIGH
+    VECTOR_PATH_QUALITY_LOW
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECTION 3 — CLASS API REFERENCE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ────────────────────────────────────────────────────────────
   class Grid
 ────────────────────────────────────────────────────────────
-  (ไม่พบ public methods)
+  Methods:
+    GArea()
+    GArea(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2)
+    GArea(Point a, Point b)
+    GArea(Point topleft, uint16_t w, uint16_t h)
+    GArea(lv_area_t area)
+    void setPoints(Point a, Point b)
+    void setPoints(lv_area_t area)
+    uint16_t width()
+    uint16_t height()
+    void width(uint16_t w)
+    void height(uint16_t h)
+    void position(Point p)
+    uint32_t size()
+    lv_area_t to_area_t()
+    GMatrix(uint8_t Rows=3, uint8_t Cols=3)
+    GMatrix(float* buf, uint8_t Rows, uint8_t Cols)
+    GMatrix(std::initializer_list<float> m)
+    GMatrix(std::initializer_list<float> m , uint8_t Rows, uint8_t Cols)
+    ~GMatrix()
+    float  det()  // สำหรับ N x N  matrix only
+    void   freeMem()
+    Grid()
+    Grid( uint16_t screen_width, uint16_t screen_height,
+    Point topleft=Point(0,0) )
+    void begin( uint16_t screen_width, uint16_t screen_height,
+    Point topleft=Point(0,0) )
+    Point snap(Point p)
+    Point gridPoint(uint16_t x, uint16_t y)
+    uint16_t max_coordinate_x()
+    uint16_t max_coordinate_y()
   Macros / Helpers:
     #define POINT_PRINTLN(point)    Serial.printf("[Point] %d,%d\n", (int)point.x, (int)point.y)
     #define POINT_PRINTLN_F(point)  Serial.printf("[Point] %.2f,%.2f\n", point.x, point.y)
@@ -84,129 +313,1952 @@ GObject           ← base ทุกอย่าง
 ────────────────────────────────────────────────────────────
   class GVector
 ────────────────────────────────────────────────────────────
-  (ไม่พบ public methods)
+  Methods:
+    GVectorPath()
+    ~GVectorPath()
+    void create(vector_path_quality_t quality= VECTOR_PATH_QUALITY_MEDIUM)
+    void del()
+    bool isCreated()
+    vector_path_t* raw()
+    void move_to(Point p)
+    void move_to(float x, float y)
+    void line_to(Point p)
+    void line_to(float x, float y)
+    void quad_to(Point p1, Point p2)
+    void quad_to(float x1, float y1, float x2, float y2)
+    void cubic_to(Point p1, Point p2, Point p3)
+    void cubic_to(float x1, float y1,float x2, float y2,float x3, float y3)
+    void close()
+    void copy(const lv_vector_path_t * path)
+    void copy(GVectorPath& path)
+    void clear()
+    void get_bounding(area_t * area)
+    void append_rect(const area_t * rect, float rx, float ry)
+    void append_circle(const lv_fpoint_t * c, float rx, float ry)
+    void append_circle(Point c, float rx, float ry)
+    void append_circle(Point c, float r)
+    void append_arc(const lv_fpoint_t * c, float radius, float start_angle,
+    void append_arc(Point c, float radius, float start_angle,
+    void append_path(const vector_path_t * subpath)
+    void append_path(GVectorPath& subpath)
+    GVector()
+    GVector(layer_t& layer) : _layer(&layer)
+    GVector(layer_t* layer) : _layer(layer)
+    ~GVector()
+    void create(layer_t * layer=NULL)
+    void del()
+    bool isCreated()
+    draw_vector_dsc_t* raw()
+    void transform(const lv_matrix_t * matrix)
+    void blend_mode(lv_vector_blend_t blend)
+    void fill_color32(lv_color32_t color)
+    void fill_color(lv_color_t color)
+    void fill_color(color_t color)
+    void fill_color(String  color)
+    void fill_opa(opa_t opa)
+    void fill(color_t color)
+    void fill(String  color)
+    void fill(color_t color, opa_t opa)
+    void fill(String  color, opa_t opa)
+    void fill_rule(lv_vector_fill_t rule)
+    void fill_image(const draw_image_dsc_t * img_dsc)
+    void fill_linear_gradient(float x1, float y1, float x2, float y2)
+    void fill_radial_gradient(lv_draw_vector_dsc_t * dsc, float cx, float cy, float radius)
+    void fill_gradient_spread(vector_gradient_spread_t spread)
+    void fill_gradient_color_stops(const gradient_stop_t * stops, uint16_t count)
+    void fill_transform(const lv_matrix_t * matrix)
+    void stroke_color32(lv_color32_t color)
+    void stroke_color(lv_color_t color)
+    void stroke_color(color_t color)
+    void stroke_color(String color)
+    void stroke_opa(opa_t opa)
+    void stroke_width(float width)
+    void stroke(float width)
+    void stroke(float width, color_t color)
+    void stroke(float width, String  color)
+    void stroke(float width, color_t color, opa_t opa)
+    void stroke(float width, String  color, opa_t opa)
+    void stroke_dash(float * dash_pattern, uint16_t dash_count)
+    void stroke_cap(lv_vector_stroke_cap_t cap)
+    void stroke_join(lv_vector_stroke_join_t join)
+    void stroke_miter_limit(uint16_t miter_limit)
+    void stroke_linear_gradient(float x1, float y1, float x2, float y2)
+    void stroke_radial_gradient(float cx, float cy, float radius)
+    void stroke_gradient_spread(vector_gradient_spread_t spread)
+    void stroke_gradient_color_stops(const gradient_stop_t * stops, uint16_t count)
+    void stroke_transform(const lv_matrix_t * matrix)
+    void identity()
+    void scale(float scale_x, float scale_y)
+    void rotate(float degree)
+    void rotation(float degree)
+    void translate(float tx, float ty)
+    void skew(float skew_x, float skew_y)
+    void add_path(const lv_vector_path_t * path)
+    void add_path(GVectorPath &path)
+    void add_path(GVectorPath &path, color_t color)
+    void add_path(GVectorPath &path, String color)
+    void clear_area(const lv_area_t * rect)
+    void draw()
 
 ────────────────────────────────────────────────────────────
   class GTransition
 ────────────────────────────────────────────────────────────
-  (ไม่พบ public methods)
+  Methods:
+    GTransition()
+    void create()
+    bool isCreated()
+    void init(style_prop_t props[], _anim_path_cb_t path_cb, uint32_t time, uint32_t delay=0, void * user_data=NULL)
+    void init(style_prop_t props[], anim_path_type_t path, uint32_t time, uint32_t delay=0, void * user_data=NULL)
+    style_transition_t* raw()
 
 ────────────────────────────────────────────────────────────
   class GTimeline
 ────────────────────────────────────────────────────────────
-  (ไม่พบ public methods)
-
-────────────────────────────────────────────────────────────
-  class GTableColumn
-────────────────────────────────────────────────────────────
-  (ไม่พบ public methods)
-
-────────────────────────────────────────────────────────────
-  class GSpinner : GArc
-────────────────────────────────────────────────────────────
-  (ไม่พบ public methods)
+  Methods:
+    GAnimation()
+    void init(GWidget *widget, anim_exec_cb_t fn, int32_t start, int32_t end, uint32_t time, bool repeat=false, bool reverse
+    void init(GWidget *widget, anim_exec_cb_t fn, int32_t start, int32_t end, uint32_t time, anim_path_type_t path_type)
+    void init(GWidget &widget, anim_exec_cb_t fn, int32_t start, int32_t end, uint32_t time, bool repeat=false, bool reverse
+    void init(GWidget &widget, anim_exec_cb_t fn, int32_t start, int32_t end, uint32_t time, anim_path_type_t path_type )
+    void init(anim_exec_cb_t fn, int32_t start, int32_t end, uint32_t time, bool repeat=false, bool reverse=false)
+    void init(GWidget *widget, anim_exec_xcb_t fn, int32_t start, int32_t end, uint32_t time, bool repeat=false, bool revers
+    void init(GWidget *widget, anim_exec_xcb_t fn, int32_t start, int32_t end, uint32_t time, anim_path_type_t path_type)
+    void init(GWidget &widget, anim_exec_xcb_t fn, int32_t start, int32_t end, uint32_t time, bool repeat=false, bool revers
+    void init(GWidget &widget, anim_exec_xcb_t fn, int32_t start, int32_t end, uint32_t time, anim_path_type_t path_type )
+    void init(anim_exec_xcb_t fn, int32_t start, int32_t end, uint32_t time, bool repeat=false, bool reverse=false)
+    void init(anim_exec_xcb_t fn, int32_t start, int32_t end, uint32_t time, anim_path_type_t path_type )
+    void path_type(anim_path_type_t path_type)
+    void start_cb(anim_start_cb_t fn)
+    void completed_cb(anim_completed_cb_t fn)
+    void ready_cb(anim_completed_cb_t fn)
+    void deleted_cb(anim_deleted_cb_t fn)
+    void path_cb(anim_path_cb_t fn)
+    void start_cb(anim_start_cb_t fn, void* user_data)
+    void completed_cb(anim_completed_cb_t fn, void* user_data)
+    void ready_cb(anim_completed_cb_t fn, void* user_data)
+    void deleted_cb(anim_deleted_cb_t fn, void* user_data)
+    void path_cb(anim_path_cb_t fn, void* user_data)
+    void onStart(anim_start_cb_t fn)
+    void onCompleted(anim_completed_cb_t fn)
+    void onReady(anim_completed_cb_t fn)
+    void onDelete(anim_deleted_cb_t fn)
+    void onPath(anim_path_cb_t fn)
+    void onStart(anim_start_cb_t fn, void* user_data)
+    void onCompleted(anim_completed_cb_t fn, void* user_data)
+    void onReady(anim_completed_cb_t fn, void* user_data)
+    void onDelete(anim_deleted_cb_t fn, void* user_data)
+    void onPath(anim_path_cb_t fn, void* user_data)
+    anim_t* raw()
+    void init()
+    void del()
+    bool isCreated()
+    void var(void * var)
+    void exec_cb(anim_exec_xcb_t exec_cb)
+    void exec_cb(anim_exec_xcb_t fn,  int32_t start, int32_t end)
+    void duration(uint32_t duration)
+    void time(uint32_t time)
+    void delay(uint32_t delay)
+    void values(int32_t start, int32_t end)
+    void custom_exec_cb(anim_custom_exec_cb_t exec_cb)
+    void path_cb(lv_anim_path_cb_t path_cb)
+    void start_cb(lv_anim_start_cb_t start_cb)
+    void value_cb(lv_anim_get_value_cb_t get_value_cb)
+    void completed_cb(lv_anim_completed_cb_t completed_cb)
+    void deleted_cb(lv_anim_deleted_cb_t deleted_cb)
+    void reverse_duration(uint32_t duration)
+    void reverse_time(uint32_t duration)
+    void reverse(bool reverse)
+    void reverse_delay(uint32_t delay)
+    void reverse_pause(uint32_t delay)
+    void repeat_count(uint16_t cnt)
+    void repeat(uint16_t cnt)
+    void repeat_delay(uint32_t delay)
+    void repeat_pause(uint32_t delay)
+    void early_apply(bool en)
+    void user_data(void * user_data)
+    void bezier3_param(int16_t x1, int16_t y1, int16_t x2, int16_t y2)
+    void start()
+    void create()
+    uint32_t delay()
+    uint32_t playtime()
+    uint32_t duration()
+    uint32_t time()
+    uint16_t repeat_count()
+    void * var()
+    void * user_data()
+    bool _del(void * var, lv_anim_exec_xcb_t exec_cb)
+    void delete_all(void)
+    anim_t * get(void * var, lv_anim_exec_xcb_t exec_cb)
+    lv_timer_t * get_timer()
+    bool custom_delete(lv_anim_custom_exec_cb_t exec_cb)
+    anim_t * custom_get(lv_anim_custom_exec_cb_t exec_cb)
+    uint16_t count_running(void)
+    uint32_t speed(uint32_t speed)
+    uint32_t speed_clamped(uint32_t speed, uint32_t min_time, uint32_t max_time)
+    void refr_now(void)
+    GTimeline()
+    void create(void)
+    bool isCreated()
+    void del()
+    void clear()
+    void add(uint32_t start_time, const anim_t * a)
+    void add(uint32_t start_time, GAnimation &a)
+    uint32_t start()
+    uint32_t pause()
+    void stop()
+    void reverse(bool reverse)
+    void progress(uint16_t progress)
+    void action_time(uint32_t act_time)
+    uint32_t playtime()
+    bool reverse()
+    uint16_t progress()
+    uint32_t action_time()
+    uint16_t toInt()
+    void onProgress(anim_timeline_cb_t fn)
+    void onStart(anim_timeline_cb_t fn)
+    void onCompleted(anim_timeline_cb_t fn)
+    void onReady(anim_timeline_cb_t fn)
+    void user_data(void * user_data)
+    void * user_data()
+    bool isProgressing()
+    bool isGAnimProgressing(GAnimation *anim)
+    bool isGAnimProgressing(GAnimation &anim)
 
 ────────────────────────────────────────────────────────────
   class GSpan
 ────────────────────────────────────────────────────────────
-  (ไม่พบ public methods)
+  Methods:
+    GParagraph(GWidget& parent=GScreen)                     : GObject(&parent)
+    GParagraph(GWidget* parent)                             : GObject(parent)
+    ~GParagraph()
+    void  create()
+    void  create(GWidget& parent)
+    void  create(GWidget* parent)
+    span_t * new_span()
+    span_t * span(String txt)
+    span_t * span(const char* txt)
+    span_t * span(int n)
+    void delete_span(span_t * span)
+    void text_align(text_align_t align)
+    void overflow(span_overflow_t overflow)
+    void indent(int32_t indent)
+    void mode(span_mode_t mode)
+    void max_lines(int32_t lines)
+    span_t * get_child(int32_t id)
+    span_t * get_span(int32_t id)
+    uint32_t span_count()
+    text_align_t text_align()
+    span_overflow_t overflow()
+    int32_t indent()
+    span_mode_t mode()
+    int32_t max_lines()
+    int32_t max_line_height()
+    uint32_t expand_width(uint32_t max_width)
+    int32_t expand_height(int32_t width)
+    void refr_mode()
+    void refresh()
+    GSpan(span_t* span)
+    GSpan()
+    void text(const char * text)
+    void text_static(const char * text)
+    void    font(const font_t &font)
+    void    font(const font_t &font, color_t color)
+    void    color(color_t color)
+    void    font_color(color_t color)
+    void    text_color(color_t color)
+    void    opa(uint8_t opa)
+    void    letter_space(int16_t letter_space)
+    void    line_space(int16_t line_space)
+    void    decor(text_decor_t value)
+    void    underline(bool enable)
+    void    strikethrough(bool enable)
+    void    text_align(text_align_t text_align)
 
 ────────────────────────────────────────────────────────────
   class GScaleSection
 ────────────────────────────────────────────────────────────
-  (ไม่พบ public methods)
+  Methods:
+    GScale(GWidget& parent=GScreen)                          : GObject(&parent)
+    GScale(GWidget* parent)                                  : GObject(parent)
+    GScale(scale_mode_t mode, GWidget& parent=GScreen)
+    : GObject(&parent), _mode(mode)
+    GScale(scale_mode_t mode, GWidget* parent)
+    : GObject(parent), _mode(mode)
+    GScale(scale_mode_t mode, int32_t total_tick_count, GWidget& parent=GScreen)
+    : GObject(&parent), _mode(mode), _total_tick_count(total_tick_count)
+    GScale(scale_mode_t mode, int32_t total_tick_count, GWidget* parent)
+    : GObject(parent), _mode(mode), _total_tick_count(total_tick_count)
+    GScale(scale_mode_t mode, int32_t total_tick_count, int32_t major_tick_every, GWidget& parent=GScreen)
+    : GObject(&parent), _mode(mode), _total_tick_count(total_tick_count), _major_tick_every(major_tick_every)
+    GScale(scale_mode_t mode, int32_t total_tick_count, int32_t major_tick_every, GWidget* parent)
+    : GObject(parent), _mode(mode), _total_tick_count(total_tick_count), _major_tick_every(major_tick_every)
+    ~GScale()
+    void  create()
+    void  create(GWidget& parent)
+    void  create(GWidget* parent)
+    void  del()
+    void  mode(scale_mode_t mode, int32_t scale_min, int32_t scale_max, int32_t total_tick_count,int32_t major_tick_every)
+    void  mode(scale_mode_t mode, int32_t total_tick_count,int32_t major_tick_every=1)
+    void  showLabel(bool en)
+    bool  showLabel()
+    void line_needle_value(GLine &line, int32_t line_length, int32_t value)
+    void image_needle_value(GImage &image, int32_t value)
+    void  angle_offset(int32_t angle)
+    void  angle_offset(GArc &arc)
+    int32_t angle_offset()
+    void  pad_radial(int32_t v, gpart_t part=GPART_INDICATOR)
+    GScaleSection* addSection()
+    void           clearSection()
+    int32_t rotation()
+    void mode(scale_mode_t mode)
+    void total_tick_count(uint32_t total_tick_count)
+    void major_tick_every(uint32_t major_tick_every)
+    void label_show(bool show_label)
+    void range(int32_t min, int32_t max)
+    void range(GArc &arc)
+    void range(GBar &bar)
+    void angle_range(uint32_t angle_range)
+    void angle_range(GArc &arc)
+    void rotation(int32_t rotation)
+    void line_needle_value(obj_t * needle_line, int32_t needle_length, int32_t value)
+    void image_needle_value(obj_t * needle_img, int32_t value)
+    void text_src(const char * txt_src[])
+    void text_src(std::vector<String> txt_list)
+    void post_draw(bool en)
+    scale_section_t * add_section()
+    void clear_sections()
+    uint32_t sections_num()
+    void section_set_range(scale_section_t * section, int32_t minor_range, int32_t major_range)
+    void section_set_style(scale_section_t * section, uint32_t part, style_t * section_part_style)
+    scale_mode_t mode()
+    int32_t total_tick_count()
+    int32_t major_tick_every()
+    bool label_show()
+    uint32_t angle_range()
+    int32_t range_min_value()
+    int32_t range_max_value()
+    void     color(color_t color)
+    void     color(color_t axis_color, color_t major_color, color_t minor_color)
+    void     color(color_t axis_color, color_t tick_color)
+    void     color(String  color)
+    void     color(String  axis_color, String  major_color, String  minor_color)
+    void     color(String  axis_color, String  tick_color)
+    void     thickness(int32_t value)
+    void     thickness(int32_t axis_thick, int32_t major_thick, int32_t minor_thick)
+    void     thickness(int32_t thick, color_t color )
+    void     thickness(int32_t thick, String  color )
+    void     tick_length(int32_t major_tick_length, int32_t minor_tick_length)
+    void     tick_length(int32_t major_tick_length)
+    void     tick_color(color_t color)
+    void     tick_color(String  color)
+    color_t  tick_color()
+    void     tick_opa(opa_t value)
+    opa_t    tick_opa()
+    void     axis_color(color_t color)
+    void     axis_color(String  color)
+    color_t  axis_color()
+    void     axis_thickness(int32_t value)
+    void     axis_thickness(int32_t value, color_t color)
+    void     axis_thickness(int32_t value, String  color)
+    int32_t  axis_thickness()
+    void     axis_opa(opa_t value)
+    opa_t    axis_opa()
+    void     major_color(color_t color)
+    void     major_color(String  color)
+    color_t  major_color()
+    void     major_thickness(int32_t value)
+    void     major_thickness(int32_t value, color_t color)
+    void     major_thickness(int32_t value, String  color)
+    int32_t  major_thickness()
+    void     major_opa(opa_t value)
+    opa_t    major_opa()
+    void     major_length(int32_t value)
+    int32_t  major_length()
+    void     minor_color(color_t color)
+    void     minor_color(String  color)
+    color_t  minor_color()
+    void     minor_thickness(int32_t value)
+    void     minor_thickness(int32_t value, color_t color)
+    void     minor_thickness(int32_t value, String  color)
+    int32_t  minor_thickness()
+    void     minor_opa(opa_t value)
+    opa_t    minor_opa()
+    void     minor_length(int32_t value)
+    int32_t  minor_length()
+    GScaleSection()
+    void set(scale_section_t * section)
+    void range(int32_t minor_range, int32_t major_range)
+    void update_style()
+    void     color(color_t color)
+    void     color(color_t axis_color, color_t major_color, color_t minor_color)
+    void     color(color_t axis_color, color_t tick_color)
+    void     color(String  color)
+    void     color(String  axis_color, String  major_color, String  minor_color)
+    void     color(String  axis_color, String  tick_color)
+    void     thickness(int32_t value)
+    void     thickness(int32_t axis_thick, int32_t major_thick, int32_t minor_thick)
+    void     thickness(int32_t thick, color_t color )
+    void     thickness(int32_t thick, String  color )
+    void     font(const font_t&font)
+    void     font(const font_t&font, color_t color)
+    void     font(const font_t&font, String  color)
+    void     font_color(color_t color)
+    void     font_color(String  color)
+    void     major_color(color_t color)
+    void     major_color(String  color)
+    void     major_thickness(int32_t value)
+    void     major_thickness(int32_t value, color_t color)
+    void     major_thickness(int32_t value, String  color)
+    void     major_opa(opa_t value)
+    void     major_length(int32_t value)
+    void     minor_color(color_t color)
+    void     minor_color(String  color)
+    void     minor_thickness(int32_t value)
+    void     minor_thickness(int32_t value, color_t color)
+    void     minor_thickness(int32_t value, String  color)
+    void     minor_opa(opa_t value)
+    void     minor_length(int32_t value)
+    void     axis_color(color_t color)
+    void     axis_color(String  color)
+    void     axis_thickness(int32_t value)
+    void     axis_thickness(int32_t value, color_t color)
+    void     axis_thickness(int32_t value, String  color)
+    void     axis_opa(opa_t value)
 
 ────────────────────────────────────────────────────────────
   class GObject
 ────────────────────────────────────────────────────────────
-  (ไม่พบ public methods)
+  Methods:
+    GObject(GWidget& parent=GScreen)                        : _par(&parent)
+    GObject(GWidget* parent)                                : _par( parent)
+    ~GObject();             /* = ทำลาย ของ derived แล้วค่อย มาทำลายตัว หลัก */
+    void    create()
+    void    create(GWidget& parent)
+    void    create(GWidget* parent)
+    void    del();          /* ลบแบบปกติสำหรับ GWidget ใดๆที่สร้างแบบปกติ ไม่ได้สร้างด้วย new ; = ไป del() ของ derived แทน ถ
+    bool            isCreated()
+    void            setObject(obj_t * obj)
+    void     link(obj_t* obj)
+    void     link(GWidget& widget)
+    bool            sameWith(GWidget &base)
+    bool            sameWith(GWidget *base)
+    void     user_data(void* user_data)
+    void*    user_data()
+    void            parent(GWidget* parent)
+    void            parent(GWidget& parent)
+    void            parent(obj_t* parent)
+    GWidget* parent()
+    uint32_t        child_num()
+    GWidget*        child(uint32_t child_id)  // child_id : 0 ถึง น้อยกว่า child_num()
+    int32_t         child_id(GWidget*widget)  // ติดลบแสดงว่าไม่ได้เป็น child ของ layer นี้
+    void            toForeground()
+    void            toBackground()
+    void            layer_id(int32_t layer_id)  // layer_id : 0 ถึง น้อยกว่า child_num() ถ้า -1 นับย้อนกลับ
+    int32_t         layer_id()
+    void            align(align_t align, int32_t x_ofs=0, int32_t y_ofs=0)
+    void            align(GWidget* widget, align_t align, int32_t x_ofs=0, int32_t y_ofs=0)
+    void     align(GWidget& widget, align_t align, int32_t x_ofs=0, int32_t y_ofs=0)
+    void     align_center( int32_t x_ofs=0, int32_t y_ofs=0)
+    void            realign()
+    void     position(int32_t x, int32_t y)
+    void     position(Point p)  // ตำแหน่ง (x,y) ของวิตเจ็ต นับจาก (0,0) ของ parent
+    Point    position()  // ตำแหน่ง (x,y) ของวิตเจ็ต นับจาก (0,0) ของ parent
+    void     posX(int32_t x)
+    void     posY(int32_t y)
+    int32_t  posX()
+    int32_t  posY()
+    void     update_position()
+    int32_t  leftX()
+    int32_t  rightX()
+    int32_t  topY()
+    int32_t  bottomY()
+    int32_t  centerX()
+    int32_t  centerY()
+    Point    top_left()
+    Point    top_right()
+    Point    bottom_left()
+    Point    bottom_right()
+    void     center(Point p)  // set center of the widget relative to parent
+    void     center(int32_t x, int32_t y)  // set center of the widget relative to parent
+    /* center of the widget  relative to parent (จุดศก.ของ widget อยู่พิกัดไหนเทียบจาก parent) */
+    Point    center()
+    /* centerpoint inner of the widget (จุดศก.ของ widget ภายใน วิตเจ็ตนั้นๆ เทียบจากจุดบนซ้ายของ widget นั้น )*/
+    Point    centerpoint()
+    void layout(layout_t layout)
+    layout_t layout()
+    int32_t GRID_column_width(uint32_t col_id)
+    int32_t GRID_row_height(uint32_t row_id)
+    void GRID_CELL(GRID_COL col_dsc, GRID_ROW row_dsc)
+    dir_t gesture_dir()
+    void clean()
+    void delete_delayed(uint32_t delay_ms)
+    void delete_anim_completed_cb(anim_t * a)
+    void delete_async(obj_t * obj)
+    void swap(GWidget*widget1, GWidget*widget2)
+    void move_to_index(int32_t index)
+    obj_t * get_screen()
+    display_t * get_display()
+    obj_t * get_child(int32_t idx)
+    obj_t * get_child_by_type(int32_t idx, const obj_class_t * class_p)
+    GWidget * get_GChild_by_type(int32_t idx, const obj_class_t * class_p)
+    GWidget * child_by_type(int32_t idx, const obj_class_t * class_p)
+    obj_t * get_sibling(int32_t idx)
+    obj_t * sibling_by_type(int32_t idx, const obj_class_t * class_p)
+    uint32_t child_count()
+    uint32_t child_count_by_type(const obj_class_t * class_p)
+    int32_t index()
+    int32_t index_by_type(const obj_class_t * class_p)
+    void tree_walk(obj_t * start_obj, obj_tree_walk_cb_t cb, void * user_data)
+    void dump_tree(obj_t * start_ob)
+    void            addStyle(GStyle&gstyle, style_selector_t selector=GPART_MAIN)
+    void            refreshStyle(style_selector_t selector=GPART_ANY, style_prop_t prop=GSTYLE_PROP_ANY)
+    void            removeStyle(GStyle &gstyle, style_selector_t style_selector=GPART_MAIN)
+    void            removeStyle(style_selector_t style_selector)
+    void            removeStyleAll()
+    void add_style(const style_t * style, style_selector_t selector=GPART_MAIN)
+    bool replace_style(const style_t * old_style, const style_t * new_style,
+    void remove_style(const style_t * style, style_selector_t selector=GPART_MAIN)
+    void remove_style_all()
+    void report_style_change(style_t * style)
+    void refresh_style(gpart_t part, style_prop_t prop)
+    void enable_style_refresh(bool en)
+    style_value_t style_prop(gpart_t part, style_prop_t prop)
+    bool has_style_prop(style_selector_t selector, style_prop_t prop)
+    void local_style_prop(style_prop_t prop, style_value_t value,
+    style_res_t local_style_prop(style_prop_t prop, style_value_t * value,
+    bool remove_local_style_prop(style_prop_t prop, style_selector_t selector=GPART_MAIN)
+    void fade_in(uint32_t time, uint32_t delay)
+    void fade_out(uint32_t time, uint32_t delay)
+    gstate_t get_selector_state(style_selector_t selector)
+    gpart_t style_get_selector_part(style_selector_t selector)
+    void pad_all(int32_t value, style_selector_t selector=GPART_MAIN)
+    void pad(int32_t value, style_selector_t selector=GPART_MAIN)
+    void pad_hor(int32_t value, style_selector_t selector=GPART_MAIN)
+    void pad_ver(int32_t value, style_selector_t selector=GPART_MAIN)
+    void margin_all(int32_t value, style_selector_t selector=GPART_MAIN)
+    void margin_hor(int32_t value, style_selector_t selector=GPART_MAIN)
+    void margin_ver(int32_t value, style_selector_t selector=GPART_MAIN)
+    void pad_gap(int32_t value, style_selector_t selector=GPART_MAIN)
+    void style_size(int32_t width, int32_t height, style_selector_t selector=GPART_MAIN)
+    void size(int32_t width, int32_t height, style_selector_t selector)
+    void transform_scale(int32_t value, style_selector_t selector=GPART_MAIN)
+    void style_scale(int32_t value, style_selector_t selector=GPART_MAIN)
+    void style_scale(int32_t value, Point pivot, style_selector_t selector=GPART_MAIN)
+    int32_t space_left(gpart_t part=GPART_MAIN)
+    int32_t space_right(gpart_t part=GPART_MAIN)
+    int32_t space_top(gpart_t part=GPART_MAIN)
+    int32_t space_bottom(gpart_t part=GPART_MAIN)
+    text_align_t calculate_style_text_align(gpart_t part, const char * txt)
+    int32_t transform_scale_x_safe(gpart_t part=GPART_MAIN)
+    int32_t transform_scale_y_safe( gpart_t part=GPART_MAIN)
+    opa_t opa_recursive(gpart_t part=GPART_MAIN)
+    int32_t  style_width(gpart_t part=GPART_MAIN)
+    int32_t  style_min_width(gpart_t part=GPART_MAIN)
+    int32_t  style_max_width(gpart_t part=GPART_MAIN)
+    int32_t  min_width(gpart_t part=GPART_MAIN)
+    int32_t  max_width(gpart_t part=GPART_MAIN)
+    int32_t  style_height(gpart_t part=GPART_MAIN)
+    int32_t  style_min_height(gpart_t part=GPART_MAIN)
+    int32_t  style_max_height(gpart_t part=GPART_MAIN)
+    int32_t  min_height(gpart_t part=GPART_MAIN)
+    int32_t  max_height(gpart_t part=GPART_MAIN)
+    int32_t  style_length(gpart_t part=GPART_MAIN)
+    int32_t  style_x(gpart_t part=GPART_MAIN)
+    int32_t  style_y(gpart_t part=GPART_MAIN)
+    align_t  style_align(gpart_t part=GPART_MAIN)
+    int32_t  transform_width(gpart_t part=GPART_MAIN)
+    int32_t  transform_height(gpart_t part=GPART_MAIN)
+    int32_t  translate_x(gpart_t part=GPART_MAIN)
+    int32_t  translate_y(gpart_t part=GPART_MAIN)
+    int32_t  transform_scale_x(gpart_t part=GPART_MAIN)
+    int32_t  transform_scale_y(gpart_t part=GPART_MAIN)
+    int32_t  transform_rotation(gpart_t part=GPART_MAIN)
+    int32_t  transform_pivot_x(gpart_t part=GPART_MAIN)
+    int32_t  transform_pivot_y(gpart_t part=GPART_MAIN)
+    int32_t  transform_skew_x(gpart_t part=GPART_MAIN)
+    int32_t  transform_skew_y(gpart_t part=GPART_MAIN)
+    int32_t  pad_top(gpart_t part=GPART_MAIN)
+    int32_t  pad_bottom(gpart_t part=GPART_MAIN)
+    int32_t  pad_left(gpart_t part=GPART_MAIN)
+    int32_t  pad_right(gpart_t part=GPART_MAIN)
+    int32_t  pad_row(gpart_t part=GPART_MAIN)
+    int32_t  pad_column(gpart_t part=GPART_MAIN)
+    int32_t  pad_radial(gpart_t part=GPART_MAIN)
+    int32_t  pad(gpart_t part=GPART_MAIN)
+    int32_t  pad_inner(gpart_t part=GPART_MAIN)
+    int32_t  pad_ver(gpart_t part=GPART_MAIN)
+    int32_t  pad_hor(gpart_t part=GPART_MAIN)
+    int32_t  padding_top(gpart_t part=GPART_MAIN)
+    int32_t  padding_bottom(gpart_t part=GPART_MAIN)
+    int32_t  padding_left(gpart_t part=GPART_MAIN)
+    int32_t  padding_right(gpart_t part=GPART_MAIN)
+    int32_t  padding_row(gpart_t part=GPART_MAIN)
+    int32_t  padding_column(gpart_t part=GPART_MAIN)
+    int32_t  padding(gpart_t part=GPART_MAIN)
+    int32_t  padding_inner(gpart_t part=GPART_MAIN)
+    int32_t  padding_ver(gpart_t part=GPART_MAIN)
+    int32_t  padding_hor(gpart_t part=GPART_MAIN)
+    int32_t  margin_top(gpart_t part=GPART_MAIN)
+    int32_t  margin_bottom(gpart_t part=GPART_MAIN)
+    int32_t  margin_left(gpart_t part=GPART_MAIN)
+    int32_t  margin_right(gpart_t part=GPART_MAIN)
+    color_t  bg_color(gpart_t part=GPART_MAIN)
+    color_t  bg_color_filtered(gpart_t part=GPART_MAIN)
+    color_t  color(gpart_t part=GPART_MAIN)
+    opa_t    bg_opa(gpart_t part=GPART_MAIN)
+    color_t  bg_grad_color(gpart_t part=GPART_MAIN)
+    color_t  bg_grad_color_filtered(gpart_t part=GPART_MAIN)
+    grad_dir_t bg_grad_dir(gpart_t part=GPART_MAIN)
+    int32_t  bg_main_stop(gpart_t part=GPART_MAIN)
+    int32_t  bg_grad_stop(gpart_t part=GPART_MAIN)
+    opa_t    bg_main_opa(gpart_t part=GPART_MAIN)
+    opa_t    bg_grad_opa(gpart_t part=GPART_MAIN)
+    const grad_dsc_t * bg_grad(gpart_t part=GPART_MAIN)
+    const void * bg_image_src(gpart_t part=GPART_MAIN)
+    const void * image(gpart_t part=GPART_MAIN)
+    opa_t    bg_image_opa(gpart_t part=GPART_MAIN)
+    color_t  bg_image_recolor(gpart_t part=GPART_MAIN)
+    color_t  bg_image_recolor_filtered(gpart_t part=GPART_MAIN)
+    opa_t    bg_image_recolor_opa(gpart_t part=GPART_MAIN)
+    bool     bg_image_tiled(gpart_t part=GPART_MAIN)
+    color_t  border_color(gpart_t part=GPART_MAIN)
+    color_t  border_color_filtered(gpart_t part=GPART_MAIN)
+    opa_t    border_opa(gpart_t part=GPART_MAIN)
+    int32_t  border_width(gpart_t part=GPART_MAIN)
+    int32_t  border(gpart_t part=GPART_MAIN)
+    border_side_t border_side(gpart_t part=GPART_MAIN)
+    bool     border_post(gpart_t part=GPART_MAIN)
+    int32_t  outline_width(gpart_t part=GPART_MAIN)
+    color_t  outline_color(gpart_t part=GPART_MAIN)
+    color_t  outline_color_filtered(gpart_t part=GPART_MAIN)
+    opa_t    outline_opa(gpart_t part=GPART_MAIN)
+    int32_t  outline_pad(gpart_t part=GPART_MAIN)
+    int32_t  shadow_width(gpart_t part=GPART_MAIN)
+    int32_t  shadow(gpart_t part=GPART_MAIN)
+    int32_t  shadow_offset_x(gpart_t part=GPART_MAIN)
+    int32_t  shadow_offset_y(gpart_t part=GPART_MAIN)
+    Point    shadow_offset(gpart_t part=GPART_MAIN)
+    int32_t  shadow_spread(gpart_t part=GPART_MAIN)
+    color_t  shadow_color(gpart_t part=GPART_MAIN)
+    color_t  shadow_color_filtered(gpart_t part=GPART_MAIN)
+    opa_t    shadow_opa(gpart_t part=GPART_MAIN)
+    opa_t    image_opa(gpart_t part=GPART_MAIN)
+    color_t  image_recolor(gpart_t part=GPART_MAIN)
+    color_t  image_recolor_filtered(gpart_t part=GPART_MAIN)
+    opa_t    image_recolor_opa(gpart_t part=GPART_MAIN)
+    int32_t  line_width(gpart_t part=GPART_MAIN)
+    int32_t  line_dash_width(gpart_t part=GPART_MAIN)
+    int32_t  line_dash_gap(gpart_t part=GPART_MAIN)
+    bool     line_rounded(gpart_t part=GPART_MAIN)
+    color_t  line_color(gpart_t part=GPART_MAIN)
+    color_t  line_color_filtered(gpart_t part=GPART_MAIN)
+    opa_t    line_opa(gpart_t part=GPART_MAIN)
+    int32_t  arc_width(gpart_t part=GPART_MAIN)
+    bool     arc_rounded(gpart_t part=GPART_MAIN)
+    color_t  arc_color(gpart_t part=GPART_MAIN)
+    color_t  arc_color_filtered(gpart_t part=GPART_MAIN)
+    opa_t    arc_opa(gpart_t part=GPART_MAIN)
+    const void * arc_image_src(gpart_t part=GPART_MAIN)
+    color_t  text_color(gpart_t part=GPART_MAIN)
+    color_t  font_color(gpart_t part=GPART_MAIN)
+    color_t  text_color_filtered(gpart_t part=GPART_MAIN)
+    color_t  font_color_filtered(gpart_t part=GPART_MAIN)
+    opa_t    text_opa(gpart_t part=GPART_MAIN)
+    const font_t * text_font(gpart_t part=GPART_MAIN)
+    const font_t * font(gpart_t part=GPART_MAIN)
+    int32_t font_height(gpart_t part=GPART_MAIN)
+    int32_t font_base_line(gpart_t part=GPART_MAIN)
+    int32_t  text_letter_space(gpart_t part=GPART_MAIN)
+    int32_t  text_line_space(gpart_t part=GPART_MAIN)
+    text_decor_t text_decor(gpart_t part=GPART_MAIN)
+    text_align_t text_align(gpart_t part=GPART_MAIN)
+    int32_t  radius(gpart_t part=GPART_MAIN)
+    int32_t  radial_offset(gpart_t part=GPART_MAIN)
+    bool     clip_corner(gpart_t part=GPART_MAIN)
+    int32_t  corner_radius(gpart_t part=GPART_MAIN)
+    bool     corner_mask(gpart_t part=GPART_MAIN)
+    opa_t    opa(gpart_t part=GPART_MAIN)
+    opa_t    opa_layered(gpart_t part=GPART_MAIN)
+    const color_filter_dsc_t * color_filter_dsc(gpart_t part=GPART_MAIN)
+    opa_t color_filter_opa(gpart_t part=GPART_MAIN)
+    const anim_t * style_anim(gpart_t part=GPART_MAIN)
+    uint32_t anim_duration(gpart_t part=GPART_MAIN)
+    uint32_t anim_speed(gpart_t part=GPART_MAIN)
+    const style_transition_dsc_t * transition(gpart_t part=GPART_MAIN)
+    blend_mode_t blend_mode(gpart_t part=GPART_MAIN)
+    uint16_t style_layout(gpart_t part=GPART_MAIN)
+    base_dir_t base_dir(gpart_t part=GPART_MAIN)
+    const img_t* bitmap_mask_src(gpart_t part=GPART_MAIN)
+    const img_t* mask(gpart_t part=GPART_MAIN)
+    uint32_t rotary_sensitivity(gpart_t part=GPART_MAIN)
+    flex_flow_t  flex_flow(gpart_t part=GPART_MAIN)
+    flex_align_t flex_main_place(gpart_t part=GPART_MAIN)
+    flex_align_t flex_cross_place(gpart_t part=GPART_MAIN)
+    flex_align_t flex_track_place(gpart_t part=GPART_MAIN)
+    uint8_t      flex_grow(gpart_t part=GPART_MAIN)
+    const int32_t* grid_column_dsc(gpart_t part=GPART_MAIN)
+    const int32_t* grid_row_dsc(gpart_t part=GPART_MAIN)
+    grid_align_t   grid_column_align(gpart_t part=GPART_MAIN)
+    grid_align_t   grid_row_align(gpart_t part=GPART_MAIN)
+    int32_t        grid_cell_column_pos(gpart_t part=GPART_MAIN)
+    int32_t        grid_cell_row_pos(gpart_t part=GPART_MAIN)
+    grid_align_t   grid_cell_x_align(gpart_t part=GPART_MAIN)
+    grid_align_t   grid_cell_y_align(gpart_t part=GPART_MAIN)
+    int32_t        grid_cell_column_span(gpart_t part=GPART_MAIN)
+    int32_t        grid_cell_row_span(gpart_t part=GPART_MAIN)
+    void style_width(int32_t value, style_selector_t selector=GPART_MAIN)
+    void style_min_width(int32_t value, style_selector_t selector=GPART_MAIN)
+    void style_max_width(int32_t value, style_selector_t selector=GPART_MAIN)
+    void min_width(int32_t value, style_selector_t selector=GPART_MAIN)
+    void max_width(int32_t value, style_selector_t selector=GPART_MAIN)
+    void style_height(int32_t value, style_selector_t selector=GPART_MAIN)
+    void style_min_height(int32_t value, style_selector_t selector=GPART_MAIN)
+    void style_max_height(int32_t value, style_selector_t selector=GPART_MAIN)
+    void min_height(int32_t value, style_selector_t selector=GPART_MAIN)
+    void max_height(int32_t value, style_selector_t selector=GPART_MAIN)
+    void min_size(int32_t w, int32_t h, style_selector_t selector=GPART_MAIN)
+    void max_size(int32_t w, int32_t h, style_selector_t selector=GPART_MAIN)
+    void style_length(int32_t value, style_selector_t selector=GPART_MAIN)
+    void style_x(int32_t value, style_selector_t selector=GPART_MAIN)
+    void style_y(int32_t value, style_selector_t selector=GPART_MAIN)
+    void style_align(align_t value, style_selector_t selector=GPART_MAIN)
+    void transform_width(int32_t value, style_selector_t selector=GPART_MAIN)
+    void transform_height(int32_t value, style_selector_t selector=GPART_MAIN)
+    void translate_x(int32_t value, style_selector_t selector=GPART_MAIN)
+    void translate_y(int32_t value, style_selector_t selector=GPART_MAIN)
+    void transform_scale_x(int32_t value, style_selector_t selector=GPART_MAIN)
+    void transform_scale_y(int32_t value, style_selector_t selector=GPART_MAIN)
+    void transform_rotation(int32_t value, style_selector_t selector=GPART_MAIN)
+    void transform_pivot_x(int32_t value, style_selector_t selector=GPART_MAIN)
+    void transform_pivot_y(int32_t value, style_selector_t selector=GPART_MAIN)
+    void transform_skew_x(int32_t value, style_selector_t selector=GPART_MAIN)
+    void transform_skew_y(int32_t value, style_selector_t selector=GPART_MAIN)
+    void   translate(int32_t x, int32_t y , style_selector_t selector=GPART_MAIN)
+    void   transform_size(int32_t w, int32_t h , style_selector_t selector=GPART_MAIN)
+    void   transform_scale(int32_t scale_x, int32_t scale_y , style_selector_t selector=GPART_MAIN)
+    void   transform_pivot(int32_t pivot_x, int32_t pivot_y, style_selector_t selector=GPART_MAIN)
+    void   transform_pivot(Point pivot, style_selector_t selector=GPART_MAIN)
+    void   transform_skew(int32_t skew_x, int32_t skew_y, style_selector_t selector=GPART_MAIN)
+    void   transform_skew(Point skew, style_selector_t selector=GPART_MAIN)
+    void   rotation(float angle , style_selector_t selector=GPART_MAIN)
+    float  rotation(style_selector_t selector=GPART_MAIN)
+    void   pivot(int32_t pivot_x, int32_t pivot_y, style_selector_t selector=GPART_MAIN)
+    void   pivot(Point pivot, style_selector_t selector=GPART_MAIN)
+    void   remove_color(style_selector_t selector=GPART_MAIN)
+    void   remove_border(style_selector_t selector=GPART_MAIN)
+    void   remove_text_font(style_selector_t selector=GPART_MAIN)
+    void   remove_text_color(style_selector_t selector=GPART_MAIN)
+    void   remove_image_recolor(style_selector_t selector=GPART_MAIN)
+    void   remove_image_recolor_opa(style_selector_t selector=GPART_MAIN)
+    void pad_top(int32_t value, style_selector_t selector=GPART_MAIN)
+    void pad_bottom(int32_t value, style_selector_t selector=GPART_MAIN)
+    void pad_left(int32_t value, style_selector_t selector=GPART_MAIN)
+    void pad_right(int32_t value, style_selector_t selector=GPART_MAIN)
+    void pad_row(int32_t value, style_selector_t selector=GPART_MAIN)
+    void pad_column(int32_t value, style_selector_t selector=GPART_MAIN)
+    void pad_radial(int32_t value, style_selector_t selector=GPART_MAIN)
+    void pad_inner(int32_t value, style_selector_t selector=GPART_MAIN)
+    void grid_gap(int32_t value, style_selector_t selector=GPART_MAIN)
+    void gap(int32_t value, style_selector_t selector=GPART_MAIN)
+    void row_gap(int32_t value, style_selector_t selector=GPART_MAIN)
+    void column_gap(int32_t value, style_selector_t selector=GPART_MAIN)
+    void padding_top(int32_t value, style_selector_t selector=GPART_MAIN)
+    void padding_bottom(int32_t value, style_selector_t selector=GPART_MAIN)
+    void padding_left(int32_t value, style_selector_t selector=GPART_MAIN)
+    void padding_right(int32_t value, style_selector_t selector=GPART_MAIN)
+    void padding_row(int32_t value, style_selector_t selector=GPART_MAIN)
+    void padding_column(int32_t value, style_selector_t selector=GPART_MAIN)
+    void padding_inner(int32_t value, style_selector_t selector=GPART_MAIN)
+    void padding(int32_t pad_top, int32_t pad_bottom, int32_t pad_left, int32_t pad_right, style_selector_t selector=GPART_M
+    void padding(int32_t pad_top, int32_t pad_bottom, int32_t pad_left, int32_t pad_right, int32_t pad_inner, style_selector
+    void padding(int32_t pad_top, int32_t pad_bottom, int32_t pad_left, int32_t pad_right, int32_t pad_row, int32_t pad_colu
+    void padding(int32_t value, style_selector_t selector=GPART_MAIN)
+    void padding_ver(int32_t value, style_selector_t selector=GPART_MAIN)
+    void padding_hor(int32_t value, style_selector_t selector=GPART_MAIN)
+    void margin_top(int32_t value, style_selector_t selector=GPART_MAIN)
+    void margin_bottom(int32_t value, style_selector_t selector=GPART_MAIN)
+    void margin_left(int32_t value, style_selector_t selector=GPART_MAIN)
+    void margin_right(int32_t value, style_selector_t selector=GPART_MAIN)
+    void margin(int32_t margin_top, int32_t margin_bottom, int32_t margin_left, int32_t margin_right, style_selector_t selec
+    void bg_color(color_t value, style_selector_t selector=GPART_MAIN)
+    void bg_opa(opa_t value, style_selector_t selector=GPART_MAIN)
+    void bg_color(color_t value, opa_t opa, style_selector_t selector=GPART_MAIN)
+    void bg_color(String value, style_selector_t selector=GPART_MAIN )
+    void bg_color(String value, opa_t opa, style_selector_t selector=GPART_MAIN)
+    void bg_grad_color(color_t value, style_selector_t selector=GPART_MAIN)
+    void bg_grad_dir(grad_dir_t value, style_selector_t selector=GPART_MAIN)
+    void bg_main_stop(int32_t value, style_selector_t selector=GPART_MAIN)
+    void bg_grad_stop(int32_t value, style_selector_t selector=GPART_MAIN)
+    void bg_main_opa(opa_t value, style_selector_t selector=GPART_MAIN)
+    void bg_grad_opa(opa_t value, style_selector_t selector=GPART_MAIN)
+    void bg_grad(const lv_grad_dsc_t * value, style_selector_t selector=GPART_MAIN)
+    void bg_grad_color(String value, style_selector_t selector=GPART_MAIN)
+    void color(color_t value, style_selector_t selector=GPART_MAIN)
+    void color(color_t main_color, color_t grad_color, style_selector_t selector=GPART_MAIN)
+    void color(color_t main_color, color_t grad_color, grad_dir_t grad_dir, style_selector_t selector=GPART_MAIN)
+    void grad_color(color_t value, style_selector_t selector=GPART_MAIN)
+    void grad_dir(grad_dir_t value, style_selector_t selector=GPART_MAIN)
+    void color_stop(int32_t value, style_selector_t selector=GPART_MAIN)
+    void grad_stop(int32_t value, style_selector_t selector=GPART_MAIN)
+    void color(String value, style_selector_t selector=GPART_MAIN)
+    void color(String main_color, String grad_color, style_selector_t selector=GPART_MAIN)
+    void color(String main_color, String grad_color, grad_dir_t grad_dir, style_selector_t selector=GPART_MAIN)
+    void grad_color(String value, style_selector_t selector=GPART_MAIN)
+    void bg_image_src(const void * value, style_selector_t selector=GPART_MAIN)
+    void bg_image_opa(opa_t value, style_selector_t selector=GPART_MAIN)
+    void bg_image_recolor(color_t value, style_selector_t selector=GPART_MAIN)
+    void bg_image_recolor_opa(opa_t value, style_selector_t selector=GPART_MAIN)
+    void bg_image_tiled(bool value, style_selector_t selector=GPART_MAIN)
+    void bg_image_recolor(String value, style_selector_t selector=GPART_MAIN)
+    void image(const void * value, style_selector_t selector=GPART_MAIN)
+    void image(const img_t* value, style_selector_t selector=GPART_MAIN)
+    void image(const img_t& value, style_selector_t selector=GPART_MAIN)
+    void image(const void * value, opa_t opa, style_selector_t selector=GPART_MAIN)
+    void image(const img_t* value, opa_t opa, style_selector_t selector=GPART_MAIN)
+    void image(const img_t& value, opa_t opa, style_selector_t selector=GPART_MAIN)
+    void image_tiled(bool value, style_selector_t selector=GPART_MAIN)
+    void border_color(color_t value, style_selector_t selector=GPART_MAIN)
+    void border_opa(opa_t value, style_selector_t selector=GPART_MAIN)
+    void border_width(int32_t value, style_selector_t selector=GPART_MAIN)
+    void border(int32_t value, style_selector_t selector=GPART_MAIN)
+    void border(int32_t value, color_t color, style_selector_t selector=GPART_MAIN)
+    void border(int32_t value, color_t color, opa_t opa, style_selector_t selector=GPART_MAIN)
+    void border_side(border_side_t value, style_selector_t selector=GPART_MAIN)
+    void border_post(bool value, style_selector_t selector=GPART_MAIN)
+    void border_color(String value, style_selector_t selector=GPART_MAIN)
+    void border(int32_t value, String color, style_selector_t selector=GPART_MAIN)
+    void border(int32_t value, String color, opa_t opa, style_selector_t selector=GPART_MAIN)
+    void outline_width(int32_t value, style_selector_t selector=GPART_MAIN)
+    void outline_color(color_t value, style_selector_t selector=GPART_MAIN)
+    void outline_opa(opa_t value, style_selector_t selector=GPART_MAIN)
+    void outline_pad(int32_t value, style_selector_t selector=GPART_MAIN)
+    void outline_color(String value, style_selector_t selector=GPART_MAIN)
+    void shadow_width(int32_t value, style_selector_t selector=GPART_MAIN)
+    void shadow(int32_t value, style_selector_t selector=GPART_MAIN)
+    void shadow(int32_t value, color_t color, style_selector_t selector=GPART_MAIN)
+    void shadow(int32_t shadow_width, int32_t shadow_spread, color_t color, style_selector_t selector=GPART_MAIN)
+    void shadow_offset_x(int32_t value, style_selector_t selector=GPART_MAIN)
+    void shadow_offset_y(int32_t value, style_selector_t selector=GPART_MAIN)
+    void shadow_offset(int32_t x_ofs, int32_t y_ofs, style_selector_t selector=GPART_MAIN)
+    void shadow_spread(int32_t value, style_selector_t selector=GPART_MAIN)
+    void shadow_color(color_t value, style_selector_t selector=GPART_MAIN)
+    void shadow_opa(opa_t value, style_selector_t selector=GPART_MAIN)
+    void shadow(int32_t value, String color, style_selector_t selector=GPART_MAIN)
+    void shadow_color(String value, style_selector_t selector=GPART_MAIN)
+    void shadow(int32_t shadow_width, int32_t shadow_spread, String color, style_selector_t selector=GPART_MAIN)
+    void image_opa(opa_t value, style_selector_t selector=GPART_MAIN)
+    void image_recolor(color_t value, style_selector_t selector=GPART_MAIN)
+    void image_recolor_opa(opa_t value, style_selector_t selector=GPART_MAIN)
+    void image_recolor(String value, style_selector_t selector=GPART_MAIN)
+    void line_width(int32_t value, style_selector_t selector=GPART_MAIN)
+    void line_dash_width(int32_t value, style_selector_t selector=GPART_MAIN)
+    void line_dash_gap(int32_t value, style_selector_t selector=GPART_MAIN)
+    void line_rounded(bool value, style_selector_t selector=GPART_MAIN)
+    void line_color(color_t value, style_selector_t selector=GPART_MAIN)
+    void line_opa(opa_t value, style_selector_t selector=GPART_MAIN)
+    void line_color(String value, style_selector_t selector=GPART_MAIN)
+    void arc_width(int32_t value, style_selector_t selector=GPART_MAIN)
+    void arc_rounded(bool value, style_selector_t selector=GPART_MAIN)
+    void arc_color(color_t value, style_selector_t selector=GPART_MAIN)
+    void arc_opa(opa_t value, style_selector_t selector=GPART_MAIN)
+    void arc_image_src(const void * value, style_selector_t selector=GPART_MAIN)
+    void arc_color(String value, style_selector_t selector=GPART_MAIN)
+    void text_color(color_t value, style_selector_t selector=GPART_MAIN)
+    void text_opa(opa_t value, style_selector_t selector=GPART_MAIN)
+    void text_font(const font_t * value, style_selector_t selector=GPART_MAIN)
+    void font(const font_t *value, style_selector_t selector=GPART_MAIN)
+    void font(const font_t &value, style_selector_t selector=GPART_MAIN)
+    void font(const font_t *value, color_t color, style_selector_t selector=GPART_MAIN)
+    void font(const font_t &value, color_t color, style_selector_t selector=GPART_MAIN)
+    void font_color(color_t value, style_selector_t selector=GPART_MAIN)
+    void text_letter_space(int32_t value, style_selector_t selector=GPART_MAIN)
+    void text_line_space(int32_t value, style_selector_t selector=GPART_MAIN)
+    void text_decor(text_decor_t value, style_selector_t selector=GPART_MAIN)
+    void letter_space(int32_t value, style_selector_t selector=GPART_MAIN)
+    void line_space(int32_t value, style_selector_t selector=GPART_MAIN)
+    void decor(text_decor_t value, style_selector_t selector=GPART_MAIN)
+    void text_color(String value, style_selector_t selector=GPART_MAIN)
+    void font(const font_t *value, String color, style_selector_t selector=GPART_MAIN)
+    void font(const font_t &value, String color, style_selector_t selector=GPART_MAIN)
+    void font_color(String value, style_selector_t selector=GPART_MAIN)
+    void text_align(text_align_t value, style_selector_t selector=GPART_MAIN)
+    void radius(int32_t value, style_selector_t selector=GPART_MAIN)
+    void radial_offset(int32_t value, style_selector_t selector=GPART_MAIN)
+    void clip_corner(bool value, style_selector_t selector=GPART_MAIN)
+    void corner_radius(int32_t value, style_selector_t selector=GPART_MAIN)
+    void corner_mask  (bool value, style_selector_t selector=GPART_MAIN)
+    void rounded(bool enable, style_selector_t selector=GPART_MAIN)
+    void opa(opa_t value, style_selector_t selector=GPART_MAIN)
+    void opa_layered(opa_t value, style_selector_t selector=GPART_MAIN)
+    void color_filter_dsc(const color_filter_dsc_t * value, lv_style_selector_t selector=GPART_MAIN)
+    void color_filter_opa(opa_t value, style_selector_t selector=GPART_MAIN)
+    void anim(const anim_t * value, style_selector_t selector=GPART_MAIN)
+    void anim_duration(uint32_t value, style_selector_t selector=GPART_MAIN)
+    void anim_speed(uint32_t value, style_selector_t selector=GPART_MAIN)
+    void transition(const style_transition_dsc_t * value, style_selector_t selector=GPART_MAIN)
+    void transition(GTransition &transition, style_selector_t selector=GPART_MAIN)
+    void blend_mode(blend_mode_t value, style_selector_t selector=GPART_MAIN)
+    void style_layout(uint16_t value, style_selector_t selector=GPART_MAIN)
+    void base_dir(base_dir_t value, style_selector_t selector=GPART_MAIN)
+    void bitmap_mask_src(const void  *value, style_selector_t selector=GPART_MAIN)
+    void mask(const void   *value, style_selector_t selector=GPART_MAIN)
+    void mask(const img_t  *value, style_selector_t selector=GPART_MAIN)
+    void mask(const img_t  &value, style_selector_t selector=GPART_MAIN)
+    void rotary_sensitivity( uint32_t value, style_selector_t selector=GPART_MAIN)
+    void FLEX(flex_flow_t flex_flow, flex_align_t flex_main_place,flex_align_t flex_cross_place,flex_align_t flex_track_plac
+    void style_flex_flow(flex_flow_t value, style_selector_t selector=GPART_MAIN)
+    void style_flex_main_place(flex_align_t value, style_selector_t selector=GPART_MAIN)
+    void style_flex_cross_place(flex_align_t value, style_selector_t selector=GPART_MAIN)
+    void style_flex_track_place(flex_align_t value, style_selector_t selector=GPART_MAIN)
+    void style_flex_grow(uint8_t value, style_selector_t selector=GPART_MAIN)
+    void style_flex_align(flex_align_t flex_main_place,flex_align_t flex_cross_place,flex_align_t flex_track_place, style_se
+    void flex_flow(uint8_t value, style_selector_t selector=GPART_MAIN)
+    void flex_main_place(uint8_t value, style_selector_t selector=GPART_MAIN)
+    void flex_cross_place(uint8_t value, style_selector_t selector=GPART_MAIN)
+    void flex_track_place(uint8_t value, style_selector_t selector=GPART_MAIN)
+    void flex_grow(uint8_t value, style_selector_t selector=GPART_MAIN)
+    void flex_align(flex_align_t flex_main_place,flex_align_t flex_cross_place,flex_align_t flex_track_place, style_selector
+    void grid_column_dsc_array(const int32_t * value, style_selector_t selector=GPART_MAIN)
+    void grid_column_align(grid_align_t value, style_selector_t selector=GPART_MAIN)
+    void grid_row_dsc_array(const int32_t * value, style_selector_t selector=GPART_MAIN)
+    void grid_row_align(grid_align_t value, style_selector_t selector=GPART_MAIN)
+    void grid_cell_column_pos(int32_t value, style_selector_t selector=GPART_MAIN)
+    void grid_cell_x_align(grid_align_t value, style_selector_t selector=GPART_MAIN)
+    void grid_cell_column_span(int32_t value, style_selector_t selector=GPART_MAIN)
+    void grid_cell_row_pos(int32_t value, style_selector_t selector=GPART_MAIN)
+    void grid_cell_y_align(grid_align_t value, style_selector_t selector=GPART_MAIN)
+    void grid_cell_row_span(int32_t value, style_selector_t selector=GPART_MAIN)
+    void grid_cell( int32_t col, int32_t row, style_selector_t selector=GPART_MAIN)
+    void grid_cell_align(  grid_align_t cell_x_align, grid_align_t cell_y_align, style_selector_t selector=GPART_MAIN)
+    void grid_cell_span( int32_t col_span, int32_t row_span, style_selector_t selector=GPART_MAIN)
+    void layout_flex_flow(flex_flow_t flow)
+    void layout_flex_align(flex_align_t main_place, flex_align_t cross_place, flex_align_t track_cross_place)
+    void flex_align(flex_align_t flex_align, gstate_t selector=GPART_MAIN )
+    void content_align(flex_align_t flex_align, gstate_t selector=GPART_MAIN)
+    void layout_flex_grow(uint8_t grow)
+    void grid_dsc_array(const int32_t col_dsc[], const int32_t row_dsc[])
+    void grid_align(grid_align_t column_align, grid_align_t row_align)
+    void grid_cell( int32_t col_pos, int32_t row_pos, int32_t col_span, int32_t row_span, grid_align_t column_align, grid_al
+    void grid_cell(grid_pos_t grid_pos)
+    grid_pos_t grid_cell()
+    draw_buf_t * capture(color_format_t cf=COLOR_FORMAT_ARGB8888)
+    bool capture(String file_name)  // SD://filename.bmp/.jpg/.png  , SPIFFS:://filename.bmp/.jpg/.png
+    void add_flag(flag_t f)
+    void addFlag(flag_t f)
+    void remove_flag(flag_t f)
+    void removeFlag(flag_t f)
+    void clearFlag(flag_t f)
+    void update_flag(flag_t f, bool v)
+    void add_gstate(gstate_t state)
+    void remove_gstate(gstate_t state)
+    void set_gstate(gstate_t state, bool v)
+    void setState(gstate_t state, bool v)
+    void hidden(bool enable)
+    bool hidden()
+    void show(bool enable)
+    bool show()
+    void visible(bool enable)
+    bool visible()
+    void clickable(bool enable)
+    bool clickable()
+    void focusable(bool enable)
+    bool focusable()
+    void checkable(bool enable)
+    bool checkable()
+    void scrollable(bool enable)
+    bool scrollable()
+    void scroll_elastic(bool enable)
+    bool scroll_elastic()
+    void scroll_momentum(bool enable)
+    bool scroll_momentum()
+    void scroll_one(bool enable)
+    bool scroll_one()
+    void scroll_chain_hor(bool enable)
+    bool scroll_chain_hor()
+    void scroll_chain_ver(bool enable)
+    bool scroll_chain_ver()
+    void scroll_chain(bool enable)
+    bool scroll_chain()
+    void scroll_on_focus(bool enable)
+    bool scroll_on_focus()
+    void scroll_with_arrow(bool enable)
+    bool scroll_with_arrow()
+    void snappable(bool enable)
+    bool snappable()
+    void press_lock(bool enable)
+    bool press_lock()
+    void event_bubble(bool enable)
+    bool event_bubble()
+    void gesture_bubble(bool enable)
+    bool gesture_bubble()
+    void adv_hittest(bool enable)
+    bool adv_hittest()
+    void ignore_layout(bool enable)
+    bool ignore_layout()
+    void floating(bool enable)
+    bool floating()
+    void overflow_visible(bool enable)
+    bool overflow_visible()
+    void flex_in_new_track(bool enable)
+    bool flex_in_new_track()
+    void flex_new_line(bool enable)
+    bool flex_new_line()
+    void flag_layout1(bool enable)
+    bool flag_layout1()
+    void flag_layout2(bool enable)
+    bool flag_layout2()
+    void flag_widget1(bool enable)
+    bool flag_widget1()
+    void flag_widget2(bool enable)
+    bool flag_widget2()
+    void top(bool enable)
+    bool top()
+    void checked(bool en)
+    bool checked()
+    void disabled(bool en)
+    bool disabled()
+    bool pressed(bool en)
+    bool pressed()
+    bool isPressed()
+    void inactive(bool en)
+    bool inactive()
+    void active(bool en)
+    bool active()
+    void event_parent(bool en)
+    bool event_parent()
+    bool isON()
+    bool isOFF()
+    bool has_flag(flag_t f)
+    bool hasFlag(flag_t f)
+    bool has_flag_any(flag_t f)
+    gstate_t get_gstate()
+    gstate_t getState()
+    bool has_gstate(gstate_t state)
+    bool hasState(gstate_t state)
+    group_t * get_group()
+    void allocate_spec_attr()
+    bool check_type(const obj_class_t * class_p)
+    bool has_class(const obj_class_t * class_p)
+    const obj_class_t * get_class()
+    String class_name()
+    bool is_valid()
+    void pos(int32_t x, int32_t y)
+    void pos(Point p)
+    void set_x(int32_t x)
+    void set_y(int32_t y)
+    void size(int32_t w, int32_t h)
+    void size(GWidget* widget)
+    void size(GWidget& widget)
+    void size(const img_t& img)
+    void size(const img_t* img)
+    void size(Point sz)
+    Point size()
+    bool refr_size()
+    void width(int32_t w)
+    void width(GWidget* widget)
+    void        width(GWidget& widget)
+    void width(const img_t& img)
+    void width(const img_t* img)
+    void height(int32_t h)
+    void height(GWidget* widget)
+    void        height(GWidget& widget)
+    void height(const img_t& img)
+    void height(const img_t* img)
+    void content_width(int32_t w)
+    void width_fit(int32_t w)
+    void content_height(int32_t h)
+    void height_fit(int32_t w)
+    void content_size(int32_t w, int32_t h)
+    void set_layout(glayout_t layout)
+    bool is_layout_positioned()
+    void mark_layout_as_dirty()
+    void update_layout()
+    void _align(align_t align)
+    void _align(align_t align, int32_t x_ofs, int32_t y_ofs)
+    void _align_to(const obj_t * base, align_t align, int32_t x_ofs, int32_t y_ofs)
+    void transform(const matrix_t * matrix)
+    void reset_transform()
+    void get_coords(area_t * coords)
+    int32_t get_x()
+    int32_t get_x2()
+    int32_t get_y()
+    int32_t get_y2()
+    int32_t get_x_aligned()
+    int32_t get_y_aligned()
+    int32_t width()
+    int32_t raw_width()
+    int32_t height()
+    int32_t raw_height()
+    int32_t content_width()
+    int32_t width_fit()
+    int32_t content_height()
+    int32_t height_fit()
+    void content_coords(area_t * area)
+    int32_t self_width()
+    int32_t self_height()
+    bool refresh_self_size()
+    void refr_pos()
+    void move_to(int32_t x, int32_t y)
+    void move_children_by(int32_t x_diff, int32_t y_diff, bool ignore_floating)
+    void transform_point(point_t * p, bool recursive, bool inv)
+    void transformed_area(area_t * area, bool recursive, bool inv)
+    void transform_point(point_t * p, point_transform_flag_t flags)
+    void transform_point_array(point_t points[], size_t count,
+    void transformed_area(area_t * area, point_transform_flag_t flags)
+    void invalidate_area(const area_t * area)
+    void invalidate()
+    bool area_is_visible(area_t * area)
+    bool is_visible()
+    void set_ext_click_area(int32_t size)
+    void get_click_area(area_t * area)
+    bool hit_test(const point_t * point)
+    int32_t clamp_width(int32_t width, int32_t min_width, int32_t max_width, int32_t ref_width)
+    int32_t clamp_height(int32_t height, int32_t min_height, int32_t max_height, int32_t ref_height)
+    void scrollbar_mode( scrollbar_mode_t mode)
+    void scroll_dir(dir_t dir)
+    void scroll_snap_x(scroll_snap_t align)
+    void scroll_snap_y(scroll_snap_t align)
+    scrollbar_mode_t scrollbar_mode()
+    dir_t scroll_dir()
+    scroll_snap_t scroll_snap_x()
+    scroll_snap_t scroll_snap_y()
+    int32_t scroll_x()
+    int32_t scroll_y()
+    int32_t scroll_top()
+    int32_t scroll_bottom()
+    int32_t scroll_left()
+    int32_t scroll_right()
+    void scroll_end(point_t * end)
+    void scroll_by(int32_t x, int32_t y, anim_enable_t anim_en=false)
+    void scroll_by_bounded(int32_t dx, int32_t dy, anim_enable_t anim_en=false)
+    void scroll_to(int32_t x, int32_t y, anim_enable_t anim_en=false)
+    void scroll_to_x(int32_t x, anim_enable_t anim_en=false)
+    void scroll_to_y(int32_t y, anim_enable_t anim_en=false)
+    void scroll_to_view(anim_enable_t anim_en)
+    void scroll_to_view_recursive(anim_enable_t anim_en)
+    bool is_scrolling()
+    void update_snap(anim_enable_t anim_en)
+    void scrollbar_area(area_t * hor, area_t * ver)
+    void scrollbar_invalidate()
+    void readjust_scroll(anim_enable_t anim_en)
+    void scrollbar_pad_top(int32_t value)
+    void scrollbar_pad_bottom(int32_t value)
+    void scrollbar_pad_left(int32_t value)
+    void scrollbar_pad_right(int32_t value)
+    void scrollbar_pad(int32_t value)
+    #if LV_VERSION_CHECK(9, 3, 0)
+    void event_cb(event_cb_t event_cb, void* user_data=NULL)
+    event_cb_t  event_cb()
+    void onClicked(event_handler_t fn)
+    #if LV_VERSION_CHECK(9, 3, 0)
+    void onDoubleClicked(event_handler_t fn)
+    void onPressed(event_handler_t fn)
+    void onPressing(event_handler_t fn)
+    void onReleased(event_handler_t fn)
+    void onPressLost(event_handler_t fn)
+    void onLongPressed(event_handler_t fn)
+    void onLongPressedRepeat(event_handler_t fn)
+    void onDelete(event_handler_t fn)
+    void onGesture(event_handler_t fn)
+    void onDrawMain(event_handler_t fn)
+    void onDrawMainBegin(event_handler_t fn)
+    void onDrawMainEnd(event_handler_t fn)
+    void onDrawTask(event_handler_t fn)
+    void onFocused(event_handler_t fn)
+    void onDefocused(event_handler_t fn)
+    void onSizeChanged(event_handler_t fn)
+    void onStyleChanged(event_handler_t fn)
+    void onValueChanged(event_handler_t fn)
+    void onClicked(event_handler_t fn, void*user_data)
+    #if LV_VERSION_CHECK(9, 3, 0)
+    void onDoubleClicked(event_handler_t fn, void*user_data)
+    void onPressed(event_handler_t fn, void*user_data)
+    void onPressing(event_handler_t fn, void*user_data)
+    void onReleased(event_handler_t fn, void*user_data)
+    void onLongPressed(event_handler_t fn, void*user_data)
+    void onLongPressedRepeat(event_handler_t fn, void*user_data)
+    void onDelete(event_handler_t fn, void*user_data)
+    void onGesture(event_handler_t fn, void*user_data)
+    void onDrawMain(event_handler_t fn, void*user_data)
+    void onDrawMainBegin(event_handler_t fn, void*user_data)
+    void onDrawMainEnd(event_handler_t fn, void*user_data)
+    void onDrawTask(event_handler_t fn, void*user_data)
+    void onFocused(event_handler_t fn, void*user_data)
+    void onDefocused(event_handler_t fn, void*user_data)
+    void onSizeChanged(event_handler_t fn, void*user_data)
+    void onStyleChanged(event_handler_t fn, void*user_data)
+    void onValueChanged(event_handler_t fn, void*user_data)
+    bool        event_send(event_t event, void * event_data=NULL)
+    bool send_event(event_t event, void * event_data=NULL)
+    void *      event_data()
+    GWidget* event_target()
+    GWidget* event_current_target()
+    void hookDrawTask(bool en)
+    bool hookDrawTask()
+    draw_task_t*        draw_task()
+    Point               event_old_size()
+    layer_t*            draw_layer(lv_event_t* e=NULL)
+    area_t&             draw_area()
+    area_t       inner_area()                    ; return area; }
+    gpart_t             draw_part()
+    draw_task_type_t    draw_type()
+    uint32_t            draw_id1()
+    uint32_t            draw_id2()
+    draw_base_dsc_t*    draw_base_dsc()
+    draw_rect_dsc_t*    draw_rect_dsc()
+    draw_line_dsc_t*    draw_line_dsc()
+    draw_fill_dsc_t*    draw_fill_dsc()
+    draw_border_dsc_t*  draw_border_dsc()
+    draw_label_dsc_t*   draw_label_dsc()
+    draw_image_dsc_t*   draw_image_dsc()
+    draw_arc_dsc_t*     draw_arc_dsc()
+    draw_box_shadow_dsc_t* draw_box_shadow_dsc()
+    draw_triangle_dsc_t*draw_triangle_dsc()
+    void init_draw_rect_dsc(gpart_t part, draw_rect_dsc_t& rect_dsc)
+    void init_draw_label_dsc(gpart_t part, draw_label_dsc_t& label_dsc)
+    void init_draw_image_dsc(gpart_t part, draw_image_dsc_t& image_dsc)
+    void init_draw_line_dsc(gpart_t part, draw_line_dsc_t& line_dsc)
+    void init_draw_arc_dsc(gpart_t part, draw_arc_dsc_t& arc_dsc)
+    void softdrawRect(draw_rect_dsc_t & draw_rect_dsc, area_t *area)
+    void softdrawLabel(draw_label_dsc_t& draw_label_dsc, area_t *area)
+    void softdrawImage(draw_image_dsc_t& draw_image_dsc, area_t *area)
+    void softdrawArc(draw_arc_dsc_t& draw_arc_dsc)
+    void softdrawTriangle(draw_triangle_dsc_t& draw_tri_dsc)
+    void softdrawLine(draw_line_dsc_t& draw_line_dsc)
+    area_t softdrawRect( int32_t w, int32_t h, color_t color, int32_t radius, int32_t border_width, color_t border_color, op
+    area_t softdrawRect( int32_t w, int32_t h, String color, int32_t radius, int32_t border_width, String border_color, opa_
+    area_t softdrawRect( int32_t w, int32_t h, color_t color, int32_t radius, align_t align=ALIGN_CENTER, int32_t ofs_x=0, i
+    area_t softdrawRect( int32_t w, int32_t h, String color, int32_t radius, align_t align=ALIGN_CENTER, int32_t ofs_x=0, in
+    area_t softdrawRect( int32_t w, int32_t h, color_t color, align_t align=ALIGN_CENTER, int32_t ofs_x=0, int32_t ofs_y=0)
+    area_t softdrawRect( int32_t w, int32_t h, String color, align_t align=ALIGN_CENTER, int32_t ofs_x=0, int32_t ofs_y=0)
+    void softdrawLabel(String text, const font_t& font= prasanmit_35, color_t color=TFT_WHITE, align_t align=ALIGN_CENTER, i
+    void softdrawLabel(String text, const font_t& font, String color, align_t align=ALIGN_CENTER, int32_t ofs_x=0, int32_t o
+    void softdrawLabel(String text, align_t align, int32_t ofs_x=0, int32_t ofs_y=0)
+    void softdrawLabel(String text, color_t color, align_t align, int32_t ofs_x=0, int32_t ofs_y=0)
+    void softdrawLabel(String text, String color, align_t align, int32_t ofs_x=0, int32_t ofs_y=0)
+    void softdrawImage(const img_t* image_src, int32_t scale /* 512 double size, 128 half size.*/, align_t align=ALIGN_CENTE
+    void softdrawImage(const img_t* image_src, align_t align=ALIGN_CENTER, int32_t ofs_x=0, int32_t ofs_y=0)
+    void softdrawImage(const img_t& image_src, int32_t scale /* 512 double size, 128 half size.*/, align_t align=ALIGN_CENTE
+    void softdrawImage(const img_t& image_src, align_t align=ALIGN_CENTER, int32_t ofs_x=0, int32_t ofs_y=0)
+    void softdrawImage(const img_t* image_src, int32_t scale /* 512 double size, 128 half size.*/, float angle /*0.0 - 360.0
+    void softdrawImage(const img_t& image_src, int32_t scale /* 512 double size, 128 half size.*/, float angle, align_t alig
+    hit_test_info_t*    hit_test_info()
+    int32_t event_target_id()
+    widget_type_t widget_type()
+    gresult_t _send_event(event_t event_code, void * param=NULL)
+    gresult_t event_base(const obj_class_t * class_p, lv_event_t * e)
+    obj_t * event_get_current_target_obj(lv_event_t * e)
+    obj_t * event_get_target_obj(lv_event_t * e)
+    void add_event_cb(lv_event_cb_t event_cb, event_t filter=EVENT_ALL, void * user_data=NULL)
+    uint32_t event_count()
+    event_dsc_t * event_dsc(uint32_t index)
+    bool remove_event(uint32_t index)
+    bool remove_event_cb(lv_event_cb_t event_cb)
+    uint32_t remove_event_cb_with_user_data(lv_event_cb_t event_cb, void * user_data)
+    indev_t * event_get_indev(lv_event_t * e)
+    layer_t * event_get_layer(lv_event_t * e)
+    const area_t * event_get_old_size(lv_event_t * e)
+    uint32_t event_get_key(lv_event_t * e)
+    anim_t * event_get_scroll_anim(lv_event_t * e)
+    void event_set_ext_draw_size(lv_event_t * e, int32_t size)
+    point_t * event_get_self_size_info(lv_event_t * e)
+    hit_test_info_t * event_get_hit_test_info(lv_event_t * e)
+    const area_t * event_get_cover_area(lv_event_t * e)
+    void event_set_cover_res(lv_event_t * e, cover_res_t res)
+    draw_task_t * event_get_draw_task(lv_event_t * e)
+    GWidget* gwidget()
+    area_t*  coords()
+    Point touch_point(bool absolute=false)
+    Point vect_point()
+    void  drag_n_drop(bool en)
+    bool  drag_n_drop()
+    bool  draging()
+    lv_event_t*  cur_event()
+    event_t      cur_event_code()
+    void*        cur_event_param()
+    layer_t*     event_draw_layer()
 
 ────────────────────────────────────────────────────────────
   class GWiFiSetting : GObject
 ────────────────────────────────────────────────────────────
-  (ไม่พบ public methods)
+  Methods:
+    GWiFiManager(GWidget& parent=GScreen)                          : GObject(&parent)
+    GWiFiManager(GWidget* parent)                                  : GObject(parent)
+    ~GWiFiManager()
+    void  create()
+    void  create(GWidget& parent)
+    void  create(GWidget* parent)
+    void wifi_rssi_cb(fn_get_wifi_rssi_t cb)
+    void wifi_connection_cb(fn_get_wifi_connection_t cb)
+    void color(color_t color_wifi_connected, color_t color_wifi_disconnected=  TFT_RED, color_t color_wifi_bg= TFT_DARKGRAY)
+    fn_get_wifi_rssi_t wifi_rssi_cb()
+    fn_get_wifi_connection_t wifi_connection_cb()
+    color_t color_wifi_connected()
+    color_t color_wifi_disconnected()
+    color_t color_wifi_bg()
+    void    onWiFiConnected()  // เชื่อมเสร็จได้ จะมา run WiFiSignalUpdate_Task_cb() เป็นระยะให้อัตโนมัติ
+    void    onWiFiDisconnected()
+    GWiFiSetting(GWidget& parent=GScreen)                          : GObject(&parent)
+    GWiFiSetting(GWidget* parent)                                  : GObject(parent)
+    ~GWiFiSetting()
+    void  create()
+    void  create(GWidget& parent)
+    void  create(GWidget* parent)
+    void onBack(event_handler_t fn)
+    void onWiFiConnected()
+    void onWiFiDisconnected()
+    void update_WiFiInfo()
+    void ta_onValueChanged(GWidget*w)
+    void scan_WiFiNetworks()
+    void update_NetworkList()
+    void WiFiReScan(uint32_t period=10000)
+    void autoconnection()  // คำสั่งให้โหลด load_WiFiConfig() แล้วทำการเชื่อมต่อ connect_WiFi()
+    void load_WiFiConfig()  // สำหรับโหลด WiFiConfig
+    void save_WiFiConfig()  // สำหรับบันทึก WiFiConfig
+    void save_WiFiConfig(String ssid, String pass)  // สำหรับบันทึก WiFiConfig
+    void clean_WiFiConfig()  // สำหรับล้าง WiFiConfig
+    void display_WiFiConfig()  // สำหรับแสดง WiFiConfig ออก Serial Monitor
+    void connect_WiFi(bool force_reconnect=false)  // คำสั่ง สำหรับเชื่อมต่อ WiFi จาก WiFiConfig ; force_reconnect = true คือบังคับตัด wifi แล้วเชื่อมต่อใหม่
+    void disconnect_WiFi()  // คำสั่ง สำหรับตัดการเชื่อมต่อ WiFi
 
 ────────────────────────────────────────────────────────────
   class GTile : GObject
 ────────────────────────────────────────────────────────────
-  (ไม่พบ public methods)
+  Methods:
+    GTileView(GWidget& parent=GScreen)                          : GObject(&parent)
+    GTileView(GWidget* parent)                                  : GObject(parent)
+    ~GTileView()
+    void  create()
+    void  create(GWidget& parent)
+    void  create(GWidget* parent)
+    obj_t * add_tile(uint8_t col_id, uint8_t row_id, dir_t dir)
+    void tile(obj_t * tile_obj, anim_enable_t anim_en=false)
+    void tile_by_index(uint32_t col_id, uint32_t row_id, anim_enable_t anim_en=false)
+    obj_t * tile_active()
+    void anim_speed(uint32_t value)
+    uint32_t anim_speed()
+    GTile(GWidget& parent=GScreen)                          : GObject(&parent)
+    GTile(GWidget* parent)                                  : GObject(parent)
+    ~GTile()
+    void  create()
+    void  create(GWidget& parent)
+    void  create(GWidget* parent)
+    void tileview_pos(uint8_t col_id, uint8_t row_id)
+    Point tileview_pos()
+    void tileview_direction(dir_t dir)
+    dir_t tileview_direction()
 
 ────────────────────────────────────────────────────────────
   class GTextAreaInputPad : GObject
 ────────────────────────────────────────────────────────────
-  (ไม่พบ public methods)
+  Methods:
+    GTextAreaInputPad(GWidget& parent=GScreen)              : GObject(&parent)
+    GTextAreaInputPad(GWidget* parent)                      : GObject(parent)
+    ~GTextAreaInputPad()
+    void  create()
+    void  create(GWidget& parent)
+    void  create(GWidget* parent)
+    void textarea(GTextArea* ta)
+    void textarea(GTextArea& ta)
+    void label(GLabel* lb)
+    void label(GLabel& lb)
+    String text()
+    void keyboard_mode(keyboard_mode_t mode)
+    keyboard_mode_t keyboard_mode()
 
 ────────────────────────────────────────────────────────────
   class GTextArea : GObject
 ────────────────────────────────────────────────────────────
-  (ไม่พบ public methods)
+  Methods:
+    GTextArea(GWidget& parent=GScreen)                          : GObject(&parent)
+    GTextArea(GWidget* parent)                                  : GObject(parent)
+    ~GTextArea()
+    void  create()
+    void  create(GWidget& parent)
+    void  create(GWidget* parent)
+    String toString()
+    int    toInt()
+    float  toFloat()
+    double toDouble()
+    const char*   c_str()
+    uint32_t length()
+    void show_cursor(bool enable)
+    void    selection_color(color_t color)
+    color_t selection_color()
+    void    selection_font_color(color_t color)
+    color_t selection_font_color()
+    void    selection_color(String color)
+    void    selection_font_color(String color)
+    void selection_start(uint32_t index)  // TEXT_SELECTION_OFF = ไม่กำหนด
+    void selection_end(uint32_t index)  // TEXT_SELECTION_OFF = ไม่กำหนด
+    uint32_t selection_start();   /* encoded char id ที่เริ่ม selection */
+    uint32_t selection_end();     /* encoded char id ที่สิ้นสุด selection */
+    void onTextSelected(event_handler_t fn)
+    String text_selected()
+    void placeholder_float(bool en)
+    bool placeholder_float()
+    void placeholder_color(color_t color)
+    void placeholder_color(String  color)
+    void placeholder_color(color_t color, opa_t opa)
+    void placeholder_color(String  color, opa_t opa)
+    color_t placeholder_color()
+    void placeholder_opa(opa_t opa)
+    opa_t placeholder_opa()
+    void placeholder_font(const font_t& font)
+    void placeholder_font(const font_t* font)
+    const font_t* placeholder_font()
+    void placeholder_font(const font_t& font, color_t c)
+    void placeholder_font(const font_t* font, color_t c)
+    void placeholder_font(const font_t& font, String  c)
+    void placeholder_font(const font_t* font, String  c)
+    void add(uint32_t c)  // wide char
+    void add(const char * txt)
+    void add(String txt)
+    void backspace()
+    void del_forward()
+    void text(const char * txt)
+    void text(String txt)
+    void placeholder(const char * txt)
+    void placeholder(String txt)
+    void placeholder(String txt, bool placeholder_float)
+    void cursor_pos(int32_t pos)
+    void cursor_click_pos(bool en)
+    void password_mode(bool en)
+    void password_bullet(const char * bullet)
+    void one_line(bool en)
+    void accepted_chars(const char * list)
+    void max_length(uint32_t num)
+    void insert_replace(const char * txt)
+    void text_selection(bool en)
+    void password_show_time(uint32_t time)
+    void text_align(text_align_t align)
+    void cursor_show(bool en)
+    void cursor_visible(bool en)
+    void cursor_hidden(bool en)
+    String text()
+    String placeholder()
+    lv_obj_t * label()
+    uint32_t cursor_pos()
+    bool cursor_click_pos()
+    bool password_mode()
+    const char * password_bullet()
+    bool one_line()
+    const char * accepted_chars()
+    uint32_t max_length()
+    bool is_selected()
+    bool text_selection()
+    uint32_t password_show_time()
+    uint32_t current_char()
+    void clear_selection()
+    void cursor_right()
+    void cursor_left()
+    void cursor_down()
+    void cursor_up()
+    void onReady(event_handler_t fn)
+    void  default_keyboard(bool en, keyboard_mode_t keyboard_mode = KEYBOARD_MODE_EN)
   Macros / Helpers:
     #define GPART_PLACEHOLDER_FLOAT         (gstate_t) (GPART_TEXTAREA_PLACEHOLDER | (int) GSTATE_EDITED)
 
 ────────────────────────────────────────────────────────────
   class GSpinbox : GTextArea
 ────────────────────────────────────────────────────────────
-  (ไม่พบ public methods)
+  Methods:
+    GSpinbox(GWidget& parent=GScreen)                       : GTextArea(&parent)
+    GSpinbox(GWidget* parent)                               : GTextArea(parent)
+    ~GSpinbox()
+    void  create()
+    void  create(GWidget& parent)
+    void  create(GWidget* parent)
+    int toInt()
+    void value(int32_t v)
+    void rollover(bool rollover)
+    void digit_format(uint32_t digit_count, uint32_t sep_pos)
+    void step(uint32_t step)
+    void range(int32_t range_min, int32_t range_max)
+    void cursor_pos(uint32_t pos)
+    void digit_step_direction(dir_t direction)
+    bool rollover()
+    int32_t value()
+    int32_t step()
+    void step_next()
+    void step_prev()
+    void increment()
+    void decrement()
+
+────────────────────────────────────────────────────────────
+  class GTable : GObject
+────────────────────────────────────────────────────────────
+  Methods:
+    GFLOAT(float f_num, uint8_t dec=2) : f(f_num), decimal(dec)
+    GTable(GWidget& parent=GScreen)                          : GObject(&parent)
+    GTable(GWidget* parent)                                  : GObject(parent)
+    ~GTable()
+    void  create()
+    void  create(GWidget& parent)
+    void  create(GWidget* parent)
+    void   cells(uint32_t row_num, uint32_t col_num)
+    void   rows(uint32_t num)
+    uint32_t rows()
+    void   columns(uint16_t num)
+    uint32_t columns()
+    String cell_str(uint32_t r, uint32_t c)
+    String cell_str(table_cell_dsc_t cell)
+    table_cell_dsc_t  selected_cell()
+    uint32_t draw_row()
+    uint32_t draw_col()
+    table_cell_dsc_t draw_cell()
+    bool cell_checked(uint32_t row, uint32_t col)
+    void cell_checked(uint32_t row, uint32_t col, bool enable)
+    bool cell_checked(table_cell_dsc_t cell)
+    void cell_checked(table_cell_dsc_t cell,bool enable)
+    bool is_cell_checked(uint32_t row, uint32_t col)
+    bool is_cell_checked(table_cell_dsc_t cell)
+    bool isON(table_cell_dsc_t cell)
+    bool isOFF(table_cell_dsc_t cell)
+    bool merge_cell_right(uint32_t row, uint32_t col)
+    bool is_cell_merged(uint32_t row, uint32_t col, uint32_t* start_merged_col=NULL, uint32_t* end_merged_col=NULL)
+    void clear_all_style()
+    void onCellClicked(event_handler_t fn)
+    void cell_value(uint32_t row, uint32_t col, const char * txt)
+    void cell_value(uint32_t row, uint32_t col, String txt)
+    void row_count(uint32_t row_cnt)
+    void column_count(uint32_t col_cnt)
+    void column_width(uint32_t col_id, int32_t w)
+    void set_cell_ctrl(uint32_t row, uint32_t col, table_cell_ctrl_t ctrl)
+    void add_cell_ctrl(uint32_t row, uint32_t col, table_cell_ctrl_t ctrl)
+    void clear_cell_ctrl(uint32_t row, uint32_t col, table_cell_ctrl_t ctrl)
+    void cell_user_data(uint16_t row, uint16_t col, void * user_data)
+    const char * cell_value(uint32_t row, uint32_t col)
+    uint32_t row_count()
+    uint32_t column_count()
+    int32_t get_column_width(uint32_t col)
+    bool has_cell_ctrl(uint32_t row, uint32_t col, table_cell_ctrl_t ctrl)
+    void selected_cell(uint32_t * row, uint32_t * col)
+    void * cell_user_data(uint16_t row, uint16_t col)
+    void cell_text_align(int32_t row, int32_t col, text_align_t align)
+    void cell_text_offset(int32_t row, int32_t col, int32_t offset_x, int32_t offset_y)
+    void cell_font(int32_t row, int32_t col, const font_t& font)
+    void cell_font_color(int32_t row, int32_t col, color_t color)
+    void cell_font_color(int32_t row, int32_t col, String color)
+    void cell_text_line_space(int32_t row, int32_t col, int32_t text_line_space)
+    void cell_text_letter_space(int32_t row, int32_t col, int32_t text_letter_space)
+    void cell_bg_color(int32_t row, int32_t col, color_t color)
+    void cell_bg_color(int32_t row, int32_t col, String color)
+    void cell_icon_src(int32_t row, int32_t col, const void* src)
+    void cell_icon_offset(int32_t row, int32_t col, int32_t icon_offset_x, int32_t icon_offset_y)
+    void cell_decimal(int32_t row, int32_t col, uint8_t decimal)
+    void cell_clickable(int32_t row, int32_t col, bool en)
+    void row_height(int32_t row, int32_t height)
+    void row_height(int32_t height)
+    void column_width(int32_t width)
+    bool cell_get_prop(int32_t row, int32_t col, style_prop_t prop, style_value_t * style_value)
+    text_align_t  cell_text_align(int32_t row, int32_t col)
+    int32_t       cell_text_offset_x(int32_t row, int32_t col)
+    int32_t       cell_text_offset_y(int32_t row, int32_t col)
+    const font_t* cell_font(int32_t row, int32_t col)
+    color_t       cell_font_color(int32_t row, int32_t col)
+    int32_t       cell_text_line_space(int32_t row, int32_t col)
+    int32_t       cell_text_letter_space(int32_t row, int32_t col)
+    color_t       cell_bg_color(int32_t row, int32_t col)
+    const void*   cell_icon_src(int32_t row, int32_t col)
+    int32_t       cell_icon_offset_x(int32_t row, int32_t col)
+    int32_t       cell_icon_offset_y(int32_t row, int32_t col)
+    bool          cell_clickable(int32_t row, int32_t col)
+    uint8_t       cell_decimal(int32_t row, int32_t col)
+    int32_t       get_row_height(int32_t row)
+    void color(color_t color)
+    void color(String  color)
 
 ────────────────────────────────────────────────────────────
   class GTabView : GObject
 ────────────────────────────────────────────────────────────
-  (ไม่พบ public methods)
+  Methods:
+    GTabView(GWidget& parent=GScreen)                          : GObject(&parent)
+    GTabView(GWidget* parent)                                  : GObject(parent)
+    ~GTabView()
+    void  create()
+    void  create(GWidget& parent)
+    void  create(GWidget* parent)
+    obj_t * add_tab(const char * name)
+    void rename_tab(uint32_t idx, const char * new_name)
+    void active(uint32_t idx, anim_enable_t anim_en)
+    void tab_bar_position(dir_t dir)
+    void tab_bar_size(int32_t size)
+    uint32_t tab_count()
+    uint32_t tab_active()
+    obj_t * content()
+    obj_t * tab_bar()
 
 ────────────────────────────────────────────────────────────
   class GSwitch : GObject
 ────────────────────────────────────────────────────────────
-  (ไม่พบ public methods)
+  Methods:
+    GSwitch(GWidget& parent=GScreen)                          : GObject(&parent)
+    GSwitch(GWidget* parent)                                  : GObject(parent)
+    ~GSwitch()
+    void  create()
+    void  create(GWidget& parent)
+    void  create(GWidget* parent)
+    bool isON()
+    bool isOFF()
+    void state(bool st)
+    bool state()
+    void on()
+    void off()
+    void ON()
+    void OFF()
+    void orientation(switch_orientation_t orientation)
+    switch_orientation_t orientation()
+    void color( color_t color )
+    void color( String  color )
+    void knob_color( color_t color)
+    void knob_color( String  color)
+    void knob_color( color_t color, gstate_t gstate )
+    void knob_color( String  color, gstate_t gstate )
+    void radius( int32_t r)
 
 ────────────────────────────────────────────────────────────
   class GRoller : GObject
 ────────────────────────────────────────────────────────────
-  (ไม่พบ public methods)
+  Methods:
+    GRoller(GWidget& parent=GScreen)                          : GObject(&parent)
+    GRoller(GWidget* parent)                                  : GObject(parent)
+    ~GRoller()
+    void  create()
+    void  create(GWidget& parent)
+    void  create(GWidget* parent)
+    void visible_rows(uint32_t row_cnt)
+    String      selected()
+    void option_align(text_align_t align)
+    String toString()
+    int    toInt()
+    float  toFloat()
+    double toDouble()
+    void options(const char * options, roller_mode_t mode=ROLLER_MODE_INFINITE)
+    void options(String* option, uint16_t option_num, roller_mode_t mode=ROLLER_MODE_INFINITE)
+    void options(int from, int to, bool zero_front=false, roller_mode_t mode=ROLLER_MODE_INFINITE)
+    void selected(uint32_t sel_opt, anim_enable_t anim=false)
+    void visible_row_count(uint32_t row_cnt)
+    uint32_t selected_id()
+    void selected_str(char * buf, uint32_t buf_size)
+    const char * options()
+    uint32_t option_count()
+    void color(color_t color)
+    void color(String  color)
+    void bg_color(color_t color)
+    void bg_color(String  color)
+    void bg_color(color_t color,color_t grad_color)
+    void bg_color(String  color,String  grad_color)
+    void bg_opa(opa_t value)
+    void bg_font(const font_t& font)
+    void bg_font(const font_t& font, color_t color)
+    void bg_font(const font_t& font, String  color)
+    void bg_font_color(color_t color)
+    void bg_font_color(String  color)
 
 ────────────────────────────────────────────────────────────
   class GQRCode : GObject
 ────────────────────────────────────────────────────────────
-  (ไม่พบ public methods)
+  Methods:
+    GQRCode(GWidget& parent=GScreen)                        : GObject(&parent)
+    GQRCode(GWidget* parent)                                : GObject(parent)
+    ~GQRCode()
+    void  create()
+    void  create(GWidget& parent)
+    void  create(GWidget* parent)
+    void size(int32_t w, int32_t h)
+    void color(color_t color)
+    void color(String  color)
+    void encode(String txt)
+    void encode(String txt, const img_t&logo)
+    void encode(String txt, const img_t*logo)
+    void encodeWiFi(String ssid, String password="", wifi_type_t wifi_type=WIFI_WPA)
+    void encodeLine(String line_id)
+    void encodePromptPay(String id, float amount, bool multi_use=true)  // สำหรับโอนเงิน
+    void encodePromptPay(String biller_id, String reference_id1, String reference_id2, float amount, bool multi_use=false, S
+    void encodeKPlusShop(String MerchantID, String bill_id, float amount, bool multi_use=false, String terminal_label= "")
+    void size(int32_t size)
+    void dark_color(color_t color)
+    void dark_color(String color)
+    void light_color(color_t color)
+    void light_color(String color)
+    void version(uint8_t qr_version)
+    void encode(const void * data, uint32_t data_len)
+    void quite_zone(bool en)
 
 ────────────────────────────────────────────────────────────
   class GPasscodeLock : GObject
 ────────────────────────────────────────────────────────────
-  (ไม่พบ public methods)
+  Methods:
+    GPasscodeLock(GWidget& parent=GScreen)                      : GObject(&parent)
+    GPasscodeLock(GWidget* parent)                              : GObject(parent)
+    ~GPasscodeLock()
+    void  create()
+    void  create(GWidget& parent)
+    void  create(GWidget* parent)
+    void btn_size(int32_t w, int32_t h)
+    void btn_color(color_t c, gstate_t s=GSTATE_DEFAULT)
+    void btn_color(String  c, gstate_t s=GSTATE_DEFAULT)
+    void btn_opa(opa_t opa, gstate_t s=GSTATE_DEFAULT)
+    void btn_font(const font_t& font)
+    void btn_font(const font_t& font, color_t c)
+    void btn_font(const font_t& font, String  c)
+    void btn_gap(int32_t gap)
+    void dot_size(int32_t w, int32_t h)
+    void dot_gap(int32_t gap)
+    void cancel_font(const font_t& font)
+    void cancel_font(const font_t& font, color_t c)
+    void cancel_font(const font_t& font, String  c)
+    void passcode(uint32_t passcode)
+    void auth_cb(void (*fn)(void))
+    void cancel_cb(void (*fn)(void))
+    void mode(GPasscodeLock_mode_t mode )
+    uint32_t passcode()
 
 ────────────────────────────────────────────────────────────
   class GMessageBox : GObject
 ────────────────────────────────────────────────────────────
-  (ไม่พบ public methods)
+  Methods:
+    GMessageBox(GWidget& parent)                            : GObject(&parent)
+    GMessageBox(GWidget* parent=NULL)                       : GObject(parent)
+    ~GMessageBox()
+    void  create()
+    void  create(GWidget& parent)
+    void  create(GWidget* parent)
+    obj_t * title(String title)
+    void title_center(bool en)
+    obj_t * header_button(const void * icon)
+    obj_t * header_button(const img_t & icon)
+    obj_t * text(String text)
+    obj_t * message(String text)
+    obj_t * footer_button(String text)
+    obj_t * close_button(bool en = true)
+    obj_t * header()
+    obj_t * titlebar()
+    obj_t * footer()
+    obj_t * content()
+    obj_t * body()
+    obj_t * title()
+    void close()
+    void close_async()
 
 ────────────────────────────────────────────────────────────
   class GApp : GMessageBox
 ────────────────────────────────────────────────────────────
-  (ไม่พบ public methods)
+  Methods:
+    GApp(GWidget& parent=GScreen)                          : GMessageBox(&parent)
+    GApp(GWidget* parent)                                  : GMessageBox(parent)
+    ~GApp()
+    void  create()
+    void  create(GWidget& parent)
+    void  create(GWidget* parent)
+    obj_t* icon_button(const void* icon)
+    obj_t* icon_button(const img_t& icon)
 
 ────────────────────────────────────────────────────────────
   class GMenu : GObject
 ────────────────────────────────────────────────────────────
-  (ไม่พบ public methods)
+  Methods:
+    GMenu(GWidget& parent=GScreen)                          : GObject(&parent)
+    GMenu(GWidget* parent)                                  : GObject(parent)
+    ~GMenu()
+    void  create()
+    void  create(GWidget& parent)
+    void  create(GWidget* parent)
+    obj_t * page_create(obj_t * parent = NULL, char const * const title = NULL)
+    obj_t * page_create(GWidget& parent, char const * const title = NULL)
+    obj_t * page_create(GWidget* parent, char const * const title = NULL)
+    obj_t * cont_create(obj_t * parent = NULL)
+    obj_t * cont_create(GWidget& parent)
+    obj_t * cont_create(GWidget* parent)
+    obj_t * section_create(obj_t * parent = NULL)
+    obj_t * section_create(GWidget& parent)
+    obj_t * section_create(GWidget* parent)
+    obj_t * separator_create(obj_t * parent = NULL)
+    obj_t * separator_create(GWidget& parent)
+    obj_t * separator_create(GWidget* parent)
+    void page(obj_t * page)
+    void page(GWidget *widget)
+    void page(GWidget &widget)
+    void page_title(obj_t * page, char const * const title)
+    void page_title(GWidget *page, char const * const title)
+    void page_title(GWidget &page, char const * const title)
+    void page_title_static(obj_t * page, char const * const title)
+    void page_title_static(GWidget *page, char const * const title)
+    void page_title_static(GWidget &page, char const * const title)
+    void sidebar_page(obj_t * page)
+    void sidebar_page(GWidget *page)
+    void sidebar_page(GWidget &page)
+    void mode_header(menu_mode_header_t mode)
+    void mode_root_back_button(menu_mode_root_back_button_t mode)
+    void load_page_event(obj_t * obj, obj_t * page)
+    void load_page_event(GWidget *widget, GWidget &page)
+    void load_page_event(GWidget &widget, GWidget &page)
+    obj_t * cur_main_page()
+    obj_t * cur_sidebar_page()
+    obj_t * main_header()
+    obj_t * main_header_back_button()
+    obj_t * sidebar_header()
+    obj_t * sidebar_header_back_button()
+    bool back_button_is_root(obj_t * obj)
+    void clear_history()
 
 ────────────────────────────────────────────────────────────
   class GLottie : GObject
 ────────────────────────────────────────────────────────────
-  (ไม่พบ public methods)
+  Methods:
+    GLottie(GWidget& parent=GScreen)                          : GObject(&parent)
+    GLottie(GWidget* parent)                                  : GObject(parent)
+    ~GLottie()
+    void  create()
+    void  create(GWidget& parent)
+    void  create(GWidget* parent)
+    void buffer(int32_t w, int32_t h, void * buf)
+    void draw_buf(draw_buf_t * draw_buf)
+    void src_data(const void * src, size_t src_size)
+    void src_file(const char * src)
+    anim_t * anim()
 
 ────────────────────────────────────────────────────────────
   class GLine : GObject
 ────────────────────────────────────────────────────────────
-  (ไม่พบ public methods)
+  Methods:
+    GLine(GWidget& parent=GScreen)                          : GObject(&parent)
+    GLine(GWidget* parent)                                  : GObject(parent)
+    ~GLine()
+    void  create()
+    void  create(GWidget& parent)
+    void  create(GWidget* parent)
+    void  del()
+    void          setPoints(Points& points)
+    void          setPoints(Point p1, Point p2)
+    void   setPoints(Point p1, int32_t w, dir_t dir= DIR_HOR)
+    void          setPoints(Point* points, int32_t point_num)
+    void          setPoints(point_precise_t* points, int32_t point_num)
+    void          setPoints(uint16_t arm_len, float angle_deg, float angle_deg_offset, Point c, rotate_direction_t rotate= C
+    void          addPoint(Point p)
+    void   addPoint(float x, float y)
+    void          addPoints(Points& points)
+    void          addPoints(Point* points, int32_t point_num)
+    void          resetPoints()
+    point_precise_t* getPoints()
+    size_t num()
+    void points(const point_precise_t points[], uint32_t point_num)
+    void y_invert(bool en)
+    bool y_invert()
+    void     thickness(int32_t thick)
+    void     thickness(int32_t thick, color_t color)
+    void     thickness(int32_t thick, String  color)
+    int32_t  thickness()
+    void     thick(int32_t thick)
+    void     thick(int32_t thick, color_t color)
+    void     thick(int32_t thick, String  color)
+    void     thick(int32_t thick, color_t color, bool rounded)
+    void     thick(int32_t thick, String  color, bool rounded)
+    int32_t  thick()
+    void     color(color_t color)
+    void     color(String  color)
+    color_t  color()
+    void     rounded(bool enable)
+    bool     rounded()
+    void     opa(opa_t opa)
+    opa_t    opa()
+    void     dash_width(int32_t dash_w)
+    int32_t  dash_width()
+    void     dash_gap(int32_t dash_gap)
+    int32_t  dash_gap()
+    void     dash(int32_t dash_w, int32_t dash_gap)
 
 ────────────────────────────────────────────────────────────
   class GLed : GObject
 ────────────────────────────────────────────────────────────
-  (ไม่พบ public methods)
+  Methods:
+    GLed(GWidget& parent=GScreen)                          : GObject(&parent)
+    GLed(GWidget* parent)                                  : GObject(parent)
+    ~GLed()
+    void  create()
+    void  create(GWidget& parent)
+    void  create(GWidget* parent)
+    bool isON()
+    bool isOFF()
+    void state(bool st)
+    bool state()
+    void color(color_t color)
+    void color(String  color)
+    color_t color()
+    void brightness(uint8_t bright)
+    void on()
+    void off()
+    void ON()
+    void OFF()
+    void checkable(bool en)
+    bool checkable()
+    void toggle()
+    uint8_t brightness()
 
 ────────────────────────────────────────────────────────────
   class GLabel : GObject, String
 ────────────────────────────────────────────────────────────
-  (ไม่พบ public methods)
+  Methods:
+    GLabel(GWidget& parent=GScreen)                         : String("")  , GObject(&parent)
+    GLabel(GWidget* parent)                                 : String("")  , GObject(parent)
+    GLabel(const char  *cstr, GWidget& parent=GScreen)      : String(cstr), GObject(&parent)
+    GLabel(const String &str, GWidget& parent=GScreen)      : String(str) , GObject(&parent)
+    GLabel(const char  *cstr, GWidget* parent)              : String(cstr), GObject(parent )
+    GLabel(const String &str, GWidget* parent)              : String(str) , GObject(parent )
+    ~GLabel()
+    void  create()
+    void  create(GWidget& parent)
+    void  create(GWidget* parent)
+    void   text(String txt)
+    String text()
+    String toString()
+    void   text_static(String &text)
+    void          rolling(bool enable, int32_t rolling_width=200, int32_t speed=0)
+    bool   rolling()
+    int32_t text_width()  // ความกว้างเฉพาะ text กี่ pixel; ถ้าเป็น label.width() บางทีไปปรับ 100% ขนาดความกว้างเฉพาะข้อความเลย ไม่ใช่ เพราะเป็นความกว้างของวิตเจ็ตแทนไปแล้ว
+    uint32_t letter_num()  // จน.ตัวอักษรตามจริง (ไม่ใช่ความยาว byte)
+    uint32_t letter_num(const char* text)  // จน.ตัวอักษรตามจริง (ไม่ใช่ความยาว byte)
+    uint32_t letter_num(String text)  // จน.ตัวอักษรตามจริง (ไม่ใช่ความยาว byte)
+    String printf(const char* fmt, ...)  __attribute__((format(printf, 1, 2)))
+    void    color(color_t color, gstate_t state=GSTATE_DEFAULT)
+    void    color(String color, gstate_t state=GSTATE_DEFAULT)
+    color_t color(gstate_t state=GSTATE_DEFAULT)
+    void    opa(uint8_t opa, gstate_t state=GSTATE_DEFAULT)
+    uint8_t opa(gstate_t state=GSTATE_DEFAULT)
+    void    letter_space(int16_t letter_space, gstate_t state=GSTATE_DEFAULT)
+    int16_t letter_space(gstate_t state=GSTATE_DEFAULT)
+    void    line_space(int16_t line_space, gstate_t state=GSTATE_DEFAULT)
+    int16_t line_space(gstate_t state=GSTATE_DEFAULT)
+    void    decor(text_decor_t value, gstate_t state=GSTATE_DEFAULT)
+    text_decor_t decor(gstate_t state=GSTATE_DEFAULT)
+    void    underline(bool enable, gstate_t state=GSTATE_DEFAULT)
+    bool    underline(gstate_t state=GSTATE_DEFAULT)
+    void    strikethrough(bool enable, gstate_t state=GSTATE_DEFAULT)
+    bool    strikethrough(gstate_t state=GSTATE_DEFAULT)
+    void    text_align(text_align_t text_align, gstate_t state=GSTATE_DEFAULT)
+    text_align_t text_align(gstate_t state=GSTATE_DEFAULT)
+    void    reset_color()
+    void    reset_font()
+    void   adjust_font(int32_t size_width, int32_t size_height, const font_t* fonts[], size_t font_num)
+    void text(const char * text)
+    void text_static(const char * text)
+    void long_mode( long_mode_t long_mode)
+    void selection_start(uint32_t index)
+    void selection_end(uint32_t index)
+    void recolor(bool en)
+    String text_selected()
+    char * _text()
+    long_mode_t long_mode()
+    void letter_pos(uint32_t char_id, point_t * pos)
+    uint32_t letter_on(point_t * pos_in, bool bidi=false)
+    bool is_char_under_pos(point_t * pos)
+    uint32_t selection_start()
+    uint32_t selection_end()
+    bool recolor()
+    void insert_text(uint32_t pos, const char * txt)
+    void insert_text(uint32_t pos, String txt)
+    void cut_text(uint32_t pos, uint32_t cnt)
   Macros / Helpers:
     #define LABEL_TEXT_SELECTION_OFF          (0xFFFF)
     #define TEXT_SELECTION_OFF                (LABEL_TEXT_SELECTION_OFF)
@@ -214,183 +2266,1172 @@ GObject           ← base ทุกอย่าง
 ────────────────────────────────────────────────────────────
   class GKeyUnlocker : GObject
 ────────────────────────────────────────────────────────────
-  (ไม่พบ public methods)
+  Methods:
+    GKeyUnlocker(GWidget& parent=GScreen)                          : GObject(&parent)
+    GKeyUnlocker(GWidget* parent)                                  : GObject(parent)
+    ~GKeyUnlocker()
+    void  create()
+    void  create(GWidget& parent)
+    void  create(GWidget* parent)
+    void secretkey(uint32_t secretkey)
+    void auth_cb(void (*fn)(void))
+    void cancel_cb(void (*fn)(void))
+    void mode(GKeyUnlocker_mode_t mode )
+    uint32_t secretkey()
 
 ────────────────────────────────────────────────────────────
   class GImageButton : GObject
 ────────────────────────────────────────────────────────────
-  (ไม่พบ public methods)
+  Methods:
+    GImageButton(GWidget& parent=GScreen)                          : GObject(&parent)
+    GImageButton(GWidget* parent)                                  : GObject(parent)
+    GImageButton( const void *src, GWidget& parent=GScreen) : GObject(&parent)
+    GImageButton( const void *src_btn_released,
+    GWidget& parent=GScreen) : GObject(&parent)
+    GImageButton( const img_t &src, GWidget& parent=GScreen) : GObject(&parent)
+    GImageButton( const img_t &src, GWidget* parent) : GObject(parent)
+    GImageButton( const img_t &src_btn_released,
+    GWidget& parent=GScreen) : GObject(&parent)
+    GImageButton( button_type_t button_type,  // BUTTON_PUSH or BUTTON_SWITCH
+    GWidget& parent=GScreen) : GObject(&parent)
+    GImageButton( const img_t &src_btn_released,
+    GWidget& parent=GScreen) : GObject(&parent)
+    GImageButton( button_type_t button_type,
+    GWidget& parent=GScreen) : GObject(&parent)
+    ~GImageButton()
+    void  create()
+    void  create(GWidget& parent)
+    void  create(GWidget* parent)
+    void    button_type(button_type_t type, const img_t *src_btn_released=NULL, const img_t *src_btn_pressed=NULL)
+    button_type_t button_type()
+    bool isON()
+    bool isOFF()
+    void ON()
+    void OFF()
+    void on()
+    void off()
+    void src(imagebutton_state_t state, const void * src_left,
+    void src(imagebutton_state_t state, const void * src_mid)
+    void src(imagebutton_state_t state, const img_t& src_mid)
+    void state(imagebutton_state_t state)
+    const void * src_left(imagebutton_state_t state)
+    const void * src_middle(imagebutton_state_t state)
+    const void * src_right(imagebutton_state_t state)
 
 ────────────────────────────────────────────────────────────
   class GImage : GObject
 ────────────────────────────────────────────────────────────
-  (ไม่พบ public methods)
+  Methods:
+    GImage(GWidget& parent=GScreen)                           : GObject(&parent)
+    GImage(GWidget* parent)                                   : GObject(parent)
+    GImage(const img_t & src_img, GWidget& parent=GScreen)    : img(&src_img), GObject(&parent)
+    GImage(const img_t & src_img, GWidget* parent)            : img(&src_img), GObject(parent)
+    GImage(const img_t * src_img, GWidget& parent=GScreen)    : img(src_img) , GObject(&parent)
+    GImage(const img_t * src_img, GWidget* parent)            : img(src_img) , GObject(parent)
+    GImage(const void* symbol, GWidget& parent=GScreen)       : img(symbol), GObject(&parent)
+    ~GImage()
+    void  create()
+    void  create(GWidget& parent)
+    void  create(GWidget* parent)
+    void src(const void * src)
+    void setImage(const img_t *src_img)
+    void setImage(const img_t & src_img)
+    void setSymbol(const void* symbol)
+    void offset_x(int32_t x)
+    void offset_y(int32_t y)
+    void offset(int32_t x, int32_t y)
+    void oiffet(Point p)
+    void rotation(float angle)  // 0 .. 360.0
+    void angle(float angle)
+    void pivot(int32_t x, int32_t y)
+    void pivot(Point p)
+    void scale(uint32_t scale)
+    void zoom(float z)  // z : 0 .. 50( half) .. 100 (no zoom)... 200 (double)
+    void scale_x(uint32_t scale)  // 0 .. 128(half) ..256(no zoom).. 512(double)
+    void scale_y(uint32_t vertical)
+    void scale(uint32_t scale_x, uint32_t scale_y)
+    void blend_mode(blend_mode_t blend_mode)
+    void antialias(bool antialias)
+    void flip(image_flip_t flip)
+    void reset_flip()
+    void image_align(image_align_t align)
+    const void * src()
+    const void* getSource()
+    int32_t offset_x()
+    int32_t offset_y()
+    Point offset()
+    float rotation()
+    float angle()
+    Point pivot()
+    int32_t scale()  // 0 .. 256 ().. 512 (double)
+    float zoom()
+    int32_t scale_x()
+    int32_t scale_y()
+    blend_mode_t blend_mode()
+    bool antialias()
+    image_flip_t flip()
+    image_align_t image_align()
+    void     color(color_t color, gstate_t state=GSTATE_DEFAULT)
+    void     color(String  color, gstate_t state=GSTATE_DEFAULT)
+    color_t  color(gstate_t state=GSTATE_DEFAULT)
+    void     filter(color_t color, uint8_t opa=255, gstate_t state=GSTATE_DEFAULT)
+    void     filter(String  color, uint8_t opa=255, gstate_t state=GSTATE_DEFAULT)
+    void     recolor(color_t color, uint8_t opa=255, gstate_t state=GSTATE_DEFAULT)
+    void     recolor(String  color, uint8_t opa=255, gstate_t state=GSTATE_DEFAULT)
+    void     opa(uint8_t opa, gstate_t state=GSTATE_DEFAULT)
+    uint8_t  opa(gstate_t state=GSTATE_DEFAULT)
 
 ────────────────────────────────────────────────────────────
   class GGaugeRainbow : GObject
 ────────────────────────────────────────────────────────────
-  (ไม่พบ public methods)
+  Methods:
+    GGaugeRainbow(GWidget& parent=GScreen)                  : GObject(&parent)
+    GGaugeRainbow(GWidget* parent)                          : GObject(parent)
+    ~GGaugeRainbow()
+    void  create()
+    void  create(GWidget& parent)
+    void  create(GWidget* parent)
+    void   gauge_type(gauge_type_t type)
+    gauge_type_t  gauge_type()
+    void   range(float val_min, float val_max)
+    void   value(float val , int8_t decimal_num=-1)
+    float  value()
+    float  value_max()
+    float  value_min()
+    int    toInt()
+    float  toFloat()
+    void    decimal(uint8_t decimal_num)
+    uint8_t decimal()
+    void   angle_offset(float a)
+    float  angle_offset()
+    void   angle_total(float a)
+    float  angle_total()
+    void      color(color_t color_begin, color_t color_end)
+    void      color(color_t color_begin, color_t color_end, color_t color_bg)
+    void      color_bg(color_t color_bg)
+    void      color(String color_begin, String color_end)
+    void      color(String color_begin, color_t color_end, color_t color_bg)
+    void      color_bg(String color_bg)
+    color_t   color_begin()
+    color_t   color_end()
+    color_t   color_bg()
+    void      thickness(int32_t thick)
+    int32_t   thickness()
+    void      thick(int32_t thick)
+    int32_t   thick()
+    void    gauge_translate(int32_t x, int32_t y)
+    void    gauge_translate_x(int32_t x)
+    void    gauge_translate_y(int32_t y)
+    int32_t gauge_translate_x()
+    int32_t gauge_translate_y()
+    void    value_translate(int32_t x, int32_t y)
+    void    value_translate_x(int32_t x)
+    void    value_translate_y(int32_t y)
+    int32_t value_translate_x()
+    int32_t value_translate_y()
+    void  font(const font_t& font)
+    void  font(const font_t& font, color_t color)
+    void  font(const font_t& font, String  color)
+    void  font_color(color_t color)
+    void  font_color(String  color)
+    const font_t* font()
+    color_t font_color()
 
 ────────────────────────────────────────────────────────────
   class GDropdownList : GObject
 ────────────────────────────────────────────────────────────
-  (ไม่พบ public methods)
+  Methods:
+    GDropdownList(GWidget& parent=GScreen)                          : GObject(&parent)
+    GDropdownList(GWidget* parent)                                  : GObject(parent)
+    ~GDropdownList()
+    void  create()
+    void  create(GWidget& parent)
+    void  create(GWidget* parent)
+    String toString()
+    int    toInt()
+    float  toFloat()
+    double toDouble()
+    void text(const char * txt)
+    void options(const char * options)  // ตัวอย่าง "aaa\nbbb\nccc\nddd"
+    void options(int from, int to, bool zero_front=false)  // ใส่ options ด้วยตัวเลข ตั้งแต่ จนถึงค่าสุดท้าย
+    void options(String* option, int32_t option_num)  // ใส่ options ด้วย String Array
+    void options(std::vector<String> options)  // ใส่ options ด้วย std::vector<String>
+    void options_static( const char * options)
+    void add_option(const char * option, uint32_t pos=DROPDOWN_POS_LAST)
+    void clear_options()
+    void selected(uint32_t option_id)
+    void dir(dir_t dir)
+    void symbol(const void * symbol)
+    void selected_highlight(bool en)
+    void height_open(int32_t value)
+    obj_t * list_obj()
+    const char * text()
+    const char * options()
+    uint32_t selected_id()
+    String selected_str()
+    String selected()
+    uint32_t option_count()
+    int32_t option_index(const char * option)
+    const char * symbol()
+    bool selected_highlight()
+    dir_t dir()
+    int32_t height_open()
+    void open()
+    void OPEN()
+    void close()
+    void CLOSE()
+    bool is_open()
+    bool isOPEN()
+    bool isCLOSE()
+    void font(const font_t& font)
+    void font(const font_t& font, color_t color)
+    void font_color(color_t color)
+    void color(color_t color)
+    void text_align(text_align_t text_align)
+    void font(const font_t& font, String  color)
+    void font_color(String  color)
+    void color(String  color)
+    void symbol_font(const font_t&font)
+    void button_font(const font_t&font)
+    void button_font(const font_t&font,color_t color)
+    void button_font(const font_t&font,String  color)
+    void button_font_color(color_t color)
+    void button_font_color(String  color)
+    void button_border(int32_t value)
+    void button_border(int32_t value, color_t color)
+    void button_border(int32_t value, String  color)
+    void button_radius(int32_t value)
+    void button_border_opa(opa_t value)
+    void button_color(color_t color)
+    void button_color(String  color)
+    void button_grad_color(color_t color)
+    void button_grad_color(String  color)
+    void button_color(color_t bg_color, color_t grad_color)
+    void button_color(String bg_color, String grad_color)
+    void list_width(int32_t value, gstate_t gstate=GPART_MAIN)
+    void list_height(int32_t value, gstate_t gstate=GPART_MAIN)
+    void list_font(const font_t& font, gstate_t gstate=GPART_MAIN)
+    void list_font_color(color_t color, gstate_t gstate=GPART_MAIN)
+    void list_font_color(String  color, gstate_t gstate=GPART_MAIN)
+    void list_font(const font_t& font,color_t color, gstate_t gstate=GPART_MAIN)
+    void list_font(const font_t& font,String  color, gstate_t gstate=GPART_MAIN)
+    void list_border(int32_t value, gstate_t gstate=GPART_MAIN)
+    void list_border_color(color_t color, gstate_t gstate=GPART_MAIN)
+    void list_border_color(String color, gstate_t gstate=GPART_MAIN)
+    void list_border(int32_t value, color_t color, gstate_t gstate=GPART_MAIN)
+    void list_border(int32_t value, String  color, gstate_t gstate=GPART_MAIN)
+    void list_color(color_t color, gstate_t gstate=GPART_MAIN)
+    void list_color(String  color, gstate_t gstate=GPART_MAIN)
+    void list_pad_left(int32_t value, gstate_t gstate=GPART_MAIN)
+    void list_pad_right(int32_t value, gstate_t gstate=GPART_MAIN)
+    void list_pad_top(int32_t value, gstate_t gstate=GPART_MAIN)
+    void list_pad_bottom(int32_t value, gstate_t gstate=GPART_MAIN)
+    void list_pad_gap(int32_t value, gstate_t gstate=GPART_MAIN)
+    void list_pad_hor(int32_t value, gstate_t gstate=GPART_MAIN)
+    void list_pad_ver(int32_t value, gstate_t gstate=GPART_MAIN)
+    void list_pad_row(int32_t value, gstate_t gstate=GPART_MAIN)
+    void list_pad_column(int32_t value, gstate_t gstate=GPART_MAIN)
+    void list_padding_left(int32_t value, gstate_t gstate=GPART_MAIN)
+    void list_padding_right(int32_t value, gstate_t gstate=GPART_MAIN)
+    void list_padding_top(int32_t value, gstate_t gstate=GPART_MAIN)
+    void list_padding_bottom(int32_t value, gstate_t gstate=GPART_MAIN)
+    void list_padding_hor(int32_t value, gstate_t gstate=GPART_MAIN)
+    void list_padding_ver(int32_t value, gstate_t gstate=GPART_MAIN)
+    void list_pad_inner(int32_t value, gstate_t gstate=GPART_MAIN)
+    void list_radius(int32_t value, gstate_t gstate=GPART_MAIN)
+    void list_text_align(text_align_t text_align, gstate_t gstate=GPART_MAIN)
+    void selected_color(color_t color)
+    void selected_color(String  color)
+    void selected_font_color(color_t color)
+    void selected_font_color(String color)
+    void selected_font(const font_t&font)
+    void selected_font(const font_t&font, color_t color)
+    void selected_font(const font_t&font, String  color)
+    void selected_border(int32_t value)
+    void selected_border_color(color_t color)
+    void selected_border_color(String  color)
+    void selected_border(int32_t value, color_t color)
+    void selected_border(int32_t value, String  color)
+    void selected_radius(int32_t value)
 
 ────────────────────────────────────────────────────────────
   class GContainer : GObject
 ────────────────────────────────────────────────────────────
-  (ไม่พบ public methods)
+  Methods:
+    GContainer(GWidget& parent=GScreen)                           : GObject(parent)
+    GContainer(GWidget* parent)                                   : GObject(parent)
+    GContainer(GContainer& parent)                                : GObject(parent)
+    GContainer(GContainer* parent)                                : GObject(parent)
+    GContainer(layout_t layout, GWidget& parent=GScreen)          : GObject(parent)
+    GContainer(layout_t layout, GWidget* parent)                  : GObject(parent)
+    GContainer(layout_t layout, int32_t padding, GWidget& parent=GScreen)
+    : GObject(&parent), _p_top(padding), _p_bottom(padding), _p_left(padding), _p_right(padding), _p_row(padding), _p_column
+    GContainer(layout_t layout, int32_t padding, GWidget* parent)
+    : GObject(parent), _p_top(padding), _p_bottom(padding), _p_left(padding), _p_right(padding), _p_row(padding), _p_column(
+    GContainer(layout_t layout, int32_t p_top, int32_t p_bottom, int32_t p_left, int32_t p_right, GWidget& parent=GScreen)
+    : GObject(&parent), _p_top(p_top), _p_bottom(p_bottom), _p_left(p_left), _p_right(p_right)
+    GContainer(layout_t layout, int32_t p_top, int32_t p_bottom, int32_t p_left, int32_t p_right, GWidget* parent)
+    : GObject(parent), _p_top(p_top), _p_bottom(p_bottom), _p_left(p_left), _p_right(p_right)
+    GContainer(layout_t layout, int32_t p_top, int32_t p_bottom, int32_t p_left, int32_t p_right, int32_t p_inner, GWidget& 
+    : GObject(&parent), _p_top(p_top), _p_bottom(p_bottom), _p_left(p_left), _p_right(p_right), _p_row(p_inner), _p_column(p
+    GContainer(layout_t layout, int32_t p_top, int32_t p_bottom, int32_t p_left, int32_t p_right, int32_t p_inner, GWidget* 
+    : GObject(parent), _p_top(p_top), _p_bottom(p_bottom), _p_left(p_left), _p_right(p_right), _p_row(p_inner), _p_column(p_
+    GContainer(layout_t layout, int32_t p_top, int32_t p_bottom, int32_t p_left, int32_t p_right, int32_t p_row, int32_t p_c
+    : GObject(&parent), _p_top(p_top), _p_bottom(p_bottom), _p_left(p_left), _p_right(p_right), _p_row(p_row), _p_column(p_c
+    GContainer(layout_t layout, int32_t p_top, int32_t p_bottom, int32_t p_left, int32_t p_right, int32_t p_row, int32_t p_c
+    : GObject(parent), _p_top(p_top), _p_bottom(p_bottom), _p_left(p_left), _p_right(p_right), _p_row(p_row), _p_column(p_co
+    GContainer(GRID_COL col_dsc, GRID_ROW row_dsc, GWidget& parent=GScreen)
+    : GObject(&parent)
+    GContainer(GRID_COL col_dsc, GRID_ROW row_dsc, GWidget* parent)
+    : GObject(parent)
+    GContainer(GRID_COL col_dsc, GRID_ROW row_dsc, opa_t bg_opa, GWidget& parent=GScreen)
+    : GObject(&parent), _bg_opa(bg_opa)
+    GContainer(GRID_COL col_dsc, GRID_ROW row_dsc, opa_t bg_opa, GWidget* parent)
+    : GObject(parent), _bg_opa(bg_opa)
+    ~GContainer()
+    void  create()
+    void  create(GWidget& parent)
+    void  create(GWidget* parent)
 
 ────────────────────────────────────────────────────────────
   class GStep : GContainer
 ────────────────────────────────────────────────────────────
-  (ไม่พบ public methods)
+  Methods:
+    GStep(GWidget& parent=GScreen)                          : GContainer(&parent)
+    GStep(GWidget* parent)                                  : GContainer(parent)
+    ~GStep()
+    void  create()
+    void  create(GWidget& parent)
+    void  create(GWidget* parent)
+    void    range(double val_min, double val_max)
+    void    value(double val)
+    double  value()
+    double  value_min()
+    double  value_max()
+    void    step(double step)
+    double  step()
+    void    decimal(uint8_t decimal)
+    uint8_t decimal()
+    void    inactive(bool en)
+    bool    inactive()
+    void active(bool en)
+    bool active()
+    void plus(double step  = DEFAULT_STEP)
+    void minus(double step = DEFAULT_STEP)
+    int toInt()
+    float toFloat()
+    double toDouble()
+    void font(const font_t * font)
+    void font(const font_t  &font)
+    void font(const font_t * font, color_t color)
+    void font(const font_t  &font, color_t color)
+    void font(const font_t * font, String  color)
+    void font(const font_t  &font, String  color)
+    void button_size(int32_t w, int32_t h)
+    void button_radius(int32_t r, gstate_t gstate= GSTATE_DEFAULT)
+    void button_border(int32_t w, color_t color, gstate_t gstate= GSTATE_DEFAULT)
+    void button_border(int32_t w, String  color, gstate_t gstate= GSTATE_DEFAULT)
+    void button_color(color_t color, gstate_t gstate= GSTATE_DEFAULT)
+    void button_color(String  color, gstate_t gstate= GSTATE_DEFAULT)
+    void button_font(font_t &font, gstate_t gstate= GSTATE_DEFAULT)
+    void button_font(font_t &font, color_t color, gstate_t gstate= GSTATE_DEFAULT)
+    void button_font(font_t &font, String  color, gstate_t gstate= GSTATE_DEFAULT)
+    void button_font_color(color_t color, gstate_t gstate= GSTATE_DEFAULT)
+    void button_font_color(String  color, gstate_t gstate= GSTATE_DEFAULT)
+    void color(color_t color, gstate_t gstate= GSTATE_DEFAULT)
+    void color(String  color, gstate_t gstate= GSTATE_DEFAULT)
 
 ────────────────────────────────────────────────────────────
   class GPage : GContainer
 ────────────────────────────────────────────────────────────
-  (ไม่พบ public methods)
+  Methods:
+    GPage(GWidget& parent=GScreen)                          : GContainer(&parent)
+    GPage(GWidget* parent)                                  : GContainer(parent)
+    GPage(layout_t layout, GWidget& parent=GScreen)         : GContainer(layout, &parent)
+    GPage(layout_t layout, GWidget* parent)                 : GContainer(layout,  parent)
+    GPage(layout_t layout, int32_t padding, GWidget& parent=GScreen)
+    : GContainer(layout, padding, &parent)
+    GPage(layout_t layout, int32_t padding, GWidget* parent)
+    : GContainer(layout, padding, parent)
+    GPage(layout_t layout, int32_t p_top, int32_t p_bottom, int32_t p_left, int32_t p_right, GWidget& parent=GScreen)
+    : GContainer(layout, p_top, p_bottom, p_left, p_right, &parent)
+    GPage(layout_t layout, int32_t p_top, int32_t p_bottom, int32_t p_left, int32_t p_right, GWidget* parent)
+    : GContainer(layout, p_top, p_bottom, p_left, p_right,  parent)
+    GPage(layout_t layout, int32_t p_top, int32_t p_bottom, int32_t p_left, int32_t p_right, int32_t p_inner, GWidget& paren
+    : GContainer(layout, p_top, p_bottom, p_left, p_right, p_inner, &parent)
+    GPage(layout_t layout, int32_t p_top, int32_t p_bottom, int32_t p_left, int32_t p_right, int32_t p_inner, GWidget* paren
+    : GContainer(layout, p_top, p_bottom, p_left, p_right, p_inner, parent)
+    GPage(layout_t layout, int32_t p_top, int32_t p_bottom, int32_t p_left, int32_t p_right, int32_t p_row, int32_t p_column
+    : GContainer(layout, p_top, p_bottom, p_left, p_right, p_row, p_column,  &parent)
+    GPage(layout_t layout, int32_t p_top, int32_t p_bottom, int32_t p_left, int32_t p_right, int32_t p_row, int32_t p_column
+    : GContainer(layout, p_top, p_bottom, p_left, p_right, p_row, p_column,  parent)
+    GPage(GRID_COL col_dsc, GRID_ROW row_dsc, GWidget& parent=GScreen)
+    : GContainer(col_dsc, row_dsc, &parent)
+    GPage(GRID_COL col_dsc, GRID_ROW row_dsc, GWidget* parent)
+    : GContainer(col_dsc, row_dsc,  parent)
+    ~GPage()
+    void  create()
+    void  create(GWidget& parent)
+    void  create(GWidget* parent)
+    void layout(layout_t layout)
+    layout_t layout()
+    void scrollbar(scrollbar_mode_t mode, bool scroll_hor , bool scroll_ver )
+    void scroll_pos(int32_t posX, int32_t posY)
+    void scroll_posX(int32_t pos)
+    void scroll_posY(int32_t pos)
+    int32_t scroll_posX()
+    int32_t scroll_posY()
+    void scrollTop()  // เลื่อนไปบนสุดของ GPage
+    void scrollLeft()  // เลื่อนไปซ้ายสุดของ GPage
+    void scrollRight()  // เลื่อนไปขวาสุดของ GPage
 
 ────────────────────────────────────────────────────────────
   class GList : GPage
 ────────────────────────────────────────────────────────────
-  (ไม่พบ public methods)
+  Methods:
+    GList(GWidget& parent=GScreen)                          : GPage(&parent)
+    GList(GWidget* parent)                                  : GPage(parent)
+    ~GList()
+    void  create()
+    void  create(GWidget& parent)
+    void  create(GWidget* parent)
+    obj_t * add(const void * icon, String item_name)
+    obj_t * add(const img_t* img, String item_name)
+    obj_t * add(const img_t& img, String item_name)
+    obj_t * add(String item_name)
+    obj_t * add(list_option_t item_option)
+    void    options(list_options_t options)
+    String button_text(GWidget*widget)
+    String selected()
+    void   selected(String item)
+    obj_t* button_selected()
+    String item_selected()
+    uint32_t item_num()
+    uint32_t num()
+    void clear()
+    obj_t * add_text(const char * txt)
+    obj_t * add_button(const void * icon, const char * txt)
+    const char * button_text(obj_t * btn)
+    void button_text(obj_t * btn, const char * txt)
+    void bg_opa(opa_t value)
+    void font_color(color_t value)
+    void font_color(String value)
+    void button_bg_opa(opa_t value)
+    void button_font_color(color_t value)
+    void button_font_color(String value)
 
 ────────────────────────────────────────────────────────────
   class GMask : GContainer
 ────────────────────────────────────────────────────────────
-  (ไม่พบ public methods)
+  Methods:
+    GMask(GWidget& parent=GScreen)                          : GContainer(&parent)
+    GMask(GWidget* parent)                                  : GContainer(parent)
+    GMask(const img_t*src, GWidget& parent=GScreen)         : GContainer(&parent), _mask_src(src)
+    GMask(const img_t&src, GWidget& parent=GScreen)         : GContainer(&parent), _mask_src(&src)
+    GMask(const img_t*src, GWidget* parent)                 : GContainer(parent), _mask_src(src)
+    GMask(const img_t&src, GWidget* parent)                 : GContainer(parent), _mask_src(&src)
+    ~GMask()
+    void  create()
+    void  create(GWidget& parent)
+    void  create(GWidget* parent)
 
 ────────────────────────────────────────────────────────────
   class GIcon : GContainer
 ────────────────────────────────────────────────────────────
-  (ไม่พบ public methods)
+  Methods:
+    GIcon(GWidget& parent=GScreen)                          : GContainer(&parent)
+    GIcon(GWidget* parent)                                  : GContainer(parent)
+    GIcon(const img_t& image_src, String text, GWidget& parent=GScreen)
+    : GContainer(&parent), _image(&image_src), _text(text )
+    GIcon(const img_t& image_src, String text, GWidget* parent)
+    : GContainer(parent), _image(&image_src), _text(text )
+    ~GIcon()
+    void  create()
+    void  create(GWidget& parent)
+    void  create(GWidget* parent)
+    void   text(String txt)
+    String text()
+    void  image_zoom(float zoom)
+    float image_zoom()
 
 ────────────────────────────────────────────────────────────
   class GButton : GContainer
 ────────────────────────────────────────────────────────────
-  (ไม่พบ public methods)
+  Methods:
+    GButton(GWidget& parent=GScreen)                    : GContainer(&parent)
+    GButton(GWidget* parent)                            : GContainer(parent)
+    GButton(String label, GWidget& parent=GScreen)      : _btn_str(label), GContainer(&parent)
+    GButton(const char* label, GWidget& parent=GScreen) : _btn_str(label), GContainer(&parent)
+    GButton(const char* label, GWidget* parent)         : _btn_str(label), GContainer(parent)
+    GButton(const img_t & src_img, String label, GWidget& parent=GScreen)   : _btn_img(&src_img), _btn_str(label), GContaine
+    GButton(button_type_t type, GWidget& parent=GScreen)                    : _btn_type(type), GContainer(&parent)
+    GButton(button_type_t type, GWidget* parent)                            : _btn_type(type), GContainer(parent)
+    GButton(button_type_t type, const char* label, GWidget& parent=GScreen) : _btn_type(type), _btn_str(label), GContainer(&
+    GButton(button_type_t type, const char* label, GWidget* parent)         : _btn_type(type), _btn_str(label), GContainer(p
+    ~GButton()
+    void    create()
+    void    create(GWidget& parent)
+    void    create(GWidget* parent)
+    void    button_type(button_type_t type)
+    button_type_t button_type()
+    void          mode(button_mode_t mode)
+    button_mode_t mode()
+    void     state(button_state_t button_state)
+    button_state_t state()
+    void    text(String txt)
+    String  text()
+    void setImage(const img_t &icon)
+    void setImage(const img_t* icon)
+    const img_t* getImage()
+    const void* getSymbol()
+    color_t      color()
+    void toggle()
+    bool isON()
+    bool isOFF()
+    void ON()
+    void OFF()
+    void on()
+    void off()
+    void long_mode(long_mode_t long_mode )        }
+    long_mode_t long_mode()
+    void label_translate(int32_t x, int32_t y)         }
+    void icon_translate(int32_t x, int32_t y)          }
+    void label_show(bool enable)
+    bool label_show()
+    void label_width(int32_t w)
+    void label_height(int32_t h)
+    int32_t label_width()
+    int32_t label_height()
+    void label_size(int32_t w, int32_t h)
+    void icon_show(bool enable)
+    bool icon_show()
+    void icon_width(int32_t w)
+    void icon_height(int32_t h)
+    int32_t icon_width()
+    int32_t icon_height()
+    void icon_size(int32_t w, int32_t h)
+    void symbol_font(const font_t* font)
+    void symbol_font(const font_t& font)
+    void symbol_font_color(color_t color)
+    void symbol_font(const font_t* font, color_t c)
+    void symbol_font(const font_t& font, color_t c)
+    void symbol_translate_x(int32_t v)
+    void symbol_translate_y(int32_t v)
+    void symbol_translate(int32_t x, int32_t y)
+    void symbol_font_color(String color)
+    void symbol_font(const font_t* font, String c)
+    void symbol_font(const font_t& font, String c)
+    void link(obj_t* obj)
+    GLabel* label()
+    GImage* icon()
 
 ────────────────────────────────────────────────────────────
   class GCircle : GObject
 ────────────────────────────────────────────────────────────
-  (ไม่พบ public methods)
+  Methods:
+    GCircle(GWidget& parent=GScreen)                    : GObject(&parent)
+    GCircle(GWidget* parent)                            : GObject(parent)
+    ~GCircle()
+    void    create()
+    void    create(GWidget& parent)
+    void    create(GWidget* parent)
+    void            size(int32_t w, int32_t h)
+    void            radius(int32_t r)
+    void     radius(int32_t r, color_t color)
+    void     radius(int32_t r, String  color)
+    int32_t  radius()
 
 ────────────────────────────────────────────────────────────
   class GCheckbox : GObject
 ────────────────────────────────────────────────────────────
-  (ไม่พบ public methods)
+  Methods:
+    GCheckbox(GWidget& parent=GScreen)                       : GObject(&parent)
+    GCheckbox(GWidget* parent)                               : GObject(parent)
+    ~GCheckbox()
+    void  create()
+    void  create(GWidget& parent)
+    void  create(GWidget* parent)
+    void          radio_design()
+    void          choice_design(const void* choice)
+    void          symbol(const void* symbol)
+    bool  isON()
+    bool  isOFF()
+    void  ON()
+    void  OFF()
+    void  on()
+    void  off()
+    void text(const char * txt)
+    void text_static(const char * txt)
+    String text()
+    void     color(color_t color)
+    void     color(String  color)
+    color_t  color()
 
 ────────────────────────────────────────────────────────────
   class GChartRangeBar : GObject
 ────────────────────────────────────────────────────────────
-  (ไม่พบ public methods)
+  Methods:
+    GChartRangeBar(GWidget& parent=GScreen)                          : GObject(&parent)
+    GChartRangeBar(GWidget* parent)                                  : GObject(parent)
+    ~GChartRangeBar()
+    void  create()
+    void  create(GWidget& parent)
+    void  create(GWidget* parent)
+    void point_count(uint32_t cnt)
+    void range(chart_axis_t axis, int32_t min, int32_t max)
+    void range(int32_t vmin, int32_t vmax)
+    void update_mode(chart_update_mode_t update_mode)
+    void div_line_count(uint8_t hdiv, uint8_t vdiv)
+    uint32_t point_count()
+    uint32_t x_start_point(chart_rangebar_series_t * ser)
+    void point_pos_by_id(chart_rangebar_series_t * ser, uint32_t id, point_t * p_out_min, point_t * p_out_max)
+    uint32_t column_width()
+    uint32_t bar_width()
+    void refresh()
+    chart_rangebar_series_t * add_series(color_t color, chart_axis_t axis= CHART_AXIS_PRIMARY_Y)
+    chart_rangebar_series_t * add_series(String color, chart_axis_t axis= CHART_AXIS_PRIMARY_Y)
+    chart_rangebar_series_t * createSerie(color_t color, chart_axis_t axis= CHART_AXIS_PRIMARY_Y)
+    chart_rangebar_series_t * createSerie(String color, chart_axis_t axis= CHART_AXIS_PRIMARY_Y)
+    void remove_series(chart_rangebar_series_t * series)
+    void hide_series(chart_rangebar_series_t * series, bool hide)
+    void show_series(chart_rangebar_series_t * series, bool hide)
+    void series_color(chart_rangebar_series_t * series, color_t color)
+    void series_color(chart_rangebar_series_t * series, String color)
+    color_t series_color(const chart_rangebar_series_t * series)
+    void x_start_point(chart_rangebar_series_t * ser, uint32_t id)
+    chart_rangebar_series_t * series_next(const chart_rangebar_series_t * ser)
+    chart_rangebar_series_t * series_first()
+    chart_rangebar_cursor_t  * add_cursor(color_t color, dir_t dir)
+    chart_rangebar_cursor_t  * add_cursor(String color, dir_t dir)
+    void cursor_pos(chart_rangebar_cursor_t * cursor, point_t * pos)
+    void cursor_point(chart_rangebar_cursor_t * cursor, chart_rangebar_series_t * ser,
+    point_t cursor_point(chart_rangebar_cursor_t * cursor)
+    void all_value(chart_rangebar_series_t * ser, int32_t value_min, int32_t value_max)
+    void next_value(chart_rangebar_series_t * ser, int32_t value_min, int32_t value_max)
+    void addBar(chart_rangebar_series_t * ser, int32_t value_min, int32_t value_max)
+    void value_by_id(chart_rangebar_series_t * ser, uint32_t id, int32_t value_min, int32_t value_max)
+    void get_value_by_id(chart_rangebar_series_t * ser, uint32_t id, int32_t * value_min, int32_t * value_max)
+    void ext_y_array(chart_rangebar_series_t * ser, int32_t array_min[], int32_t array_max[])
+    void ext_x_array(chart_rangebar_series_t * ser, int32_t array[])
+    int32_t * y_array_min(chart_rangebar_series_t * ser)
+    int32_t * y_array_max(chart_rangebar_series_t * ser)
+    int32_t * x_array(chart_rangebar_series_t * ser)
+    uint32_t pressed_point()
+    int32_t first_point_center_offset()
 
 ────────────────────────────────────────────────────────────
   class GChart : GObject
 ────────────────────────────────────────────────────────────
-  (ไม่พบ public methods)
+  Methods:
+    GChart(GWidget& parent=GScreen)                          : GObject(&parent)
+    GChart(GWidget* parent)                                  : GObject(parent)
+    GChart(uint32_t point_count, GWidget& parent=GScreen)    : GObject(&parent), _point_count(point_count)
+    GChart(uint32_t point_count, uint8_t hdiv, uint8_t vdiv, GWidget& parent=GScreen)
+    : GObject(&parent), _point_count(point_count), _hdiv(hdiv), _vdiv(vdiv)
+    ~GChart()
+    void  create()
+    void  create(GWidget& parent)
+    void  create(GWidget* parent)
+    void chart_type(chart_type_t type)  // CHART_TYPE_NONE, CHART_TYPE_LINE, CHART_TYPE_BAR, CHART_TYPE_SCATTER | CHART_TYPE_POINT
+    void type(chart_type_t type)
+    void point_count(uint32_t cnt)
+    void range(chart_axis_t axis, int32_t min, int32_t max)
+    void range(int32_t vmin, int32_t vmax)
+    void update_mode(chart_update_mode_t update_mode)  // CHART_UPDATE_MODE_SHIFT, CHART_UPDATE_MODE_CIRCULAR
+    void div_line_count(uint8_t hdiv, uint8_t vdiv)
+    chart_type_t chart_type()  // CHART_TYPE_NONE, CHART_TYPE_LINE, CHART_TYPE_BAR, CHART_TYPE_SCATTER
+    chart_type_t type()
+    uint32_t point_count()
+    uint32_t x_start_point(chart_series_t * ser)
+    void point_pos_by_id(chart_series_t * ser, uint32_t id, lv_point_t * p_out)
+    uint32_t column_width()
+    uint32_t bar_width()
+    void refresh()
+    chart_series_t * add_series(color_t color, chart_axis_t axis= CHART_AXIS_PRIMARY_Y)
+    chart_series_t * add_series(String color, chart_axis_t axis= CHART_AXIS_PRIMARY_Y)
+    chart_series_t * createSerie(color_t color, chart_axis_t axis= CHART_AXIS_PRIMARY_Y)
+    chart_series_t * createSerie(String color, chart_axis_t axis= CHART_AXIS_PRIMARY_Y)
+    void remove_series(chart_series_t * series)
+    void hide_series(chart_series_t * series, bool hide)
+    void show_series(chart_series_t * series, bool hide)
+    void series_color(chart_series_t * series, color_t color)
+    void series_color(chart_series_t * series, String color)
+    color_t series_color(const chart_series_t * series)
+    void x_start_point(chart_series_t * ser, uint32_t id)
+    chart_series_t * series_next(const chart_series_t * ser=NULL)
+    chart_series_t * series_first()
+    chart_cursor_t  * add_cursor(color_t color, dir_t dir)
+    chart_cursor_t  * add_cursor(String color, dir_t dir)
+    void cursor_pos(chart_cursor_t * cursor, lv_point_t * pos)
+    void cursor_point(chart_cursor_t * cursor, chart_series_t * ser,
+    lv_point_t cursor_point(chart_cursor_t * cursor)
+    void all_value(chart_series_t * ser, int32_t value)
+    void next_value(chart_series_t * ser, int32_t value)
+    void addPoint(chart_series_t * ser, int32_t value)
+    void next_value2(chart_series_t * ser, int32_t x_value, int32_t y_value)
+    void addPoint(chart_series_t * ser, Point p)
+    void addPoint(chart_series_t * ser, int32_t x, int32_t y)
+    void series_value_by_id(chart_series_t * ser, uint32_t id, int32_t value)
+    void value_by_id(chart_series_t * ser, uint32_t id, int32_t value)
+    void get_series_value_by_id(chart_series_t * ser, uint32_t id, int32_t * value)
+    void get_value_by_id(chart_series_t * ser, uint32_t id, int32_t * value)
+    void series_value_by_id2(chart_series_t * ser, uint32_t id, int32_t x_value,
+    void value_by_id2(chart_series_t * ser, uint32_t id, int32_t x_value,
+    void ext_y_array(chart_series_t * ser, int32_t array[])
+    void ext_x_array(chart_series_t * ser, int32_t array[])
+    int32_t * y_array(chart_series_t * ser)
+    int32_t * x_array(chart_series_t * ser)
+    uint32_t pressed_point()
+    int32_t first_point_center_offset()
+    void show_point(bool en)
+    void point_size(int32_t w, int32_t h)
+    void touch_popup(bool en, gchart_popup_format_cb_t fn=NULL)
+    void draw_grad(bool en)
   Macros / Helpers:
     #define CHART_POINT_NONE          (INT32_MAX)
 
 ────────────────────────────────────────────────────────────
   class GCanvas : GObject
 ────────────────────────────────────────────────────────────
-  (ไม่พบ public methods)
+  Methods:
+    GCanvas(GWidget& parent=GScreen)                          : GObject(&parent)
+    GCanvas(GWidget* parent)                                  : GObject(parent)
+    ~GCanvas()
+    void  create()
+    void  create(GWidget& parent)
+    void  create(GWidget* parent)
+    void  draw_buf(draw_buf_t& draw_buf)
+    void buffer(void * buf, int32_t w, int32_t h, color_format_t cf=COLOR_FORMAT_RGB565)
+    void draw_buf(draw_buf_t * draw_buf)
+    void px(int32_t x, int32_t y, color_t color, opa_t opa)
+    void px(int32_t x, int32_t y, String color, opa_t opa)
+    void palette(uint8_t id, color32_t c)
+    draw_buf_t * draw_buf()
+    color_t px(int32_t x, int32_t y)
+    opa_t px_opa(int32_t x, int32_t y)
+    img_t * image()
+    const void * buf()
+    void copy_buf(const area_t * canvas_area, draw_buf_t * dest_buf,
+    void fill_bg(color_t color, opa_t opa=OPA_COVER)
+    void fill_bg(String color, opa_t opa)
+    void init_layer(layer_t * layer)
+    void init_layer(layer_t &layer)
+    void init_layer(GLayer &layer)
+    void finish_layer(layer_t * layer)
+    void finish_layer(layer_t &layer)
+    void finish_layer(GLayer &layer)
   Macros / Helpers:
     #define DRAW_BUF_DEFINE(name, _w, _h, _cf) \
 
 ────────────────────────────────────────────────────────────
   class GCalendar : GObject
 ────────────────────────────────────────────────────────────
-  (ไม่พบ public methods)
+  Methods:
+    GCalendar(GWidget& parent=GScreen)                          : GObject(&parent)
+    GCalendar(GWidget* parent)                                  : GObject(parent)
+    ~GCalendar()
+    void  create()
+    void  create(GWidget& parent)
+    void  create(GWidget* parent)
+    void title_font(const font_t &font)
+    const font_t * title_font()
+    void title_color(color_t c)
+    void title_color(String c)
+    void today_date(uint32_t year, uint32_t month, uint32_t day)
+    void showed_date(uint32_t year, uint32_t month)
+    void highlighted_dates(calendar_date_t highlighted[], size_t date_num)
+    void day_names(const char ** day_names)
+    obj_t * get_btnmatrix()
+    const calendar_date_t * today_date()
+    const calendar_date_t * showed_date()
+    calendar_date_t * highlighted_dates()
+    size_t highlighted_dates_num()
+    bool pressed_date(calendar_date_t * date)
+    obj_t * header_dropdown_create()
+    void header_dropdown_set_year_list(const char * years_list)
+    obj_t * header_arrow_create()
 
 ────────────────────────────────────────────────────────────
   class GButtonMatrix : GObject
 ────────────────────────────────────────────────────────────
-  (ไม่พบ public methods)
+  Methods:
+    GButtonMatrix(GWidget& parent=GScreen)                          : GObject(&parent)
+    GButtonMatrix(GWidget* parent)                                  : GObject(parent)
+    ~GButtonMatrix()
+    void  create()
+    void  create(GWidget& parent)
+    void  create(GWidget* parent)
+    void map(const char * map[])
+    void ctrl_map(const buttonmatrix_ctrl_t ctrl_map[])
+    void selected_button(uint32_t btn_id)
+    void selected_id(uint32_t btn_id)
+    void button_ctrl(uint32_t btn_id, buttonmatrix_ctrl_t ctrl)
+    void clear_button_ctrl(uint32_t btn_id, buttonmatrix_ctrl_t ctrl)
+    void button_ctrl_all(buttonmatrix_ctrl_t ctrl)
+    void clear_button_ctrl_all(buttonmatrix_ctrl_t ctrl)
+    void button_width(uint32_t btn_id, uint32_t width)
+    void button_width(uint32_t width)  // button width all
+    void one_checked(bool en)
+    void button_checkable(uint32_t btn_id, bool en)
+    void button_checkable_all(bool en)
+    void button_checked(uint32_t btn_id)
+    int32_t button_checked()
+    void    checked_id(uint32_t btn_id)
+    int32_t checked_id()
+    const char ** map()
+    uint32_t button_cnt()
+    uint32_t selected_id()
+    uint32_t pressed_button_id()  // ให้ compatible กับ BlynkGOv2/v3
+    String button_text(uint32_t btn_id)
+    String selected_button()
+    String active_button()  // ให้ compatible กับ BlynkGOv2/v3
+    bool has_button_ctrl(uint32_t btn_id, buttonmatrix_ctrl_t ctrl)
+    bool one_checked()
+    void     bg_color(color_t color)  // สีพื้นหลัง
+    color_t  bg_color()  // สีพื้นหลัง
+    void     bg_radius(int32_t r)  // รัศมีมุม พื้นหลัง
+    int32_t  bg_radius()  // รัศมีมุม พื้นหลัง
+    void     bg_opa(uint8_t opa)  // ความโปร่งใสพื้นหลัง
+    uint8_t  bg_opa()  // ความโปร่งใสพื้นหลัง
+    void     bg_border(int32_t width)  // ความหนาขอบพื้นหลัง
+    int32_t  bg_border()  // ความหนาขอบพื้นหลัง
+    void     bg_border(int32_t width, color_t color)  // ความหนาขอบพื้นหลัง พร้อมกำหนดสี
+    void     bg_border_opa(uint8_t opa)  // ความโปร่งใส ขอบพื้นหลัง
+    uint8_t  bg_border_opa()  // ความโปร่งใส ขอบพื้นหลัง
+    void     bg_border_color(color_t color)  // สีขอบพื้นหลัง
+    color_t  bg_border_color()  // สีขอบพื้นหลัง
+    void     button_color(color_t color)  // สี ปุ่มกด ขณะปล่อย
+    color_t  button_color()  // สี ปุ่มกด ขณะปล่อย
+    void     button_radius(int32_t r)  // รัศมีมุม ปุ่มกด ขณะปล่อย
+    int32_t  button_radius()  // รัศมีมุม ปุ่มกด ขณะปล่อย
+    void     button_opa(uint8_t opa)  // ความโปร่งใสขอบ ปุ่มกด ขณะปล่อย
+    uint8_t  button_opa()  // ความโปร่งใสขอบ ปุ่มกด ขณะปล่อย
+    void     button_border(int32_t width)  // ความหนาขอบ ปุ่มกด ขณะปล่อย
+    void     button_border(int32_t width, color_t color)  // ความหนาขอบ ปุ่มกด ขณะปล่อย พร้อมกำหนดสี
+    int32_t  button_border()  // ความหนาขอบ ปุ่มกด ขณะปล่อย
+    void     button_border_opa(uint8_t opa)  // ความโปร่งใส ปุ่มกด ขณะปล่อย
+    uint8_t  button_border_opa()  // ความโปร่งใส ปุ่มกด ขณะปล่อย
+    void     button_border_color(color_t color)  // สีขอบ ปุ่มกด ขณะปล่อย
+    color_t  button_border_color()  // สีขอบ ปุ่มกด ขณะปล่อย
+    void     button_padding(int32_t pad)
+    int32_t  button_padding()
+    void     button_border_side(border_side_t value)
+    border_side_t button_border_side()
+    void     button_pressed_color(color_t color)  // สี ปุ่มกด ขณะกด
+    color_t  button_pressed_color()  // สี ปุ่มกด ขณะกด
+    void     button_pressed_radius(int32_t r)  // รัศมีมุม ปุ่มกด ขณะกด
+    int32_t  button_pressed_radius()  // รัศมีมุม ปุ่มกด ขณะกด
+    void     button_pressed_opa(uint8_t opa)  // ความโปร่งใสขอบ ปุ่มกด ขณะกด
+    uint8_t  button_pressed_opa()  // ความโปร่งใสขอบ ปุ่มกด ขณะกด
+    void     button_pressed_border(int32_t width)  // ความหนาขอบ ปุ่มกด ขณะกด
+    void     button_pressed_border(int32_t width,color_t color)  // ความหนาขอบ ปุ่มกด ขณะกด พร้อมกำหนดสี
+    int32_t  button_pressed_border()  // ความหนาขอบ ปุ่มกด ขณะกด
+    void     button_pressed_border_opa(uint8_t opa)  // ความโปร่งใส ปุ่มกด ขณะกด
+    uint8_t  button_pressed_border_opa()  // ความโปร่งใส ปุ่มกด ขณะกด
+    void     button_pressed_border_color(color_t color)  // สีขอบ ปุ่มกด ขณะกด
+    color_t  button_pressed_border_color()  // สีขอบ ปุ่มกด ขณะกด
+    void     font(const font_t &font)
+    const font_t* font()
+    void     font(const font_t &font, color_t color)
+    void     font_color(color_t color)
+    color_t  font_color()
+    void     ctrl_color(color_t color)
+    color_t  ctrl_color()
+    void     ctrl_radius(int32_t r)  // รัศมีมุม ปุ่ม ctrl ขณะปล่อย
+    int32_t  ctrl_radius()  // รัศมีมุม ปุ่ม ctrl ขณะปล่อย
+    void     ctrl_opa(uint8_t opa)  // ความโปร่งใส ปุ่ม ctrl ขณะปล่อย
+    uint8_t  ctrl_opa()  // ความโปร่งใส ปุ่ม ctrl ขณะปล่อย
+    void     ctrl_border(int32_t width)  // ความหนาขอบ ปุ่ม ctrl ขณะปล่อย
+    void     ctrl_border(int32_t width, color_t color)  // ความหนาขอบ ปุ่ม ctrl ขณะปล่อย
+    int32_t  ctrl_border()  // ความหนาขอบ ปุ่ม ctrl ขณะปล่อย
+    void     ctrl_border_opa(uint8_t opa)  // ความโปร่งใสขอบ ปุ่ม ctrl ขณะปล่อย
+    uint8_t  ctrl_border_opa()  // ความโปร่งใสขอบ ปุ่ม ctrl ขณะปล่อย
+    void     ctrl_border_color(color_t color)  // สีขอบ ปุ่ม ctrl ขณะปล่อย
+    color_t  ctrl_border_color()  // สีขอบ ปุ่ม ctrl ขณะปล่อย
+    void     ctrl_font(const font_t &font)  // ความหน้าขอบ ปุ่ม ctrl ขณะปล่อย
+    void     ctrl_font(const font_t &font, color_t color)  // ความหน้าขอบ ปุ่ม ctrl ขณะปล่อย
+    const font_t* ctrl_font()  // ความหน้าขอบ ปุ่ม ctrl ขณะปล่อย
+    void     ctrl_font_color(color_t color)  // ความหน้าขอบ ปุ่ม ctrl ขณะปล่อย
+    color_t  ctrl_font_color()  // ความหน้าขอบ ปุ่ม ctrl ขณะปล่อย
 
 ────────────────────────────────────────────────────────────
   class GKeyboard : GButtonMatrix
 ────────────────────────────────────────────────────────────
-  (ไม่พบ public methods)
+  Methods:
+    GKeyboard(GWidget& parent=GScreen)                      : GButtonMatrix(&parent)
+    GKeyboard(GWidget* parent)                              : GButtonMatrix(parent)
+    ~GKeyboard()
+    void  create()
+    void  create(GWidget& parent)
+    void  create(GWidget* parent)
+    void textarea(GTextArea &ta)
+    void textarea(GTextArea *ta)
+    void keyboard_mode(keyboard_mode_t mode)
+    void mode(keyboard_mode_t mode)
+    void popovers(bool en)
+    void map(keyboard_mode_t mode,  const char * map[],
+    GTextArea& textarea()
+    keyboard_mode_t keyboard_mode()
+    keyboard_mode_t mode()
+    void onReady(event_handler_t fn)
 
 ────────────────────────────────────────────────────────────
   class GBar : GObject
 ────────────────────────────────────────────────────────────
-  Methods:
-    GBar(GWidget & parent = GScreen)                        : GObject(&parent)
-    GBar(GWidget* parent)                                   : GObject(parent)
-    void  create()
-    void  create(GWidget& parent)
-    void  create(GWidget* parent)
-    int   toInt()
-    void color(color_t color)
-    void color(color_t color, color_t grad_color)
-    void color(String color)
-    void color(String color, String grad_color)
-    color_t color()
-    color_t grad_color()
-    void grad_dir(grad_dir_t grad_dir)
-    grad_dir_t grad_dir()
-    void opa(uint8_t opa)
-    uint8_t  opa()
-    void bg_color(color_t color)
-    void bg_color(String color)
-    color_t  bg_color()
-    void bg_opa(uint8_t opa)
-    uint8_t  bg_opa()
-    void image(const img_t& img)
-    void image(const img_t* img)
-    const img_t* image()
-    void image_opa(uint8_t opa)
-    void image_tiled(bool enable)
-    void rounded(bool en)
-    void radius(uint16_t r)
-    void corner_radius(uint16_t r)
-    void direction(base_dir_t direction)
-    void value(int32_t value, bool anim_enable = true)
-    void start_value(int32_t start_value, bool anim_enable = true)
-    void value_range(int32_t start_value, int32_t value)
-    void range(int32_t min, int32_t max)
-    void mode(bar_mode_t mode)  // BAR_MODE_NORMAL,  BAR_MODE_SYMMETRICAL,  BAR_MODE_RANGE
-    void orientation(bar_orientation_t orient)
-    int32_t value()
-    int32_t start_value()
-    int32_t min_value()
-    int32_t max_value()
-    bar_mode_t mode()
-    bar_orientation_t orientation()
-    bool isSymmetrical()
-    area_t indic_area()
+  (ไม่พบ public methods)
 
 ────────────────────────────────────────────────────────────
   class GSlider : GBar
 ────────────────────────────────────────────────────────────
-  (ไม่พบ public methods)
+  Methods:
+    GSlider(GWidget& parent=GScreen)                        : GBar(&parent)
+    GSlider(GWidget* parent)                                : GBar(parent)
+    ~GSlider()
+    void  create()
+    void  create(GWidget& parent)
+    void  create(GWidget* parent)
+    area_t &left_knob_area()
+    area_t &right_knob_area()
+    void  mode(slider_mode_t mode)
+    slider_mode_t mode()
+    void left_value(int32_t value, bool anim_enable=true)
+    int32_t left_value()
+    void     knob_color(color_t color)
+    void     knob_color(String  color)
+    color_t  knob_color()
+    void     knob_opa(opa_t opa)
+    opa_t    knob_opa()
+    void     knob_border(int32_t width)
+    void     knob_border(int32_t width, color_t color)
+    void     knob_border(int32_t width, String  color)
+    int32_t  knob_border()
+    void     knob_border_color(color_t color)
+    void     knob_border_color(String  color)
+    opa_t    knob_border_color()
+    void     knob_padding(int32_t padding)
+    int32_t  knob_padding()
+    void     knob_pad(int32_t padding)
+    int32_t  knob_pad()
+    void     knob_radius(int32_t r)
+    int32_t  knob_radius()
 
 ────────────────────────────────────────────────────────────
   class GArcLabel : GObject
 ────────────────────────────────────────────────────────────
-  (ไม่พบ public methods)
+  Methods:
+    GArcLabel(GWidget& parent=GScreen)                          : GObject(&parent)
+    GArcLabel(GWidget* parent)                                  : GObject(parent)
+    ~GArcLabel()
+    void  create()
+    void  create(GWidget& parent)
+    void  create(GWidget* parent)
+    void text(const char * text)
+    void text(String text)
+    void text_static(const char * text)
+    void angle_start(value_precise_t start)
+    void angle_offset(value_precise_t offset)
+    void angle_size(value_precise_t size)
+    void offset(int32_t offset)
+    void dir(arclabel_dir_t dir)
+    void recolor(bool en)
+    void radius(uint32_t radius)
+    void center_offset_x(uint32_t x)
+    void center_offset_y(uint32_t y)
+    void text_vertical_align(arclabel_text_align_t align)
+    void text_horizontal_align(arclabel_text_align_t align)
+    void overflow(arclabel_overflow_t overflow)
+    void end_overlap(bool overlap)
+    value_precise_t angle_start()
+    value_precise_t angle_offset()
+    value_precise_t angle_size()
+    arclabel_dir_t dir()
+    bool recolor()
+    uint32_t radius()
+    uint32_t center_offset_x()
+    uint32_t center_offset_y()
+    arclabel_text_align_t text_vertical_align()
+    arclabel_text_align_t text_horizontal_align()
+    arclabel_overflow_t overflow()
+    bool end_overlap()
+    value_precise_t text_angle()
+    void color(color_t color)
+    void color(String  color)
+    void font(const font_t &font)
+    void font(const font_t &font, color_t color)
+    void font(const font_t &font, String  color)
+    void font(const font_t *font)
+    void font(const font_t *font, color_t color)
+    void font(const font_t *font, String  color)
+
+────────────────────────────────────────────────────────────
+  class GArc : GObject
+────────────────────────────────────────────────────────────
+  Methods:
+    GArc(GWidget& parent=GScreen)                          : GObject(&parent)
+    GArc(GWidget* parent)                                  : GObject(parent)
+    ~GArc()
+    void  create()
+    void  create(GWidget& parent)
+    void  create(GWidget* parent)
+    arc_direction_t direction()
+    void radius(int32_t r)
+    int32_t radius()
+    void start_angle(value_precise_t start)
+    value_precise_t start_angle()
+    void stop_angle(value_precise_t stop)
+    value_precise_t stop_angle()
+    void end_angle(value_precise_t end)
+    value_precise_t end_angle()
+    void set_angle(value_precise_t start, value_precise_t end)  // มุมของ arc ด้านบน  (คู่กับ bg_angle )
+    void angle_range(value_precise_t end)
+    value_precise_t angle_range()
+    void bg_start_angle(value_precise_t start)
+    value_precise_t bg_start_angle()
+    void bg_stop_angle(value_precise_t stop)
+    value_precise_t bg_stop_angle()
+    void bg_end_angle(value_precise_t end)
+    value_precise_t bg_end_angle()
+    void bg_angle(value_precise_t start, value_precise_t end)
+    void rotation(int32_t rotation)
+    int32_t rotation()
+    void angle_offset(int32_t angle_offset)
+    int32_t angle_offset()
+    void mode(arc_mode_t mode)
+    arc_mode_t mode()
+    void value(int32_t value)
+    int32_t value()
+    int32_t toInt()
+    void range(int32_t  min_value, int32_t max_value)
+    int32_t min_value()
+    int32_t max_value()
+    void rate(uint32_t rate)
+    void     bg_enable(bool enable)
+    bool     bg_enable()
+    void     bg_color(color_t color)
+    void     bg_color(String color)
+    color_t  bg_color()
+    void     bg_opa(uint8_t opa)
+    uint8_t  bg_opa()
+    void     color(color_t color)
+    void     color(String color)
+    color_t  color()
+    void     opa(uint8_t opa)
+    uint8_t  opa()
+    void     rounded(bool enable)
+    bool     rounded()
+    void     thickness(int16_t thick)
+    void     thickness(int16_t thick, color_t color)
+    int16_t  thickness()
+    void     bg_thickness(int16_t thick)
+    int16_t  bg_thickness()
+
+────────────────────────────────────────────────────────────
+  class GSpinner : GArc
+────────────────────────────────────────────────────────────
+  Methods:
+    GSpinner(GWidget& parent=GScreen)                          : GArc(&parent)
+    GSpinner(GWidget* parent)                                  : GArc(parent)
+    ~GSpinner()
+    void  create()
+    void  create(GWidget& parent)
+    void  create(GWidget* parent)
+    void anim_params(uint32_t t, uint32_t angle)
+
+────────────────────────────────────────────────────────────
+  class GGauge : GArc
+────────────────────────────────────────────────────────────
+  Methods:
+    GGauge(GWidget& parent=GScreen)                          : GArc(&parent)
+    GGauge(GWidget* parent)                                  : GArc(parent)
+    ~GGauge()
+    void    create()
+    void    create(GWidget& parent)
+    void    create(GWidget* parent)
+    void     decimal(uint32_t decimal)
+    uint32_t decimal()
+    void mode(gauge_mode_t mode)
+    void value(float value)
+    float value()
+    float  toFloat()
+    int    toInt()
 
 ────────────────────────────────────────────────────────────
   class GAnimImage : GObject
 ────────────────────────────────────────────────────────────
-  (ไม่พบ public methods)
+  Methods:
+    GAnimImage(GWidget& parent=GScreen)                          : GObject(&parent)
+    GAnimImage(GWidget* parent)                                  : GObject(parent)
+    ~GAnimImage()
+    void  create()
+    void  create(GWidget& parent)
+    void  create(GWidget* parent)
+    void set_src(const void * dsc[], size_t num)
+    void set_src(const img_t * dsc[], size_t num)
+    void start()
+    void duration(uint32_t duration)
+    void repeat_count(uint32_t count)
+    const void ** get_src()
+    uint8_t src_count()
+    uint32_t duration()
+    uint32_t repeat_count()
 
 ────────────────────────────────────────────────────────────
   class GMultiScreen : GTileView
 ────────────────────────────────────────────────────────────
-  (ไม่พบ public methods)
+  Methods:
+    GMultiScreen(GWidget& parent=GScreen)                          : GTileView(&parent)
+    GMultiScreen(GWidget* parent)                                  : GTileView(parent)
+    ~GMultiScreen()
+    void  create()
+    void  create(GWidget& parent)
+    void  create(GWidget* parent)
+    void addScreen(uint8_t num=1)
+    GRect* screen(uint8_t screen_id)
+    uint16_t num()  // จำนวน screens ทั้งหมดขณะนี้
+    void   current_screen(uint16_t screen_id, bool anim=true)
+    GRect* current_screen()
+    int16_t current_screen_id()
+    void selected_id(uint16_t screen_id, bool anim=false)
+    void selected(uint16_t screen_id, bool anim=false)
+    uint16_t selected_id()
+    GRect* selected()
+    void     hidden_indic(bool enable)
+    bool     hidden_indic()
+    void     show_indic(bool enable)
+    bool     show_indic()
+    void indic_color(color_t color_active, color_t color_inactive)
+    void indic_color(String  color_active, String  color_inactive)
+    void     indic_opa(uint8_t opa_active, uint8_t opa_inactive)
+    GContainer& indic()
+    void     anim_time(int32_t time)
+    int32_t  anim_time()
 
 ────────────────────────────────────────────────────────────
   class GLayer
 ────────────────────────────────────────────────────────────
-  (ไม่พบ public methods)
+  Methods:
+    GLayer(layer_t* layer) : _p_layer(layer)
+    GLayer()
+    void drawRect(const draw_rect_dsc_t& rect_dsc, const area_t &area)
+    void drawRect(const draw_rect_dsc_t& rect_dsc, int32_t w, int32_t h, align_t Align=ALIGN_CENTER, int32_t ofs_x=0, int32_
+    void drawLabel(const draw_label_dsc_t&label_dsc, area_t& area)
+    void drawLabel(const draw_label_dsc_t&label_dsc, align_t Align=ALIGN_CENTER, int32_t ofs_x=0, int32_t ofs_y=0)
+    void drawLabel(String label, const font_t& font, color_t color, align_t Align=ALIGN_CENTER, int32_t ofs_x=0, int32_t ofs
+    void drawImage(const draw_image_dsc_t&image_dsc, area_t& area)
+    void drawImage(const draw_image_dsc_t&image_dsc, align_t Align=ALIGN_CENTER, int32_t ofs_x=0, int32_t ofs_y=0)
+    void drawImage(const img_t & image_src, align_t Align=ALIGN_CENTER, int32_t ofs_x=0, int32_t ofs_y=0)
+    void drawImage(const img_t & image_src, float angle /* 0.0-360.0 deg*/, align_t Align=ALIGN_CENTER, int32_t ofs_x=0, int
+    void drawImage(const img_t & image_src, Point pivot, float angle /* 0.0-360.0 deg*/, align_t Align=ALIGN_CENTER, int32_t
+    void drawLine(const draw_line_dsc_t& line_dsc)
+    void drawArc(const draw_arc_dsc_t&arc_dsc)
+    void drawTriangle(const draw_triangle_dsc_t& triangle_dsc)
+    void drawMaskRect(const draw_mask_rect_dsc_t& mask_rect_dsc)
+    void create(layer_t* parent_layer, area_t &layer_area)
+    void render()
+    bool isNULL()
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  QUICK NOTES  (สิ่งที่ AI ต้องรู้)
+  SECTION 4 — QUICK NOTES  (สิ่งที่ AI ต้องรู้)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
   ─ FONT ที่มีพร้อมใช้ (default) ─────────────────────────────
