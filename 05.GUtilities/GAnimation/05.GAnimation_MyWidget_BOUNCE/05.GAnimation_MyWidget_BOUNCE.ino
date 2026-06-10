@@ -2,7 +2,7 @@
 
 class MyWidget : public GRect {
   public:
-    MyWidget(GPARENT= GScreen) : GRect(parent)  { }
+    MyWidget(GWidget& parent= GScreen) : GRect(parent)  { }
 
     GLabel lb_title;
     GLabel lb_value;

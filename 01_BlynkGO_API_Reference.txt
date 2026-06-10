@@ -269,6 +269,27 @@ GObject           ← base ทุกอย่าง
     VECTOR_PATH_QUALITY_LOW
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECTION 2.5 — MACROS  (built-in ใน BlynkGOv5.h — ใช้ได้ทันที ไม่ต้อง define เอง)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ─ GRID alignment aliases ────────────────────────────────────────────────────
+  // ชื่อสอดคล้องกับ GRID_CELL / GRID_COL / GRID_ROW style (UPPERCASE = GRID op)
+  // defined ใน BlynkGO_Type.h แล้ว — ไม่ต้อง #define เพิ่มใน main.cpp
+  GRID_COLUMN_ALIGN(v)      → grid_column_align(v)
+  GRID_ROW_ALIGN(v)         → grid_row_align(v)
+  GRID_ALIGN(col_v, row_v)  → grid_align(col_v, row_v)
+
+  ใช้งาน (ทุก widget ที่ inherit GObject):
+    rect.GRID_CELL( GRID_COL{...}, GRID_ROW{...} )        ← ตั้ง template บน parent
+    rect.GRID_COLUMN_ALIGN(GRID_ALIGN_CENTER)              ← จัด col block ซ้าย/กลาง/ขวา
+    rect.GRID_ROW_ALIGN(GRID_ALIGN_CENTER)                 ← จัด row block บน/กลาง/ล่าง
+    rect.GRID_ALIGN(GRID_ALIGN_CENTER, GRID_ALIGN_CENTER)  ← col+row พร้อมกัน
+
+  ⚠️  ต่างจาก grid_cell_x_align / grid_cell_y_align:
+      GRID_COLUMN_ALIGN  → จัด block ทั้งหมดใน parent  (เหมือน justify-content CSS)
+      grid_cell_x_align  → จัด widget ภายใน cell ตัวเอง (เหมือน align-self CSS)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   SECTION 3 — CLASS API REFERENCE
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -789,6 +810,7 @@ GObject           ← base ทุกอย่าง
     int32_t GRID_column_width(uint32_t col_id)
     int32_t GRID_row_height(uint32_t row_id)
     void GRID_CELL(GRID_COL col_dsc, GRID_ROW row_dsc)
+    void GRID_CELL(GRID_COL col_dsc, GRID_ROW row_dsc, grid_align_t col_align, grid_align_t row_align)
     dir_t gesture_dir()
     void clean()
     void delete_delayed(uint32_t delay_ms)
@@ -1062,6 +1084,7 @@ GObject           ← base ทุกอย่าง
     void gap(int32_t value, style_selector_t selector=GPART_MAIN)
     void row_gap(int32_t value, style_selector_t selector=GPART_MAIN)
     void column_gap(int32_t value, style_selector_t selector=GPART_MAIN)
+    void gap(int32_t row_gap, int32_t col_gap, style_selector_t selector=GPART_MAIN)
     void padding_top(int32_t value, style_selector_t selector=GPART_MAIN)
     void padding_bottom(int32_t value, style_selector_t selector=GPART_MAIN)
     void padding_left(int32_t value, style_selector_t selector=GPART_MAIN)
@@ -3449,11 +3472,29 @@ GObject           ← base ทุกอย่าง
   widget.align_center(x_offset, y_offset)
 
   ─ GRID_CELL ─────────────────────────────────────────────────
-  parent.GRID_CELL( GRID_COL{...}, GRID_ROW{...} )
+  parent.GRID_CELL( GRID_COL{w1, w2, ...}, GRID_ROW{h1, h2, ...} )
+  parent.GRID_CELL( GRID_COL{...}, GRID_ROW{...}, col_align, row_align )  ← จัด block พร้อมกันใน call เดียว
   child.grid_cell(col, row)
   child.grid_cell(col, row, col_span, row_span)
-  GRID_FR(n)  = flexible fraction (คล้าย CSS fr)
-  PCT(n)      = n% ของ parent size
+  child.grid_cell(col, row, col_span, row_span, col_align, row_align)
+  child.grid_cell(col, row, col_span, row_span, col_align, row_align, offset_x, offset_y)
+  child.grid_cell(col, row, col_align, row_align)
+  child.grid_cell(col, row, col_align, row_align, offset_x, offset_y)
+  GRID_FR(n)      = flexible fraction (คล้าย CSS fr)
+  PCT(n)          = n% ของ parent size
+  GRID_CONTENT    = col/row หดตาม child ที่ใหญ่สุดใน col/row นั้น
+  <px>            = ขนาดตายตัว เช่น GRID_ROW{ 220, GRID_FR(1) }
+
+  ─ GRID alignment aliases (user-defined macros) ───────────
+  ใช้งาน (ทุก widget ที่ inherit GObject):
+  rect.GRID_CELL( GRID_COL{...}, GRID_ROW{...} )   ← ตั้ง template บน parent
+  rect.GRID_COLUMN_ALIGN(GRID_ALIGN_CENTER)          ← จัดกลุ่ม col ซ้าย/กลาง/ขวา
+  rect.GRID_ROW_ALIGN(GRID_ALIGN_CENTER)             ← จัดกลุ่ม row บน/กลาง/ล่าง
+  rect.GRID_ALIGN(GRID_ALIGN_CENTER, GRID_ALIGN_CENTER) ← ทั้ง col+row พร้อมกัน
+
+  ⚠️  ต่างจาก grid_cell_x_align / grid_cell_y_align:
+      GRID_COLUMN_ALIGN → จัด block ปุ่มทั้งหมดใน parent (เหมือน justify-content CSS)
+      grid_cell_x_align → จัด widget ภายใน cell ของตัวเอง (เหมือน align-self CSS)
 
   ─ Time functions ─────────────────────────────────────────────
   hour(), minute(), second(), day(), month(), year()

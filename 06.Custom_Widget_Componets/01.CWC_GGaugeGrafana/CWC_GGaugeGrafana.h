@@ -1,3 +1,5 @@
+#ifndef __CWC_GGAUGE_GRAFANA_H__
+#define __CWC_GGUAGE_GRAFANA_H__
 
 // ════════════════════════════════════════════════════════════════
 //  CWC: GGaugeGRAFANA — Grafana-style gauge
@@ -185,3 +187,6 @@ class GGaugeGRAFANA : public GScale {
       }
     }
 };
+
+
+#endif // __CWC_GGUAGE_GRAFANA_H__

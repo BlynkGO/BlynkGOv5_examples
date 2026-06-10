@@ -36,11 +36,11 @@ COMMENT TEMPLATE สำหรับ custom font:
   // 1. Download font: https://fonts.google.com/specimen/<FontName>
   //    วางไฟล์ <FontName>.ttf ไว้ใน folder เดียวกับ src/
   // 2. รันคำสั่ง:
-  //      fontconv --font <FontName>.ttf --size <px> -<range>
+  //      fontconv --font <FontName>.ttf --size <px> -<range> -o <fontname_size>.c
   //    ตัวอย่าง:
-  //      fontconv --font Kanit.ttf --size 30 -thai
-  //      fontconv --font Roboto.ttf --size 24 -eng
-  //      fontconv --font BebasNeue.ttf --size 45 -num
+  //      fontconv --font Kanit.ttf      --size 30 -thai -o Kanit_30.c
+  //      fontconv --font Roboto.ttf     --size 24 -eng  -o Roboto_24.c
+  //      fontconv --font BebasNeue.ttf  --size 45 -num  -o BebasNeue_45.c
   // 3. จะได้ไฟล์ <name>_<size>.c ใน src/ → จึงค่อย build project
   // ────────────────────────────────────────────────────────────────────
   FONT_DECLARE(<fontname_size>);
@@ -109,6 +109,19 @@ COMMENT TEMPLATE สำหรับ image:
   // ────────────────────────────────────────────────────────────────────
   IMAGE_DECLARE(img_<name>);
 
+  ─ GRect ใช้เป็น layout container พร้อม background image ────
+  GRect สามารถแสดง background image ได้โดยตรง
+  โดยใช้ .image() ก่อน หรือพร้อมกับการตั้งค่า GRID/layout ได้เลย:
+
+    rect.image(img_bg);
+    rect.GRID_CELL( GRID_COL{...}, GRID_ROW{...} );
+    rect.padding(30);
+    // child widgets ใช้ .grid_cell() วางใน rect นี้ได้ทันที
+
+  ✅ ใช้แทน GImage ได้เมื่อต้องการให้ container มี layout (GRID/padding)
+  ✅ child ที่ใช้ .parent(rect) จะอยู่ในขอบเขต padding ของ rect อัตโนมัติ
+  ❌ GImage ไม่รองรับ GRID_CELL / layout — ถ้าต้องการ layout ใช้ GRect.image() แทน
+
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   SECTION 4 — GENERAL CODING RULES
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -125,6 +138,72 @@ EVENT CALLBACK:
       btn.onClicked(GWIDGET_CB {
         // code here
       });
+
+  - onClicked / onValueChanged: ถ้าต้องการ access CWC จาก callback
+      ใช้ user_data (ส่ง this ตอน register) แล้วดึงผ่าน widget->user_data():
+      btn.onClicked(GWIDGET_CB { ((MyClass*)widget->user_data())->doSomething(); }, this);
+
+  - onSizeChanged: ใช้ดัก CWC ที่ต้อง recalc layout เมื่อขนาดเปลี่ยน
+      ⚠️  ต้องเช็ค old_size vs new_size ก่อนเสมอ เพื่อป้องกัน refresh ที่ไม่จำเป็น
+
+      กรณี 1 — CWC ดัก this ตัวเอง (cast widget ตรงๆ ได้เลย):
+          myWidget.onSizeChanged(GWIDGET_CB {
+            auto old_size = widget->event_old_size();
+            auto new_size = widget->size();
+            if (old_size.x != new_size.x || old_size.y != new_size.y) {
+              MyClass* c = (MyClass*) widget;
+              c->refresh_layout();
+            }
+          });
+
+      กรณี 2 — ต้องส่ง external data เข้าไปด้วย:
+          // ตั้ง user_data ก่อน register callback
+          myWidget.user_data((void*)&myData);
+          myWidget.onSizeChanged(GWIDGET_CB {
+            auto old_size = widget->event_old_size();
+            auto new_size = widget->size();
+            if (old_size.x != new_size.x || old_size.y != new_size.y) {
+              MyDataType* d = (MyDataType*) widget->user_data();
+              // ใช้ d->...
+            }
+          });
+
+      กรณีใช้งาน:
+        - CWC ที่ใช้ SIZE_CONTENT + GRID_CELL แบบ fixed px → recalc GRID_COL/ROW ใหม่
+        - รองรับ screen rotate runtime
+        - ควร extract logic recalc ออกเป็น void refresh_layout() แยกต่างหาก
+          แล้วเรียกทั้งจาก create() ครั้งแรก และจาก onSizeChanged
+
+      ⚠️  RULE: register onSizeChanged เป็นบรรทัดสุดท้ายใน create() เสมอ
+        - ต้องเรียก refresh_layout() ครั้งแรกก่อน แล้วค่อย register
+        - ถ้า register ก่อน → BlynkGO trigger onSizeChanged ทันทีตอน GRect::create()
+          → refresh_layout() ถูกเรียกขณะ child widgets ยังไม่ถูก create
+          → GRID apply ผิด → child หลุดไปอยู่ผิดที่ (เช่น โผล่มุมบนซ้าย)
+
+        // ✅ ลำดับที่ถูกต้องใน create():
+        GRect::create();
+        // ... setup child widgets, grid_cell, callbacks ...
+        refresh_layout();                // ← ครั้งแรก ก่อน register เสมอ
+        GRect::onSizeChanged(GWIDGET_CB{ // ← register หลังสุด
+          auto old_size = widget->event_old_size();
+          auto new_size = widget->size();
+          if (old_size.x != new_size.x || old_size.y != new_size.y) {
+            MyClass* c = (MyClass*) widget;
+            c->_targetH = new_size.y;   // ← เก็บ size จริงไว้ใช้ใน refresh_layout()
+            c->_targetW = new_size.x;   // ← ถ้าต้องการ width ด้วย
+            c->refresh_layout();
+          }
+        });
+
+      ⚠️  RULE: ใน refresh_layout() ห้ามอ่าน GRect::height()/width() โดยตรง
+        - ถ้า CWC ใช้ SIZE_CONTENT → GRect::height() คืน constant ไม่ใช่ pixel จริง
+        - ให้เก็บ size จริงไว้ใน private member _targetH / _targetW แทน
+        - รับค่าจาก onSizeChanged → new_size.y / new_size.x
+        - ครั้งแรก (ก่อน onSizeChanged fire) → fallback เป็น GScreen.height()
+
+        // pattern ใน refresh_layout():
+        int32_t h = (_targetH > 0) ? _targetH : GScreen.height();
+        int32_t w = (_targetW > 0) ? _targetW : GScreen.width();
 
 POSITION:
   - widget.position(x, y)
@@ -143,6 +222,11 @@ PADDING:
   - padding(top, bottom, left, right, gap)               ← 5 ค่า
   - padding(top, bottom, left, right, gap_rol, gap_col)  ← 6 ค่า
   - padding(all)                                         ← ทุกด้านเท่ากัน รวม gap (padding inner)
+  - gap(value)                   ← row_gap + col_gap เท่ากัน
+  - gap(row_gap, col_gap)        ← แยก row / col
+  - grid_gap(value)              ← alias ของ gap(value)
+  - row_gap(value)               ← เฉพาะ row gap
+  - column_gap(value)            ← เฉพาะ col gap
 
 GRID:
   - parent.GRID_CELL( GRID_COL{w1, w2, ...}, GRID_ROW{h1, h2, ...} )
@@ -206,6 +290,33 @@ WIDGET DEFAULT BEHAVIOR:
   - GRect ใน GRID — default col_align/row_align = GRID_ALIGN_STRETCH
                     จะยืดเต็ม grid cell นั้นๆ อัตโนมัติ
                     ไม่ต้องระบุ GRID_ALIGN_STRETCH ซ้ำใน grid_cell()
+  - GArc           — ค่า default ที่ BlynkGO ตั้งให้มาจากโรงงาน:
+                       arc.knob_enable(false);   // ไม่แสดง knob
+                       arc.bg_enable(false);     // ไม่แสดง bg arc ด้านหลัง
+                       arc.rounded(false);       // ปลาย arc ไม่มน
+                       arc.angle_offset(135);    // จุดเริ่มต้น arc อยู่ที่ 135° จากแกน X
+                                                 //   (ใช้ angle_offset แทน rotation ได้เลย)
+                       arc.angle(0, 270);        // ช่วง arc ทั้งหมด = 270° (0° → 270°)
+                       arc.range(0, 100);        // map ค่า 0-100 → มุม 0°-270°
+                       arc.value(100);           // ค่าเริ่มต้น = 100 (เต็ม range max)
+
+                     การเปิด feature เพิ่มเติม:
+                       arc.bg_enable(true);      // แสดง bg arc ด้านหลัง (track)
+                       arc.knob_enable(true);    // เปิดให้ผู้ใช้ลาก knob ควบคุมได้
+
+
+PARENT BINDING (constructor-time):
+  - ระบุ parent ตอน declare ได้เลย แทนการเรียก .parent() ภายหลัง
+  - parent เป็น parameter สุดท้ายเสมอ
+
+  GLabel lb(rect_header);                    // parent = rect_header
+  GRect  card(rect_cards);                   // parent = rect_cards
+  GImage img(img_bg, rect_root);             // param1=src, parent=rect_root (สุดท้าย)
+
+  ✅ สะอาดกว่า และลด code ใน setup()
+  ✅ ใช้ได้กับทุก widget ที่รับ parent ใน constructor
+  ✅ ใน CWC — child widget ยังต้องผูก parent ใน create() เสมอ
+     (ห้ามผูก parent ของ child ใน constructor ของ CWC)
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   SECTION 4b — WIDGET USAGE & CUSTOM CLASS PATTERN  ⚠️ CRITICAL
@@ -334,6 +445,20 @@ CORRECT CONSTRUCTOR FORMS:
     - ปุ่มหลายปุ่ม style เดียวกัน
     - Row ข้อมูลซ้ำๆ ใน list / table
 
+CWC BASE CLASS RULE:
+  ✅ inherit จาก widget ที่เหมาะกับ use case:
+     - GRect   → ต้องการ card / container มีพื้นหลัง
+     - GScale  → ต้องการ extend gauge/scale behavior
+     - GChart  → ต้องการ encapsulate chart + series
+     - GLabel  → ต้องการ label มี behavior พิเศษ
+     - GArc    → ต้องการ arc/gauge แบบง่าย
+     - ฯลฯ
+
+  ✅ widget อื่นๆ ที่ต้องการเพิ่ม → เป็น member ข้างใน
+  ✅ เลือก base class จาก "สิ่งที่ CWC นี้ IS" ไม่ใช่ "สิ่งที่มี"
+     SensorCard IS a GRect → inherit GRect
+     GaugeGrafana IS a GScale → inherit GScale
+
 ── CWC PATTERN (ต้องทำตาม Section 4b PART 2 เสมอ) ───────────────────────────
 
   ✅ ตัวอย่าง CWC สำหรับ SensorCard ที่ใช้ซ้ำ 4 ใบ:
@@ -360,8 +485,8 @@ CORRECT CONSTRUCTOR FORMS:
           lb_value.align(ALIGN_BOTTOM_LEFT, 10, -8);
         }
 
-        void setTitle(const char* t)  { create(); lb_title = t; }
-        void setValue(float v, const char* unit) {
+        void title(const char* t)  { create(); lb_title = t; }
+        void value(float v, const char* unit) {
           create();
           lb_value = StringX::printf("%.1f %s", v, unit);
         }
@@ -404,6 +529,7 @@ CORRECT CONSTRUCTOR FORMS:
   ✅ public method ของ CWC ต้องเรียก create() บรรทัดแรกเสมอ
   ✅ CWC ทำให้ setup() สั้นลงมาก — ย้าย config ทั้งหมดเข้าไปใน class
   ❌ ห้าม copy-paste block เดิมซ้ำกัน — ถ้าซ้ำ ต้องทำ CWC
+
 
 
 CWC (Custom Widget Class) PATTERN — มี widget ลูก:
@@ -605,7 +731,7 @@ RULE: ถ้า API Reference ไม่มี method → ดูจาก Example
   // ASSET PREPARATION — รันคำสั่งเหล่านี้ใน folder src/ ก่อน build
   // ════════════════════════════════════════════════════════════════
   //
-  // [FONT]   ...คำสั่ง fontconv...
+  // [FONT]   fontconv --font <Name>.ttf --size <px> -<range> -o <name_px>.c
   //          Download: https://fonts.google.com/specimen/...
   //
   // [ICON]   สร้าง iconlist.txt:
@@ -648,6 +774,49 @@ RULE: ถ้า API Reference ไม่มี method → ดูจาก Example
     BlynkGO.update();
   }
 
+CODE STYLE — INDENTATION:
+  - child widget ที่อยู่ใน parent ให้ indent 2 space เพื่อแสดงความสัมพันธ์
+
+  // ── ตัวอย่าง ─────────────────────────────────────────────
+  void setup() {
+    BlynkGO.begin();
+
+    rect_bg.image(img_bg);
+    rect_bg.GRID_CELL(...);
+    rect_bg.padding(30);
+
+      rect_header.grid_cell(0, 0);
+      rect_header.color(...);
+      rect_header.padding(...);
+
+        lb_title.font(prasanmit_35, COLOR_ACCENT_CYAN);
+        lb_title = "Smart Farm";
+        lb_title.align(ALIGN_LEFT_MID);
+
+      rect_cards.grid_cell(0, 1);
+      rect_cards.bg_opa(0);
+
+        card_temp.grid_cell(0, 0);
+        card_temp.title("Temperature");
+
+      rect_footer.grid_cell(0, 2);
+      rect_footer.color(...);
+
+        lb_pump_label.font(...);
+        lb_pump_label = "Irrigation Pump";
+  }
+
+  // ── Global declarations ก็ทำเช่นกัน ──────────────────────
+  GRect  rect_bg;
+    GRect  rect_header(rect_bg);
+      GLabel lb_title(rect_header);
+      GLabel lb_auto_mode(rect_header);
+    GRect  rect_cards(rect_bg);
+      SensorCard card_temp(rect_cards);
+      SensorCard card_humidity(rect_cards);
+    GRect  rect_footer(rect_bg);
+      GLabel lb_pump_label(rect_footer);
+
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   SECTION 6 — OUTPUT QUALITY CHECKLIST
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -684,6 +853,11 @@ RULE: ถ้า API Reference ไม่มี method → ดูจาก Example
   [ ] ไม่กำหนด size ให้ GRect โดยไม่จำเป็น — default PCT(100) อยู่แล้ว
   [ ] ไม่ระบุ GRID_ALIGN_STRETCH ใน grid_cell() ของ GRect — เป็น default อยู่แล้ว
   [ ] ไม่ใช้ position(0,0) เพื่อ reset ตำแหน่ง — default ทุก widget คือ ALIGN_CENTER
+  [ ] ถ้าต้องการ background image + layout → ใช้ GRect.image() ไม่ใช่ GImage
+  [ ] CWC ที่ใช้ onSizeChanged → register onSizeChanged เป็นบรรทัดสุดท้ายใน create() เสมอ
+  [ ] CWC ที่ใช้ onSizeChanged → เรียก refresh_layout() ครั้งแรกก่อน register เสมอ
+  [ ] refresh_layout() ห้ามอ่าน GRect::height()/width() โดยตรง — ใช้ _targetH/_targetW แทน
+  [ ] _targetH/_targetW รับค่าจาก new_size ใน onSizeChanged, fallback เป็น GScreen.height()/width()
 
 ================================================================================
   END OF SYSTEM PROMPT

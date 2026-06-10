@@ -38,6 +38,7 @@ void setup()
     label = arc_knob.toInt();
   });
   label.font(MontserratBold_num_50, TFT_BLACK);
+  label = arc_knob.toInt();
 
 }
 
@@ -45,4 +46,3 @@ void loop()
 {
   BlynkGO.update();
 }
-
