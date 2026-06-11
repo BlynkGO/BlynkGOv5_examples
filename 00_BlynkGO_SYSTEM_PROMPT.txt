@@ -16,6 +16,127 @@ When the user does not provide all 4 files, remind them to attach the missing on
 before generating code.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECTION 0 — AI ASSET OUTPUT RULE  ⚠️ MUST FOLLOW
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+AI ต้อง output asset ทุกอย่างให้พร้อมใช้ทันที — ไม่ใช่แค่ comment บอกให้ user ไปทำเอง
+
+── FONT ─────────────────────────────────────────────────────────────────────────
+
+  เมื่อ project ใช้ custom font ให้ output ครบทั้ง 3 อย่าง:
+
+  ① download command  — คำสั่ง curl/wget สำหรับดาวน์โหลด .ttf จาก Google Fonts
+  ② convert command   — คำสั่ง fontconv พร้อม flag ที่ถูกต้อง
+  ③ FONT_DECLARE       — บรรทัด declare ใน main.cpp / CWC .h
+
+  ✅ ตัวอย่าง output ที่ถูกต้อง:
+
+    // ── [FONT] Kanit ──────────────────────────────────────────────────
+    // ① Download (รันใน src/):
+    //    curl -o Kanit.ttf "https://fonts.gstatic.com/s/kanit/v15/nKKZ-Go6G5tXcr4WORWz.ttf"
+    //    หรือ: https://fonts.google.com/specimen/Kanit  → Download family
+    // ② Convert (รันใน src/):
+    //    fontconv --font Kanit.ttf --size 30 -thai -o Kanit_30.c
+    //    fontconv --font Kanit.ttf --size 20 -thai -o Kanit_20.c
+    // ─────────────────────────────────────────────────────────────────
+    FONT_DECLARE(Kanit_30);
+    FONT_DECLARE(Kanit_20);
+
+  ⚠️  Google Fonts URL สำหรับ curl อาจเปลี่ยน version ได้
+      ให้บอก URL หน้า specimen ด้วยเสมอเป็น fallback:
+      https://fonts.google.com/specimen/<FontName>
+
+── ICON ─────────────────────────────────────────────────────────────────────────
+
+  เมื่อ project ใช้ custom icon ให้ output ครบทั้ง 3 อย่าง:
+
+  ① iconlist.txt      — ไฟล์เนื้อหาพร้อม copy ไปวางใน src/ ได้เลย
+  ② convert command   — คำสั่ง iconconv พร้อม flag
+  ③ FONT_DECLARE + #define — บรรทัด declare และ symbol ทุกตัว
+
+  ✅ ตัวอย่าง output ที่ถูกต้อง:
+
+    // ── [ICON] ui_icons ──────────────────────────────────────────────
+    // ① สร้างไฟล์ src/iconlist.txt ด้วยเนื้อหาต่อไปนี้:
+    // ┌────────────────────────────────┐
+    // │  thermostat      E846          │
+    // │  humidity_mid    F176          │
+    // │  air             E007          │
+    // │  water_drop      E798          │
+    // │  bolt            EA0B          │
+    // └────────────────────────────────┘
+    // ② Convert (รันใน src/):
+    //    iconconv iconlist.txt --size 30 --name ui_icons
+    // ③ iconconv จะ generate ให้อัตโนมัติ → copy ไปใส่ main.cpp:
+    // ─────────────────────────────────────────────────────────────────
+    #include "ui_icons_List.h"       // ← ไฟล์นี้ถูก generate โดย iconconv
+
+    ภายใน ui_icons_List.h ตัวอย่างจะเป็นอย่างนี้ในอัตโนมัติ โดย iconconv
+    ---------------------------
+    #ifndef _UI_ICONS_LIST_H_
+    #define _UI_ICONS_LIST_H_
+
+    #define SYMBOL_THERMOSTAT   "\uE846"
+    #define SYMBOL_HUMIDITY     "\uF176"
+    #define SYMBOL_AIR          "\uE007"
+    #define SYMBOL_WATER_DROP   "\uE798"
+    #define SYMBOL_BOLT         "\uEA0B"
+
+    #endif // _UI_ICONS_LIST_H_
+    ---------------------------
+
+  ⚠️  iconconv output pattern:
+      - สร้างไฟล์ <name>_<size>.c   เช่น  ui_icons_30.c  ← font data (per size)
+      - สร้างไฟล์ <name>_List.h     เช่น  ui_icons_List.h  ← SYMBOL_xxx defines
+        → _List.h ใช้ร่วมกันได้ทุกขนาด  (SYMBOL codepoint ไม่เปลี่ยนตามขนาด)
+        → ถ้าแปลงหลายขนาด ไฟล์ _List.h จะถูก overwrite แต่เนื้อหาเหมือนเดิม
+      - ใน main.cpp: #include "_List.h" แค่ครั้งเดียว + FONT_DECLARE ทุกขนาดที่ใช้
+
+  ตัวอย่างใช้หลายขนาด:
+    #include "ui_icons_List.h"   // ← include ครั้งเดียว
+    FONT_DECLARE(ui_icons_30);   // ← เพิ่ม FONT_DECLARE ทุกขนาดที่ต้องการ
+    FONT_DECLARE(ui_icons_40);
+    FONT_DECLARE(ui_icons_24);
+
+── IMAGE ────────────────────────────────────────────────────────────────────────
+
+  เมื่อ project ใช้ image ให้ output ครบทั้ง 3 อย่าง:
+
+  ① download hint     — URL แหล่งภาพ + คำค้นที่แนะนำ (ภาพต้อง user เลือกเอง)
+  ② convert command   — คำสั่ง imgconv พร้อม flag (-t ถ้าโปร่งใส)
+  ③ IMAGE_DECLARE      — บรรทัด declare ใน main.cpp
+
+  ✅ ตัวอย่าง output ที่ถูกต้อง:
+
+    // ── [IMAGE] background ───────────────────────────────────────────
+    // ① หาภาพ background (800×480):
+    //    https://unsplash.com  → ค้น "dark green farm dashboard"
+    //    Resize ให้เป็น 800×480 ก่อนแปลง
+    // ② Convert (รันใน src/):
+    //    imgconv background.png
+    // ─────────────────────────────────────────────────────────────────
+    IMAGE_DECLARE(img_background);
+
+    // ── [IMAGE] logo (PNG โปร่งใส) ──────────────────────────────────
+    // ① หาภาพ logo PNG โปร่งใส:
+    //    https://flaticon.com  → ค้น "smart farm icon"
+    // ② Convert (รันใน src/):
+    //    imgconv logo.png -t      ← -t เพราะ PNG มี alpha
+    // ─────────────────────────────────────────────────────────────────
+    IMAGE_DECLARE(img_logo);
+
+  ⚠️  image ต้อง user เลือกและดาวน์โหลดเอง — AI บอกได้แค่ URL แหล่งภาพ + คำค้น
+      ไม่สามารถดาวน์โหลดภาพให้ได้โดยตรง
+
+── สรุป RULE ────────────────────────────────────────────────────────────────────
+
+  asset       AI ต้อง output                            AI ทำไม่ได้
+  ──────────  ────────────────────────────────────────  ──────────────────────
+  FONT        curl command + fontconv command + DECLARE  ดาวน์โหลด .ttf ให้
+  ICON        iconlist.txt เนื้อหาครบ + iconconv + DEFINE  (ทำได้ทั้งหมด)
+  IMAGE       แหล่งภาพ URL + คำค้น + imgconv command    ดาวน์โหลดภาพให้
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   SECTION 1 — FONT RULES
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -71,11 +192,86 @@ COMMENT TEMPLATE สำหรับ custom icon font:
   //      iconconv iconlist.txt --size <px> --name <output_name>
   //    ตัวอย่าง:
   //      iconconv iconlist.txt --size 30 --name ui_icons
-  // 3. จะได้ไฟล์ ui_icons_30.c ใน src/
-  // 4. ให้ #include "dash_icons_List.h" ใน main.cpp → จึงค่อย build project
+  // 3. iconconv จะสร้างไฟล์ใน src/ อัตโนมัติ:
+  //      <output_name>_<size>.c     ← font data (มีทุกขนาดที่แปลง)
+  //      <output_name>_List.h       ← SYMBOL_xxx defines (ใช้ร่วมทุกขนาด)
+  //    ⚠️  ถ้าแปลงหลายขนาด → _List.h จะถูก overwrite แต่เนื้อหาเหมือนเดิม
+  //        #include "_List.h" แค่ครั้งเดียว + FONT_DECLARE ทุกขนาดที่ใช้
+  // 4. Copy integration guide ที่ iconconv แสดงไว้ใส่ main.cpp:
   // ────────────────────────────────────────────────────────────────────
-  FONT_DECLARE(<output_name>);
-  #define SYMBOL_<NAME>   "\u<CODEPOINT>"
+  #include "<output_name>_List.h"   // ← include ครั้งเดียว (SYMBOL_xxx ทุกตัว)
+  FONT_DECLARE(<output_name>_30);   // ← เพิ่ม FONT_DECLARE ทุกขนาดที่ต้องการ
+  FONT_DECLARE(<output_name>_40);   //    (ถ้าใช้ขนาดเดียวก็บรรทัดเดียว)
+
+ICONLIST.TXT — AI MUST GENERATE:
+  ✅ ถ้า project ใช้ custom icon → AI ต้องสร้างไฟล์ iconlist.txt ให้พร้อมใช้เลย
+     ไม่ใช่แค่ comment บอกให้ user ไปหา codepoint เอง
+
+  รูปแบบ iconlist.txt (tab หรือ space คั่น, ไม่ต้องใส่ 0x):
+    <icon_name>   <CODEPOINT_HEX>
+
+  ✅ CORRECT — AI output ครบ:
+
+    // iconlist.txt
+    thermostat      E846
+    humidity_mid    F176
+    air             E007
+    water_drop      E798
+    bolt            EA0B
+    settings        E8B8
+
+  ⚠️  AI CODEPOINT WARNING:
+      codepoint ใน table ด้านล่างอาจ outdated หรือไม่ตรงกับ iconconv จริง
+      _List.h ที่ iconconv generate ออกมา คือ source of truth เสมอ
+      → ใช้ SYMBOL_xxx จาก _List.h เท่านั้น อย่า hardcode "\uXXXX" ใน code โดยตรง
+      → ถ้า AI ใส่ codepoint ผิดใน iconlist.txt ก็ไม่เป็นไร
+        เพราะ iconconv จะ remap ให้เองและ generate _List.h ที่ถูกต้องออกมา
+
+  ⚠️  AI ต้องรู้ codepoint ของ Material Symbols ทั่วไป
+     ตาราง codepoint ที่ใช้บ่อยใน dashboard / IoT:
+
+    // ── Sensor / Environment ──────────────────
+    thermostat        E846    // อุณหภูมิ
+    humidity_mid      F176    // ความชื้น
+    water_drop        E798    // น้ำ / ฝน
+    air               E007    // อากาศ / CO2
+    wb_sunny          E81A    // แดด
+    cloud             E2BD    // เมฆ
+    grain             E3F4    // ฝุ่น / PM2.5
+    science           EA4B    // สาร / ค่าเคมี
+
+    // ── Power / Energy ────────────────────────
+    bolt              EA0B    // ไฟฟ้า / พลังงาน
+    power             E63C    // power plug
+    battery_full      E1A4    // แบตเตอรี่
+    solar_power       EC0F    // โซลาร์
+
+    // ── Control / Status ──────────────────────
+    toggle_on         E9F6    // สวิตช์เปิด
+    toggle_off        E9F5    // สวิตช์ปิด
+    check_circle      E86C    // สำเร็จ / OK
+    cancel            E5C9    // ยกเลิก / Error
+    warning           E002    // เตือน
+    notifications     E7F4    // แจ้งเตือน
+
+    // ── Farm / Agriculture ────────────────────
+    grass             F205    // หญ้า / ดิน
+    yard              EB7B    // พื้นที่
+    water             EA00    // น้ำ (ชลประทาน)
+    spa               EB3D    // ต้นไม้ / พืช
+
+    // ── Dashboard / UI ────────────────────────
+    dashboard         E871    // แดชบอร์ด
+    home              E88A    // บ้าน
+    settings          E8B8    // ตั้งค่า
+    info              E88E    // ข้อมูล
+    menu              E5D2    // เมนู
+    close             E5CD    // ปิด
+    arrow_back        E5C4    // ย้อนกลับ
+    refresh           E5D5    // รีเฟรช
+    person            E7FD    // ผู้ใช้
+    wifi              E63E    // WiFi
+    bluetooth         E1A7    // Bluetooth
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   SECTION 3 — IMAGE RULES
@@ -461,38 +657,82 @@ CWC BASE CLASS RULE:
 
 ── CWC PATTERN (ต้องทำตาม Section 4b PART 2 เสมอ) ───────────────────────────
 
-  ✅ ตัวอย่าง CWC สำหรับ SensorCard ที่ใช้ซ้ำ 4 ใบ:
+── Card-style CWC: ใช้ GRID_CELL เป็น internal layout หลัก ⚠️ ──────────────────
 
-    class SensorCard : public GContainer {
+  CWC ที่มี layout แบบ card (icon + label + value + bar / หลาย zone) ให้ใช้
+  GRID_CELL เป็นตัวจัด internal layout เสมอ ไม่ใช่ align() แบบ absolute
+
+  ❌ WRONG — align() absolute:
+    lb_title.align(ALIGN_TOP_LEFT, 10, 8);      // แข็ง ปรับ font ขนาดใหม่แล้วหลุด
+    lb_value.align(ALIGN_BOTTOM_LEFT, 10, -8);  // ไม่ reflow เมื่อ content เปลี่ยน
+
+  ✅ CORRECT — GRID_CELL:
+    GRect::GRID_CELL( GRID_COL{ICON_W, GRID_FR(1), GRID_CONTENT},
+                      GRID_ROW{GRID_FR(1), BAR_H} );
+    lb_icon.grid_cell(0, 0, GRID_ALIGN_CENTER, GRID_ALIGN_CENTER);
+    lb_title.grid_cell(1, 0, GRID_ALIGN_START,  GRID_ALIGN_CENTER);
+    lb_value.grid_cell(2, 0, GRID_ALIGN_END,    GRID_ALIGN_CENTER);
+
+  เหตุผล:
+    ✅ content เปลี่ยน (font ใหม่, text ยาวขึ้น) → GRID reflow ให้อัตโนมัติ
+    ✅ เพิ่ม/ลด child ได้โดยไม่ต้อง recalc offset ทุกตัว
+    ✅ baseline/cap-top alignment ทำผ่าน offset_y ใน grid_cell() ได้ทันที
+       (ดู Section 4e — ใส่ bl_offset / cap_offset ใน parameter สุดท้าย)
+    ✅ padding() ของ card ควบคุม inner margin ที่เดียว ไม่ต้องชดเชยใน align()
+    ❌ align() absolute — offset ผิดทันทีที่ font size หรือ card height เปลี่ยน
+
+  เมื่อใช้ GRID_CELL ใน card-style CWC:
+    - กำหนด GRID_CELL บน GRect (ตัว card เอง) ใน create()
+    - child แต่ละตัวเรียก .grid_cell(col, row, ...) แทน .align(...)
+    - ถ้ามี bar ให้วางเป็น row ล่างสุด span ทุก col:
+        bar.grid_cell(0, 1, N_COLS, 1, GRID_ALIGN_STRETCH, GRID_ALIGN_CENTER);
+    - padding() ของ card ทำหน้าที่เป็น inner margin ให้ทุก child พร้อมกัน
+
+  ✅ ตัวอย่าง CWC สำหรับ SensorCard ที่ใช้ซ้ำ 4 ใบ (GRID layout):
+
+    class SensorCard : public GRect {
       public:
-        SensorCard(GPARENT) : GContainer(parent) {}
+        SensorCard(GPARENT) : GRect(parent) {}
 
         void create() {
-          if (GContainer::isCreated()) return;
-          GContainer::create();
+          if (GRect::isCreated()) return;
+          GRect::create();
 
-          GContainer::size(180, 100);
-          GContainer::bg_color(TFT_COLOR_HEX(0x1E1E1E));
-          GContainer::radius(12);
-          GContainer::border(0);
+          GRect::bg_color(TFT_COLOR_HEX(0x1E1E1E));
+          GRect::radius(12);
+          GRect::border(0);
+          GRect::height(80);
+          // GRID: col0=icon, col1=label FR(1), col2=value CONTENT | row0=content, row1=bar
+          GRect::GRID_CELL( GRID_COL{48, GRID_FR(1), GRID_CONTENT},
+                            GRID_ROW{GRID_FR(1), 6} );
+          GRect::padding(0, 8, 12, 12);   // top, bottom, left, right
 
           lb_title.parent(this);
-          lb_title.font(prasanmit_25, TFT_DARKGRAY);
-          lb_title.align(ALIGN_TOP_LEFT, 10, 8);
+          lb_title.font(prasanmit_20, TFT_COLOR_HEX(0x9CA3AF));
+          lb_title.grid_cell(1, 0, GRID_ALIGN_START, GRID_ALIGN_CENTER);
 
           lb_value.parent(this);
           lb_value.font(BebasNeueBold_num_45, TFT_WHITE);
-          lb_value.align(ALIGN_BOTTOM_LEFT, 10, -8);
+          lb_value.grid_cell(2, 0, GRID_ALIGN_END, GRID_ALIGN_CENTER);
+
+          bar.parent(this);
+          bar.height(4);
+          bar.grid_cell(0, 1, 3, 1, GRID_ALIGN_STRETCH, GRID_ALIGN_CENTER);
+          bar.radius(2);
+          bar.range(0, 1000);
+          bar.value(0, false);
         }
 
         void title(const char* t)  { create(); lb_title = t; }
-        void value(float v, const char* unit) {
+        void value(float v, float max_v) {
           create();
-          lb_value = StringX::printf("%.1f %s", v, unit);
+          lb_value = StringX::printf("%.1f", v);
+          bar.value((int32_t)(v / max_v * 1000), true);
         }
 
         GLabel lb_title;
         GLabel lb_value;
+        GBar   bar;
     };
 
     // ── Global ──
@@ -504,22 +744,15 @@ CWC BASE CLASS RULE:
     void setup() {
       BlynkGO.begin();
 
-      card_temp.setTitle("อุณหภูมิ");
-      card_temp.align(ALIGN_TOP_LEFT, 10, 10);
-
-      card_humi.setTitle("ความชื้น");
-      card_humi.align(ALIGN_TOP_LEFT, 200, 10);
-
-      card_co2.setTitle("CO₂");
-      card_co2.align(ALIGN_TOP_LEFT, 390, 10);
-
-      card_pm25.setTitle("PM2.5");
-      card_pm25.align(ALIGN_TOP_LEFT, 580, 10);
+      card_temp.title("อุณหภูมิ");
+      card_humi.title("ความชื้น");
+      card_co2.title("CO₂");
+      card_pm25.title("PM2.5");
     }
 
     // ── ใช้งาน ──
-    card_temp.setValue(28.5, "°C");
-    card_humi.setValue(65.0, "%");
+    card_temp.value(28.5, 50.0);
+    card_humi.value(65.0, 100.0);
 
 ── CWC RULES สรุป ─────────────────────────────────────────────────────────────
 
@@ -566,7 +799,508 @@ class MyWidget : public GRect {
   ✅ public method ทุกตัวเรียก create() บรรทัดแรกเสมอ
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  SECTION 4d — API HALLUCINATION PREVENTION  ⚠️ CRITICAL
+  SECTION 4c-2 — CWC FILE FORMAT, NAMING CONVENTION & CWC STORE STANDARD
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+── CWC FILE RULE ────────────────────────────────────────────────────────────────
+
+  ✅ CWC ทุกตัวต้องแยกเป็น .h ไฟล์ของตัวเอง  (ห้าม define ไว้ใน main.cpp)
+  ✅ วางไฟล์ไว้ใน folder เดียวกับ main.cpp (src/)
+  ✅ ใน main.cpp ให้ #include "CWC_Name.h" หลัง #include <BlynkGOv5.h>
+
+  โครงสร้าง include ใน main.cpp:
+    #include <BlynkGOv5.h>
+    #include "CWC_SensorCard.h"
+    #include "CWC_GGaugeGRAFANA.h"
+    #include "CWC_StockCard.h"
+
+── CWC NAMING CONVENTION ────────────────────────────────────────────────────────
+
+  FILE  :  CWC_<ClassName>.h    ← prefix CWC_ เสมอ  (รู้ทันทีว่าเป็น CWC)
+  CLASS :  <ClassName>          ← ไม่มี prefix, PascalCase, สื่อความหมาย
+
+  ✅  CWC_SensorCard.h     → class SensorCard
+  ✅  CWC_GGaugeGRAFANA.h  → class GGaugeGRAFANA
+  ✅  CWC_StockCard.h      → class StockCard
+  ✅  CWC_DonutChart.h     → class DonutChart
+  ❌  SensorCard.h         ← ไม่รู้ว่าเป็น CWC หรือ helper
+  ❌  CWCSensorCard.h      ← ไม่มี underscore อ่านยาก
+  ❌  class CWCSensorCard  ← ห้าม prefix ใน class name
+
+── CWC STORE HEADER TEMPLATE ────────────────────────────────────────────────────
+
+  ทุก CWC_xxxxx.h ต้องขึ้นต้นด้วย block comment นี้เสมอ:
+
+  // ════════════════════════════════════════════════════════════════════
+  // CWC: <ClassName>
+  // File: CWC_<ClassName>.h
+  // Base: <BaseClass>   (GRect / GScale / GChart / GArc / ...)
+  // Version: 1.0
+  // ────────────────────────────────────────────────────────────────────
+  // DESCRIPTION:
+  //   <อธิบาย 1-2 บรรทัด ว่า CWC นี้แสดงผลอะไร ใช้ทำอะไร>
+  //
+  // INTERNAL GRID LAYOUT:
+  //
+  //   ┌──────────┬───────────────┬──────────────┐
+  //   │ [icon]   │ [title]       │ [value unit] │  ← row 0  GRID_FR(1)
+  //   ├──────────┴───────────────┴──────────────┤
+  //   │ [bar  ──────── span 3 ────────────────] │  ← row 1  4px
+  //   └─────────────────────────────────────────┘
+  //     col 0: 40px   col 1: GRID_FR(1)   col 2: GRID_CONTENT
+  //
+  //   GRID_COL{ 40, GRID_FR(1), GRID_CONTENT }
+  //   GRID_ROW{ GRID_FR(1), 4 }
+  //
+  // DEPENDENCIES (รันก่อน build):
+  //   FONT :  <fontname_size>   // [fontconv] fontconv --font ... -o ...
+  //   ICON :  <iconconv cmd>    // [iconconv] iconconv iconlist.txt ...
+  //   IMAGE: -
+  //
+  // PUBLIC API:
+  //   void  title(String t)       — ตั้ง label บน card
+  //   void  value(float v)        — อัปเดตค่าแสดงผล + redraw
+  //   void  unit(String u)        — ตั้ง unit text
+  //   void  icon(String symbol)   — เปลี่ยน icon (Material Symbol codepoint)
+  //   void  accent(color_t c)     — เปลี่ยนสี accent (icon + bar)
+  //
+  // USAGE EXAMPLE:
+  //
+  //   // ── src/main.cpp ─────────────────────────────────
+  //   #include <BlynkGOv5.h>
+  //   #include "CWC_<ClassName>.h"
+  //
+  //   // ── Global declarations ──────────────────────────
+  //   GRect rect_cards;
+  //     <ClassName> card_a(rect_cards);
+  //     <ClassName> card_b(rect_cards);
+  //
+  //   // ── setup() ──────────────────────────────────────
+  //   void setup() {
+  //     BlynkGO.begin();
+  //
+  //     rect_cards.GRID_CELL( GRID_COL{ GRID_FR(1), GRID_FR(1) },
+  //                           GRID_ROW{ GRID_FR(1) } );
+  //     rect_cards.padding(12);
+  //
+  //       card_a.grid_cell(0, 0);
+  //       card_a.title("Temperature");
+  //       card_a.unit("°C");
+  //       card_a.accent(TFT_COLOR_HEX(0xFF6B6B));
+  //       card_a.value(28.5f);
+  //
+  //       card_b.grid_cell(1, 0);
+  //       card_b.title("Humidity");
+  //       card_b.unit("%");
+  //       card_b.value(65.0f);
+  //   }
+  //
+  //   void loop() { BlynkGO.update(); }
+  // ════════════════════════════════════════════════════════════════════
+
+  #pragma once
+  #include <BlynkGOv5.h>
+
+  class <ClassName> : public <BaseClass> {
+    // ... CWC body (ตาม LAZY CREATION PATTERN, Section 4b PART 2) ...
+  };
+
+── GRID LAYOUT DIAGRAM RULE ─────────────────────────────────────────────────────
+
+  CWC ทุกตัวที่มี internal GRID ต้องมี ASCII diagram ใน header comment เสมอ
+  เพื่อให้ AI และ User เข้าใจ layout ก่อนอ่าน code
+
+  กฎของ diagram:
+    ✅ แสดง col/row ทุกช่อง พร้อมชื่อ content ใน [ ]
+    ✅ บอก row size ที่ขอบขวา (GRID_FR(1) / px / GRID_CONTENT)
+    ✅ บอก col size ด้านล่าง diagram
+    ✅ แสดง GRID_COL{...} และ GRID_ROW{...} spec ตามหลัง diagram
+    ✅ ถ้ามี span ให้เขียน "span N" หรือเส้น ─── ใน cell นั้น
+
+  ตัวอย่าง diagram รูปแบบต่างๆ:
+
+  // simple 2-col:
+  //   ┌────────────┬────────────────────┐
+  //   │ [icon]     │ [title / value]    │  ← row 0  GRID_FR(1)
+  //   └────────────┴────────────────────┘
+  //     col 0: 48px   col 1: GRID_FR(1)
+
+  // 3-col + bar:
+  //   ┌──────────┬───────────────┬──────────────┐
+  //   │ [icon]   │ [title]       │ [value unit] │  ← row 0  GRID_FR(1)
+  //   ├──────────┴───────────────┴──────────────┤
+  //   │ [bar  ──────── span 3 ────────────────] │  ← row 1  4px
+  //   └─────────────────────────────────────────┘
+  //     col 0: 40px   col 1: GRID_FR(1)   col 2: GRID_CONTENT
+
+  // title row + content row:
+  //   ┌─────────────────────────────────────────┐
+  //   │ [title ─────────────── span 3 ────────] │  ← row 0  GRID_CONTENT
+  //   ├──────────┬───────────────┬──────────────┤
+  //   │ [icon]   │ [value]       │ [unit]       │  ← row 1  GRID_FR(1)
+  //   ├──────────┴───────────────┴──────────────┤
+  //   │ [bar  ──────── span 3 ────────────────] │  ← row 2  4px
+  //   └─────────────────────────────────────────┘
+  //     col 0: 40px   col 1: GRID_FR(1)   col 2: GRID_CONTENT
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECTION 4d — SOFTDRAW: วาด text/shape โดยไม่สร้าง widget เพิ่ม
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+── แนวคิด ──────────────────────────────────────────────────────────────────────
+
+  ใน CWC (หรือ widget ปกติ) สามารถวาด text / shape เพิ่มบนหน้า widget ได้โดยตรง
+  ผ่าน draw callback โดยไม่ต้องสร้าง GLabel / GLine ฯลฯ เป็น member เพิ่ม
+  → ประหยัด RAM และ widget object count ในกรณีที่ text เปลี่ยนตาม state เอง
+
+  ใช้ได้ทั้งกับ widget ปกติ (setup()) และใน CWC::create()
+
+── draw callback ที่ใช้ได้ ─────────────────────────────────────────────────────
+
+  widget.onDrawMain(GWIDGET_CB { ... });
+    → เรียกตอน BlynkGO กำลัง draw ส่วน GPART_MAIN ของ widget
+    → วาดทับ bg/border ของ widget ได้เลย ยังไม่มี child อยู่ด้านบน
+
+  widget.onDrawMainEnd(GWIDGET_CB { ... });
+    → เรียกหลัง GPART_MAIN draw เสร็จ
+    → ปลอดภัยกว่าสำหรับ text บน widget เพราะ child widget ยังไม่ render ทับ
+    → แนะนำใช้กรณี draw label บน top-level widget
+
+  widget.hookDrawTask(true);
+  widget.onDrawTask(GWIDGET_CB { ... });
+    → เรียกทุก GPART ที่ widget มี (KNOB, INDICATOR, MAIN ฯลฯ)
+    → ใช้เมื่อต้องการ intercept การ draw ใน GPART เฉพาะ
+    → ต้องเรียก hookDrawTask(true) ก่อน onDrawTask เสมอ
+    → ใช้ DRAW_PART (macro) เพื่อเช็คว่า BlynkGO กำลัง draw GPART ไหน:
+        if (DRAW_PART == DRAW_PART_KNOB) { ... }
+        if (DRAW_PART == DRAW_PART_INDICATOR) { ... }
+        if (DRAW_PART == DRAW_PART_MAIN) { ... }
+
+  ⚠️  DRAW_PART, DRAW_AREA, DRAW_LAYER เป็น macro ที่ใช้ได้เฉพาะใน GWIDGET_CB
+      ของ onDrawTask / onDrawMain / onDrawMainEnd เท่านั้น
+
+── วิธีที่ 1: softdrawLabel() — shorthand สำหรับ text ────────────────────────
+
+  ง่ายที่สุด ใช้ได้ใน onDrawMain / onDrawMainEnd
+  วาด text บน widget โดยตรง ไม่ต้องสร้าง draw_label_dsc_t เอง
+
+  // แบบ full options:
+  widget.softdrawLabel(text, font, color, align, ofs_x, ofs_y);
+
+  // แบบ shorthand (font/color default):
+  widget.softdrawLabel(text, align, ofs_x, ofs_y);
+  widget.softdrawLabel(text, color, align, ofs_x, ofs_y);
+
+  ตัวอย่าง — วาดตัวเลขกลาง card โดยไม่ใช้ GLabel:
+
+    class ValueCard : public GRect {
+      public:
+        ValueCard(GPARENT) : GRect(parent) {}
+        void create() {
+          if (GRect::isCreated()) return;
+          GRect::create();
+          GRect::bg_color(TFT_COLOR_HEX(0x1E1E1E));
+          GRect::radius(12);
+          GRect::height(80);
+          GRect::onDrawMainEnd(GWIDGET_CB {
+            ValueCard* c = (ValueCard*) widget;
+            c->softdrawLabel(StringX::printf("%.1f", c->_val),
+                             BebasNeueBold_num_45, TFT_WHITE,
+                             ALIGN_CENTER, 0, 0);
+            c->softdrawLabel(c->_unit,
+                             prasanmit_20, TFT_COLOR_HEX(0x9CA3AF),
+                             ALIGN_BOTTOM_MID, 0, -6);
+          });
+        }
+        void value(float v) { create(); _val = v; GRect::invalidate(); }
+        void unit(const char* u) { create(); _unit = u; GRect::invalidate(); }
+      private:
+        float  _val  = 0.0f;
+        String _unit = "";
+    };
+
+  ⚠️  ต้องเรียก widget.invalidate() ทุกครั้งที่ข้อมูลเปลี่ยน
+      เพื่อให้ BlynkGO trigger draw callback ใหม่
+
+── วิธีที่ 2: draw_label_dsc_t + draw_label() — full control ───────────────────
+
+  ใช้เมื่อต้องการควบคุม position ละเอียด เช่น จัด align ตาม area อื่น
+  หรือต้องการ draw ใน layer แยก (draw_layer_create)
+
+  ขั้นตอน:
+    ① สร้าง draw_label_dsc_t และ init
+    ② ตั้งค่า font, text, color
+    ③ คำนวณ area ด้วย text_get_area()
+    ④ จัด position ด้วย area_align()
+    ⑤ วาดด้วย draw_label()
+
+  ตัวอย่าง — ใน onDrawMainEnd บน GRect CWC:
+
+    GRect::onDrawMainEnd(GWIDGET_CB {
+      MyCard* c = (MyCard*) widget;
+      draw_label_dsc_t label_dsc;
+      area_t           label_area;
+      draw_label_dsc_init(&label_dsc);
+
+      // ── วาด title ──
+      label_dsc.font  = &prasanmit_20;
+      label_dsc.color = TFT_COLOR(TFT_COLOR_HEX(0x9CA3AF));
+      label_dsc.text  = c->_title.c_str();
+      text_get_area(&label_area, &label_dsc);
+      area_align(DRAW_AREA, &label_area, ALIGN_TOP_LEFT, 12, 10);
+      draw_label(DRAW_LAYER, &label_dsc, &label_area);
+
+      // ── วาด value ──
+      static String txt;
+      txt = StringX::printf("%.1f", c->_val);
+      label_dsc.font  = &BebasNeueBold_num_45;
+      label_dsc.color = TFT_COLOR(TFT_WHITE);
+      label_dsc.text  = txt.c_str();
+      text_get_area(&label_area, &label_dsc);
+      area_align(DRAW_AREA, &label_area, ALIGN_BOTTOM_RIGHT, -12, -8);
+      draw_label(DRAW_LAYER, &label_dsc, &label_area);
+    });
+
+  helper functions:
+    text_get_area(&area, &label_dsc)              ← คำนวณ bounding box ของ text
+    text_get_area(&area, text, font)              ← overload แบบระบุ text+font ตรงๆ
+    area_align(ref_area, &label_area, align, ox, oy) ← จัด label_area ให้ตรง ref
+    area_align(DRAW_AREA, &label_area, align)     ← จัด relative to widget area
+    draw_label(DRAW_LAYER, &label_dsc, &area)     ← วาดลง layer จริง
+
+── วิธีที่ 3: onDrawTask — intercept GPART เฉพาะ ────────────────────────────
+
+  ใช้เมื่อต้องการ overlay text บน GPART ที่ไม่ใช่ MAIN
+  เช่น text บน KNOB ของ GSwitch, text บน INDICATOR ของ GBar
+
+  ตัวอย่าง — วาด icon บน KNOB และ text บน INDICATOR ของ GSwitch:
+
+    class MySwitch : public GSwitch {
+      public:
+        MySwitch(GPARENT) : GSwitch(parent) {}
+        void create() {
+          if (GSwitch::isCreated()) return;
+          GSwitch::create();
+          GSwitch::size(90, 40);
+          GSwitch::hookDrawTask(true);          // ① เปิด hook ก่อน
+          GSwitch::onDrawTask(GWIDGET_CB {      // ② register callback
+            MySwitch* sw = (MySwitch*) widget;
+            draw_label_dsc_t label_dsc;
+            area_t           label_area;
+            draw_label_dsc_init(&label_dsc);
+
+            if (DRAW_PART == DRAW_PART_KNOB) {
+              label_dsc.font  = &Material_Icon_30;
+              label_dsc.color = TFT_COLOR(TFT_WHITE);
+              label_dsc.text  = SYMBOL_POWER;
+              text_get_area(&label_area, &label_dsc);
+              area_align(DRAW_AREA, &label_area, ALIGN_CENTER, 0, 0);
+              draw_label(DRAW_LAYER, &label_dsc, &label_area);
+            }
+            else if (DRAW_PART == DRAW_PART_INDICATOR && sw->isON()) {
+              label_dsc.font  = &prasanmit_20;
+              label_dsc.color = TFT_COLOR(TFT_BLACK);
+              label_dsc.text  = "ON";
+              text_get_area(&label_area, &label_dsc);
+              area_align(DRAW_AREA, &label_area, ALIGN_LEFT_MID, 10, 0);
+              draw_label(DRAW_LAYER, &label_dsc, &label_area);
+            }
+          });
+        }
+    };
+
+── เลือกใช้วิธีไหน ──────────────────────────────────────────────────────────────
+
+  ┌──────────────────────────────────┬───────────────────────────────────────────┐
+  │ สถานการณ์                        │ วิธีที่แนะนำ                              │
+  ├──────────────────────────────────┼───────────────────────────────────────────┤
+  │ text/icon ตำแหน่งง่าย            │ softdrawLabel() ใน onDrawMain/End         │
+  │ text หลายชิ้น position ละเอียด   │ draw_label_dsc_t + draw_label()           │
+  │ text บน GPART เฉพาะ (KNOB/INDIC) │ hookDrawTask + onDrawTask                 │
+  │ ต้องการ GLabel จริง (interact,   │ GLabel เป็น member ตามปกติ                │
+  │ onClicked, สี dynamic ซับซ้อน)   │                                            │
+  └──────────────────────────────────┴───────────────────────────────────────────┘
+
+── กฎที่ต้องทำตาม ───────────────────────────────────────────────────────────────
+
+  ✅ เมื่อ text เปลี่ยนตาม state → เรียก widget.invalidate() ทุกครั้ง
+  ✅ hookDrawTask(true) ต้องเรียกก่อน onDrawTask เสมอ
+  ✅ DRAW_PART, DRAW_AREA, DRAW_LAYER ใช้ได้เฉพาะใน GWIDGET_CB ของ draw callback
+  ✅ draw_label_dsc_t.text ต้องเป็น const char* ที่ยังมีชีวิตอยู่ขณะ draw
+     → ใช้ static String หรือ member String เก็บข้อความก่อน .c_str()
+     → ห้ามส่ง .c_str() ของ local String ที่จะถูก destroy ก่อน draw
+  ❌ ห้ามสร้าง GLabel เพิ่มถ้า text เป็นแค่ static label หรือ value ที่ invalidate ได้
+  ❌ ห้ามลืม invalidate() — ถ้าไม่ call, draw callback จะไม่ถูก trigger
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECTION 4e — BASELINE ALIGNMENT (จัด GLabel ต่างขนาด/ต่าง font บน baseline เดียวกัน)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+── ปัญหา ───────────────────────────────────────────────────────────────────────
+
+  เมื่อวาง GLabel หลายตัวที่ใช้ font ต่างขนาด/ต่างชุดเรียงแนวนอน
+  และใช้ GRID_ALIGN_CENTER หรือ align_center บน row/cell เดียวกัน
+  ตัวอักษรจะไม่เรียงบน baseline เดียวกัน เพราะ:
+    - GRID_ALIGN_CENTER จัด "กึ่งกลางของ font box" ให้ตรงกัน
+    - แต่ baseline (เส้นฐานตัวอักษร) ของแต่ละ font อยู่ในตำแหน่งต่างกัน
+      สัมพัทธ์กับกึ่งกลาง font box
+
+  ผลที่เห็น: ตัวเลขใหญ่กับหน่วยเล็กลอยสูงต่ำไม่เรียงกัน น่าเกลียด
+
+── หลักการคำนวณ offset ──────────────────────────────────────────────────────────
+
+  ระยะจากกึ่งกลาง font box ลงมาถึง baseline (dist_below_center) ของ font ใดๆ:
+    dist = (line_height - base_line) - line_height / 2
+
+  เมื่อทั้งสอง label ใช้ GRID_ALIGN_CENTER บน cell เดียวกัน:
+    กึ่งกลาง font box ของทั้งคู่ตรงกัน
+    แต่ baseline ต่างกันเท่ากับ:
+      bl_offset = dist_A - dist_B
+
+  → ใส่ bl_offset นี้เป็น offset_y ของ label B ใน grid_cell()
+    เพื่อดัน label B ให้ baseline ตรงกับ label A
+
+── struct font_t ที่ใช้คำนวณ ────────────────────────────────────────────────────
+
+  const font_t* f = lb.font();   // ดึง font pointer จาก GLabel
+  f->line_height   // ความสูง bounding box ทั้งบรรทัด (px)
+  f->base_line     // ระยะจาก baseline ขึ้นไปถึง bottom ของ bounding box (px)
+
+── ตัวอย่าง — GRID cell เรียงแนวนอน ────────────────────────────────────────────
+
+  สถานการณ์: lb_value ใช้ BebasNeueBold_num_45, lb_unit ใช้ prasanmit_25
+  วางใน GRID col เคียงกัน ต้องการให้ baseline ตรงกัน
+
+  // ① วาง lb_value ก่อน ใช้ GRID_ALIGN_CENTER เป็น anchor
+  lb_value.grid_cell(2, 0, GRID_ALIGN_END, GRID_ALIGN_CENTER);
+
+  // ② คำนวณ offset ของ lb_unit ให้ baseline ตรงกับ lb_value
+  {
+    const font_t* fv = lb_value.font();
+    const font_t* fu = lb_unit.font();
+    // dist_below_center = (line_height - base_line) - line_height/2
+    int32_t dist_v  = (fv->line_height - fv->base_line) - fv->line_height / 2;
+    int32_t dist_u  = (fu->line_height - fu->base_line) - fu->line_height / 2;
+    int32_t bl_offset = dist_v - dist_u;   // ค่าบวก = ดัน lb_unit ลง, ลบ = ดันขึ้น
+    lb_unit.grid_cell(3, 0, GRID_ALIGN_START, GRID_ALIGN_CENTER, 4, bl_offset);
+  }
+
+  // หมายเหตุ: bl_offset คำนวณได้ล่วงหน้าแล้วใส่ตัวเลขตรงๆ ก็ได้
+  //   เช่น BebasNeueBold_num_45 vs prasanmit_25 → bl_offset ≈ +9
+
+── ตัวอย่าง — align() เรียงแนวนอน (ไม่ใช้ GRID) ───────────────────────────────
+
+  สถานการณ์: lb_big ใช้ font ขนาดใหญ่ เป็น anchor
+             lb_small ใช้ font ขนาดเล็ก วางขวา lb_big ให้ baseline ตรงกัน
+
+  lb_big.align_center();
+
+  {
+    const font_t* fb = lb_big.font();
+    const font_t* fs = lb_small.font();
+    int32_t dist_b  = (fb->line_height - fb->base_line) - fb->line_height / 2;
+    int32_t dist_s  = (fs->line_height - fs->base_line) - fs->line_height / 2;
+    int32_t bl_offset = dist_b - dist_s;
+    // ALIGN_OUT_RIGHT_MID → กึ่งกลาง Y ตรงกัน, แล้ว shift ด้วย bl_offset
+    lb_small.align(lb_big, ALIGN_OUT_RIGHT_MID, 4, bl_offset);
+  }
+
+── cap-top alignment — ด้านบนตัวอักษรตรงกัน ──────────────────────────────────────
+
+  ใช้เมื่อต้องการให้ยอดด้านบนของตัวอักษร (cap-top / ascender) ตรงกัน
+  แทนที่จะจัด baseline ให้ตรงกัน
+
+  field ที่ใช้: f->cap_height
+    = ระยะจาก baseline ขึ้นไปถึงยอดด้านบนของตัวพิมพ์ใหญ่ (เช่น A, H, T)
+    (คล้าย base_line แต่ชี้ขึ้น)
+
+  สูตร dist_above_center ของ font ใดๆ:
+    dist = f->cap_height - f->line_height / 2
+    (ค่าบวก = cap-top อยู่เหนือกึ่งกลาง font box)
+
+  เมื่อทั้งสอง label ใช้ GRID_ALIGN_CENTER บน cell เดียวกัน:
+    cap_offset = dist_A - dist_B
+    → ใส่ -cap_offset เป็น offset_y ของ label B
+      (ค่าลบ = ดัน B ขึ้น ให้ cap-top ตรงกับ A)
+
+  ตัวอย่าง — GRID cell เรียงแนวนอน ต้องการให้ cap-top ตรงกัน:
+
+    lb_value.grid_cell(2, 0, GRID_ALIGN_END, GRID_ALIGN_CENTER);
+
+    {
+      // Cap-top alignment:
+      // dist_above_center = cap_height - line_height/2
+      // cap_offset = dist_value - dist_unit
+      // → ใส่ -cap_offset เป็น offset_y ของ lb_unit
+      //   ค่าลบ = ดัน lb_unit ขึ้น ให้ cap-top ตรงกับ lb_value
+      const font_t* fv = lb_value.font();
+      const font_t* fu = lb_unit.font();
+      int32_t dist_v   = fv->cap_height - fv->line_height / 2;
+      int32_t dist_u   = fu->cap_height - fu->line_height / 2;
+      int32_t cap_offset = dist_v - dist_u;
+      lb_unit.grid_cell(3, 0, GRID_ALIGN_START, GRID_ALIGN_CENTER, 4, -cap_offset);
+    }
+
+  ตัวอย่าง — align() ไม่ใช้ GRID ต้องการให้ cap-top ตรงกัน:
+
+    lb_big.align_center();
+    {
+      const font_t* fb = lb_big.font();
+      const font_t* fs = lb_small.font();
+      int32_t dist_b   = fb->cap_height - fb->line_height / 2;
+      int32_t dist_s   = fs->cap_height - fs->line_height / 2;
+      int32_t cap_offset = dist_b - dist_s;
+      lb_small.align(lb_big, ALIGN_OUT_RIGHT_TOP, 4, -cap_offset);
+    }
+
+  ⚠️  สรุปความต่าง baseline vs cap-top:
+    ┌─────────────────┬──────────────────────────────────────────────┬──────────────┐
+    │ เป้าหมาย        │ สูตร dist                                    │ offset_y     │
+    ├─────────────────┼──────────────────────────────────────────────┼──────────────┤
+    │ baseline ตรงกัน │ (line_height - base_line) - line_height/2    │ +bl_offset   │
+    │ cap-top ตรงกัน  │ cap_height - line_height/2                   │ -cap_offset  │
+    └─────────────────┴──────────────────────────────────────────────┴──────────────┘
+    ทั้งคู่ใช้สูตรเดียวกัน: offset = dist_A - dist_B
+    ต่างกันที่ field และเครื่องหมาย offset_y ที่ใส่ใน grid_cell() / align()
+
+── กฎที่ต้องทำตาม ───────────────────────────────────────────────────────────────
+
+  ✅ เมื่อวาง GLabel ต่าง font เรียงแนวนอน (ค่า + หน่วย, ตัวเลข + label ฯลฯ)
+     และต้องการให้ baseline ตรงกัน → ต้องคำนวณ bl_offset ทุกครั้ง
+  ✅ เมื่อต้องการให้ cap-top ตรงกัน → ใช้สูตร cap_offset แทน
+  ✅ ใช้สูตร dist = (line_height - base_line) - line_height/2  สำหรับ baseline
+  ✅ ใช้สูตร dist = cap_height - line_height/2                  สำหรับ cap-top
+  ✅ เปิด block {} กันตัวแปร dist ไม่ให้รั่วออกมา
+  ✅ ใส่ comment อธิบายสูตรไว้ด้วย เพื่อให้อ่านแล้วเข้าใจได้ทันที
+  ✅ ใช้ได้ทั้งใน setup() ปกติ และใน CWC::create()
+  ❌ ห้ามใช้ magic offset ตัวเลขลอยๆ โดยไม่มี comment อธิบาย
+  ❌ ห้ามวาง label ต่าง font แนวนอนด้วย GRID_ALIGN_CENTER ล้วนๆ โดยไม่คำนวณ offset
+     — baseline และ cap-top จะไม่ตรงกันแน่นอน
+
+── ตัวอย่าง CWC สมบูรณ์ (StatusCard — value + unit) ────────────────────────────
+
+  // ใน CWC::create() หลังตั้งค่า lb_value และ lb_unit ครบแล้ว:
+
+    lb_value.font(BebasNeueBold_num_45, TFT_WHITE);
+    lb_value.grid_cell(2, 0, GRID_ALIGN_END, GRID_ALIGN_CENTER);
+
+    lb_unit.font(prasanmit_25, TFT_COLOR_HEX(0xD1D5DB));
+    {
+      // Baseline alignment:
+      // GRID_ALIGN_CENTER จัดกึ่งกลาง font box ตรงกลาง cell
+      // dist_below_center = (line_height - base_line) - line_height/2
+      // bl_offset = dist_value - dist_unit
+      //   → ค่าบวก = ดัน lb_unit ลงมา ให้ baseline ตรงกับ lb_value
+      const font_t* fv = lb_value.font();
+      const font_t* fu = lb_unit.font();
+      int32_t dist_v  = (fv->line_height - fv->base_line) - fv->line_height / 2;
+      int32_t dist_u  = (fu->line_height - fu->base_line) - fu->line_height / 2;
+      int32_t bl_offset = dist_v - dist_u;
+      lb_unit.grid_cell(3, 0, GRID_ALIGN_START, GRID_ALIGN_CENTER, 4, bl_offset);
+    }
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECTION 4f — API HALLUCINATION PREVENTION  ⚠️ CRITICAL
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ── SOURCE OF TRUTH — ลำดับความน่าเชื่อถือ ────────────────────────────────────
@@ -850,6 +1584,16 @@ CODE STYLE — INDENTATION:
   [ ] CWC ทุกตัวใช้ LAZY CREATION PATTERN (constructor รับ parent เท่านั้น, create() มี guard)
   [ ] public method ของ CWC เรียก create() บรรทัดแรกเสมอ
   [ ] ชื่อ CWC สื่อความหมาย (SensorCard, StatBox, NavButton ฯลฯ)
+  [ ] CWC ทุกตัวแยกเป็นไฟล์ CWC_<ClassName>.h — ห้าม define ไว้ใน main.cpp
+  [ ] ชื่อไฟล์ขึ้นต้น CWC_ เสมอ, ชื่อ class ไม่มี prefix
+  [ ] CWC_xxxxx.h ทุกไฟล์มี Store Header Block (DESCRIPTION / INTERNAL GRID LAYOUT / PUBLIC API / USAGE EXAMPLE)
+  [ ] INTERNAL GRID LAYOUT ใน header มี ASCII diagram + GRID_COL/GRID_ROW spec ครบ
+  [ ] Card-style CWC ใช้ GRID_CELL เป็น internal layout หลัก ไม่ใช่ align() absolute
+  [ ] Card-style CWC — bar (ถ้ามี) วางเป็น row ล่างสุด span ทุก col ด้วย GRID_ALIGN_STRETCH
+  [ ] text ที่ไม่ต้องการ interaction → พิจารณาใช้ softdrawLabel() / draw_label() แทน GLabel
+  [ ] softdraw text เปลี่ยนค่า → เรียก invalidate() ทุกครั้งหลังอัปเดต state
+  [ ] hookDrawTask(true) ต้องเรียกก่อน onDrawTask เสมอ
+  [ ] draw_label_dsc_t.text ต้องชี้ไปยัง const char* ที่ยังมีชีวิตอยู่ขณะ draw (ใช้ static String)
   [ ] ไม่กำหนด size ให้ GRect โดยไม่จำเป็น — default PCT(100) อยู่แล้ว
   [ ] ไม่ระบุ GRID_ALIGN_STRETCH ใน grid_cell() ของ GRect — เป็น default อยู่แล้ว
   [ ] ไม่ใช้ position(0,0) เพื่อ reset ตำแหน่ง — default ทุก widget คือ ALIGN_CENTER
@@ -858,6 +1602,9 @@ CODE STYLE — INDENTATION:
   [ ] CWC ที่ใช้ onSizeChanged → เรียก refresh_layout() ครั้งแรกก่อน register เสมอ
   [ ] refresh_layout() ห้ามอ่าน GRect::height()/width() โดยตรง — ใช้ _targetH/_targetW แทน
   [ ] _targetH/_targetW รับค่าจาก new_size ใน onSizeChanged, fallback เป็น GScreen.height()/width()
+  [ ] GLabel ต่าง font เรียงแนวนอน → คำนวณ bl_offset (baseline) หรือ cap_offset (cap-top) ด้วยสูตร Section 4e
+  [ ] ห้ามใช้ GRID_ALIGN_CENTER ล้วนๆ กับ label ต่าง font แนวนอน — baseline/cap-top จะไม่ตรงกัน
+  [ ] ห้ามใส่ magic offset ตัวเลขลอยๆ โดยไม่มี comment อธิบายสูตร bl_offset / cap_offset
 
 ================================================================================
   END OF SYSTEM PROMPT

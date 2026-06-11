@@ -1,0 +1,11 @@
+wb_sunny            E430
+bolt                EA0B
+battery_charging    E1A3
+water_drop          E798
+thermostat          F076
+water               F084
+wind_power          EC0C
+ev_station          E56D
+solar_power         EC0F
+home                E88A
+settings            E8B8   
