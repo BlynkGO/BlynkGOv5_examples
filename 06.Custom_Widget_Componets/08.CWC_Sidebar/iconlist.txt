@@ -1,0 +1,5 @@
+dashboard      E871
+thermostat     E846
+air            EFD8
+water_drop     E798
+settings       E8B8
