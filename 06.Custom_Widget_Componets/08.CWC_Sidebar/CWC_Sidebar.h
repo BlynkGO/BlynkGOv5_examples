@@ -183,6 +183,8 @@ class Sidebar : public GRect {
     void expand(uint32_t delay_ms = 0) {
       create();
       _expanded = true;
+      this->top(true);
+      this->toForeground();
 
       btn_hamburger.parent(this);
       btn_hamburger.top(true);
@@ -217,7 +219,9 @@ class Sidebar : public GRect {
     void collapse(uint32_t delay_ms = 0) {
       create();
       _expanded = false;
-
+      this->top(true);
+      this->toForeground();
+      
       _anim.del();   // ยกเลิก countdown ที่ค้างอยู่ (ถ้ามี)
 
       // slide ซ่อนไปซ้าย
