@@ -18,7 +18,7 @@
 //   iconconv iconlist.txt --size 28 --name nav_icons
 //   → สร้าง nav_icons_28.c และ nav_icons_List.h ใน src/
 //
-// [FONT]  prasanmit_15 — มีใน BlynkGO library ใช้ได้เลย
+// [FONT]  prasanmit_15, prasanmit_30 — มีใน BlynkGO library ใช้ได้เลย
 // [IMAGE] — ไม่มี
 //
 // ════════════════════════════════════════════════════════════════════
@@ -45,9 +45,16 @@ FONT_DECLARE(prasanmit_30);
 //                ลอยบนสุด กดได้เสมอแม้ Sidebar หายไป
 //                กดแล้ว Sidebar slide กลับออกมา
 //
+//   Auto-collapse:
+//   - หลัง expand() → slide ออก 300ms แล้วรอ _auto_ms → collapse()
+//   - กดเมนูใดๆ → collapse() ทันที ไม่รอ
+//   - กด hamburger → collapse() ทันที ไม่รอ
+//   - _auto_ms = 0 → disable auto-collapse
+//
 // PUBLIC API:
 //   void addItem(const char* symbol, const char* label)
 //   void    title(String t)
+//   void    auto_collapse_time(uint32_t ms)   // 0 = disable
 //   int32_t selected_id()
 //   String  selected_text()
 //   int     item_count()
@@ -64,6 +71,8 @@ FONT_DECLARE(prasanmit_30);
 //
 //   void setup() {
 //     BlynkGO.begin();
+//
+//     sidebar.auto_collapse_time(3000);   // optional, default = 3000ms
 //
 //     sidebar.addItem(SYMBOL_DASHBOARD,  "Dashboard");
 //     sidebar.addItem(SYMBOL_THERMOSTAT, "Temp");
@@ -98,8 +107,8 @@ class Sidebar : public GRect {
       GRect::shadow(0);
       GRect::layout(LAYOUT_COL_M, 8, 0, 8, 8, 4);
       GRect::align(ALIGN_LEFT);
-      GRect::scrollbar(SCROLLBAR_AUTO, false, true);  // มี scrollbar เฉพาะแนวตั้ง แบบ AUTO
-      GRect::top(true);   // ← Sidebar ลอยบนสุด ทับ content เสมอ
+      GRect::scrollbar(SCROLLBAR_AUTO, false, true);
+      GRect::top(true);
 
       // ── Logo ────────────────────────────────────────────────────
       lb_logo.parent(this);
@@ -109,10 +118,8 @@ class Sidebar : public GRect {
       lb_logo.translate_x(-10);
 
       // ── Hamburger button ────────────────────────────────────────
-      // เริ่มต้น parent=this + ignore_layout → วางตำแหน่งเองบน Sidebar
-      // เมื่อ collapse → ย้าย parent=parent ของ sidebar + top(true)
       btn_hamburger.parent(this);
-      btn_hamburger.ignore_layout(true);   // ไม่ถูกจัดโดย LAYOUT_COL_M
+      btn_hamburger.ignore_layout(true);
       btn_hamburger.radius(8);
       btn_hamburger.shadow(0);
       btn_hamburger.border(0);
@@ -122,7 +129,7 @@ class Sidebar : public GRect {
       btn_hamburger.text("");
       btn_hamburger.padding(5,5,5,5,0);
       btn_hamburger.bg_opa(0);
-      btn_hamburger.align(ALIGN_TOP_RIGHT,  GRect::padding_right() -5, - GRect::padding_top()+5);  // มุมบนขวาของ Sidebar
+      btn_hamburger.align(ALIGN_TOP_RIGHT, GRect::padding_right()-5, -GRect::padding_top()+5);
       btn_hamburger.floating(true);
 
       btn_hamburger.onClicked(GWIDGET_CB {
@@ -151,12 +158,15 @@ class Sidebar : public GRect {
 
       b->onClicked(GWIDGET_CB {
         Sidebar* _sb = (Sidebar*) widget->parent();
+
         for (int j = 0; j < (int)_sb->btn.size(); j++) {
           if (_sb->btn[j] == (GButton*)widget) {
             _sb->_selected_id = j;
             break;
           }
         }
+
+        _sb->collapse(0);
         _sb->event_send(EVENT_VALUE_CHANGED);
       });
 
@@ -164,51 +174,81 @@ class Sidebar : public GRect {
     }
 
     // ── toggle / expand / collapse ────────────────────────────────
-    void toggle() {
+    void toggle(uint32_t delay_ms = 0) {
       create();
-      if (_expanded) collapse();
-      else           expand();
+      if (_expanded) collapse(delay_ms);
+      else           expand(delay_ms);
     }
 
-    void expand() {
+    void expand(uint32_t delay_ms = 0) {
       create();
       _expanded = true;
 
-      // ย้าย hamburger กลับมาอยู่บน Sidebar
       btn_hamburger.parent(this);
-      btn_hamburger.top(true);        // ลอยบนสุดบน 
+      btn_hamburger.top(true);
       btn_hamburger.toForeground();
       btn_hamburger.ignore_layout(true);
-      btn_hamburger.align(ALIGN_TOP_RIGHT, GRect::padding_right() -5, - GRect::padding_top()+5);
+      btn_hamburger.align(ALIGN_TOP_RIGHT, GRect::padding_right()-5, -GRect::padding_top()+5);
 
+      // anim 1: slide ออก 300ms
+      _anim.del();
       _anim.init(*this, ANIM_X, GRect::posX(), 0, 300, ANIM_PATH_EASE_OUT);
-      _anim.start();
-    }
-
-    void collapse() {
-      create();
-      _expanded = false;
-
-      // animation เสร็จแล้วค่อยย้าย hamburger ออกมาอยู่บน GScreen
-      _anim.init(*this, ANIM_X, GRect::posX(), -GRect::width(), 300, ANIM_PATH_EASE_OUT);
+      _anim.delay(delay_ms);
       _anim.completed_cb([](GAnimation* a) {
         Sidebar* _sb = (Sidebar*) a->user_data();
-        GWidget* _parent = _sb->parent();
-        _sb->btn_hamburger.parent(_parent);
-        _sb->btn_hamburger.top(true);        // ลอยบนสุดบน 
-        _sb->btn_hamburger.toForeground();
-        _sb->btn_hamburger.ignore_layout(true);
-        _sb->btn_hamburger.align(ALIGN_TOP_LEFT, -_parent->pad_left() + 5, -_parent->pad_top());
+        if (!_sb->_expanded) return;
+        if (_sb->_auto_ms == 0) return;   // disable
+
+        // anim 2: รอ _auto_ms แล้ว collapse (สร้างใหม่หลัง slide เสร็จ)
+        _sb->_anim.del();
+        _sb->_anim.init(*_sb, ANIM_X, 0, 0, 1, ANIM_PATH_LINEAR);  // อยู่นิ่ง
+        _sb->_anim.delay(_sb->_auto_ms);
+        _sb->_anim.completed_cb([](GAnimation* a2) {
+          Sidebar* _sb = (Sidebar*) a2->user_data();
+          if (_sb->_expanded) _sb->collapse(0);
+        });
+        _sb->_anim.user_data(_sb);
+        _sb->_anim.start();
       });
       _anim.user_data(this);
       _anim.start();
     }
 
-    inline void    title(String t)    { create(); lb_logo = t; }
-    inline int32_t selected_id()      { create(); return _selected_id; }
-    inline String  selected_text()    { create(); if (_selected_id < 0 || _selected_id >= (int)btn.size()) return ""; return btn[_selected_id]->text(); }
-    inline int     item_count()       { create(); return (int)btn.size(); }
-    inline bool    is_expanded()      { return _expanded; }
+    void collapse(uint32_t delay_ms = 0) {
+      create();
+      _expanded = false;
+
+      _anim.del();   // ยกเลิก countdown ที่ค้างอยู่ (ถ้ามี)
+
+      // slide ซ่อนไปซ้าย
+      _anim.init(*this, ANIM_X, GRect::posX(), -GRect::width(), 300, ANIM_PATH_EASE_OUT);
+      _anim.delay(delay_ms);
+      _anim.completed_cb([](GAnimation* a) {
+        Sidebar* _sb = (Sidebar*) a->user_data();
+        GWidget* _parent = _sb->parent();
+        _sb->btn_hamburger.parent(_parent);
+        _sb->btn_hamburger.top(true);
+        _sb->btn_hamburger.toForeground();
+        _sb->btn_hamburger.ignore_layout(true);
+        _sb->btn_hamburger.align(ALIGN_TOP_LEFT, -_parent->pad_left()+5, -_parent->pad_top());
+      });
+      _anim.user_data(this);
+      _anim.start();
+    }
+
+    // ── setters ──────────────────────────────────────────────────
+    inline void title(String t)                  { create(); lb_logo = t; }
+    inline void auto_collapse_time(uint32_t ms)  { _auto_ms = ms; }
+
+    // ── getters ──────────────────────────────────────────────────
+    inline int32_t selected_id()   { create(); return _selected_id; }
+    inline String  selected_text() {
+      create();
+      if (_selected_id < 0 || _selected_id >= (int)btn.size()) return "";
+      return btn[_selected_id]->text();
+    }
+    inline int  item_count()  { create(); return (int)btn.size(); }
+    inline bool is_expanded() { return _expanded; }
 
   public:
     GButton               btn_hamburger;
@@ -218,6 +258,7 @@ class Sidebar : public GRect {
   private:
     int        _selected_id = -1;
     bool       _expanded    = true;
+    uint32_t   _auto_ms     = 3000;   // auto-collapse delay (ms), 0 = disable
     GAnimation _anim;
 };
 
