@@ -108,7 +108,7 @@ class GGaugeGRAFANA : public GScale {
 
       this->onSizeChanged(GWIDGET_CB {
         GGaugeGRAFANA* g = (GGaugeGRAFANA*) widget;
-        g->refresh_size();
+        if(g->event_old_size() != g->size()) g->refresh_size();
       });
 
       this->refresh_size();
