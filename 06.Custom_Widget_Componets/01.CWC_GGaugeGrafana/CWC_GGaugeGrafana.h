@@ -156,8 +156,9 @@ class GGaugeGRAFANA : public GScale {
       lb_title.align(lb_value, ALIGN_TOP,    0, 0);
       lb_unit.align( lb_value, ALIGN_BOTTOM, 0, 0);
       int8_t n = min(_ranges.size() - 1, _sect_colors.size());
+      auto _arc_v = constrain((int32_t)_value, 0, arc.max_value());
       for (int i = 1; i <= n; i++) {
-        if (_value <= _ranges[i]) { arc.color(_sect_colors[i-1]); break; }
+        if (_arc_v <= _ranges[i]) { arc.color(_sect_colors[i-1]); break; }
       }
     }
 
