@@ -1,0 +1,8 @@
+grain          E3F4
+cloud          E2BD
+thermostat     E846
+water_drop     E798
+wb_sunny       E81A
+bolt           EA0B
+notifications  E7F4
+settings       E8B8
