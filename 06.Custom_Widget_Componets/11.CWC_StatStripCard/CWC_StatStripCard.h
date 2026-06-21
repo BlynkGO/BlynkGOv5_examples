@@ -73,7 +73,7 @@ class StatStripCard : public GRect {
       lb_icon.parent(this);
       lb_icon.font(prasanmit_20, TFT_COLOR_HEX(0x8892AA));
       lb_icon.grid_cell(0, 0, GRID_ALIGN_START, GRID_ALIGN_CENTER);
-      lb_icon = "";
+      lb_icon = SYMBOL_BELL;
 
       // ── (1,0): title — same font as icon, no baseline calc needed ──
       lb_title.parent(this);
@@ -90,14 +90,13 @@ class StatStripCard : public GRect {
       lb_unit.parent(this);
       lb_unit.font(prasanmit_20, TFT_COLOR_HEX(0x8892AA));
       lb_unit.ignore_layout(true);   // free-position relative to lb_value
-
-      // bl_offset: BebasNeueBold_num_45 vs prasanmit_20
       lb_unit = "";
 
       _reflesh_layout();
 
       GRect::onSizeChanged(GWIDGET_CB{
         if(widget->event_old_size() != widget->size()){
+          Serial.println("Size Changed");
           ((StatStripCard*) widget)->_reflesh_layout();
         }
       });
@@ -114,6 +113,7 @@ class StatStripCard : public GRect {
       create();
       _value   = v;
       lb_value = String(v, dec);
+      _reflesh_layout();
     }
     inline void  operator=(float f) { value(f); }
     inline float toFloat()          { return _value; }
@@ -143,12 +143,13 @@ class StatStripCard : public GRect {
     color_t _strip_color = TFT_COLOR_HEX(0x3B82F6);
     float   _value        = 0;
     void _reflesh_layout(){
+      // bl_offset: BebasNeueBold_num_45 vs prasanmit_20
       const font_t* fv = lb_value.font();
       const font_t* fu = lb_unit.font();
       int32_t dist_v = (fv->line_height - fv->base_line) - fv->line_height / 2;
       int32_t dist_u = (fu->line_height - fu->base_line) - fu->line_height / 2;
       int32_t bl_offset = dist_v - dist_u;
-      lb_unit.align(lb_value, ALIGN_OUT_RIGHT_MID, 6, bl_offset);
+      lb_unit.align(lb_value, ALIGN_RIGHT, 6, bl_offset);
     }
 };
 
