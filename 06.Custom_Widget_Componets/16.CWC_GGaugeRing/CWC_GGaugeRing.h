@@ -201,7 +201,8 @@ class GGaugeRing : public GRect {
       _thick = t;
       scale.clearSection();
       _build_sections();
-      _refresh_dot();
+      // _refresh_dot();
+      this->dot_size(t);
     }
 
     // ── Dot style API ─────────────────────────────────────────
@@ -262,7 +263,7 @@ class GGaugeRing : public GRect {
 
       // กึ่งกลางความหนาของแถบ section บน scale ring
       // (ค่านี้ยืนยันแล้วจากการทดสอบจริงบนจอ — dot อยู่กึ่งกลางแถบสีพอดี)
-      int32_t r = scale_outer_r - (_thick / 2);
+      float r = scale_outer_r - (_thick / 2.0);
       if (r < 0) r = 0;
 
       // clamp ค่าไว้ในช่วง range ก่อนคำนวณมุม — dot จะไปสุดที่ปลาย
@@ -271,12 +272,12 @@ class GGaugeRing : public GRect {
       if (v_clamped < (float)_range_min) v_clamped = (float)_range_min;
       if (v_clamped > (float)_range_max) v_clamped = (float)_range_max;
 
-      int32_t angle_deg = map((int32_t)(v_clamped * 100),
+      float angle_deg = map_f((v_clamped * 100),
                                _range_min * 100,
                                _range_max * 100,
                                0, scale.angle_range());
 
-      dot.center( Point(r,
+      dot.center( Point( r,
                          angle_deg,
                          scale.angle_offset(),
                          GRect::centerpoint(),
