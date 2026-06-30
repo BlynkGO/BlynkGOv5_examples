@@ -61,7 +61,7 @@
 
 class GGaugeGRAFANA : public GScale {
   public:
-    GGaugeGRAFANA(GWidget& parent = GScreen)
+    GGaugeGRAFANA(GPARENT)
       : GScale(parent),
         _ranges{0, 40, 60, 80, 100},
         _sect_colors{ TFT_COLOR_HSV(220,100,100), TFT_GREEN, TFT_YELLOW, TFT_RED }

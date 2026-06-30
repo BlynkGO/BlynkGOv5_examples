@@ -14,7 +14,7 @@
 // สร้าง derived class (คลาสสืบต่อ) จาก GScale
 class GMyGaugeGfana : public GScale {  
   public:
-    GMyGaugeGfana(GWidget &parent= GScreen) : GScale(parent)  {}  // ** ต้องมีเพิ่ม ** เวลายกขึ้นเป็น class widget
+    GMyGaugeGfana(GPARENT) : GScale(parent)  {}  // ** ต้องมีเพิ่ม ** เวลายกขึ้นเป็น class widget
 
     uint32_t _range[5] = { 0, 40, 60, 80, 100};
     GScaleSection section[4];

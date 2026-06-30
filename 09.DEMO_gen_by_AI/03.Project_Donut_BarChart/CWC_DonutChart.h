@@ -9,7 +9,7 @@
 //
 //   QUICK START:
 //   ─────────────────────────────────────────────────────────────
-//   DonutChart donut(GScreen);
+//   DonutChart donut;
 //
 //   donut.size(300, 300);
 //   donut.title("FARM");

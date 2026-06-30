@@ -4,7 +4,7 @@
 
 class GScalePicker : public GContainer {
   public:
-    GScalePicker(GWidget &parent=GScreen) : GContainer(parent) {}
+    GScalePicker(GPARENT) : GContainer(parent) {}
       GLabel lb_value;
       GRect rect_scroll;
         GRect rect_scale;

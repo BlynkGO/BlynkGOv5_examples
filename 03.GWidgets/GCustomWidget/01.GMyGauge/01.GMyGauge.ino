@@ -8,7 +8,7 @@
 class GMyGauge : public GRect
 {
   public:
-    GMyGauge(GWidget &parent = GScreen) : GRect(parent) {}
+    GMyGauge(GPARENT) : GRect(parent) {}
 
     float _val=0.0f, _val_min=0.0f, _val_max =100.0f;
     uint8_t _arc_max_num = 120;

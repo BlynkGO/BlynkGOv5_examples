@@ -45,7 +45,7 @@ static const int SEG_COUNT = 6;
 //  - inherit GRect → จัด layout ด้วย GRID_CELL ภายในตัวเอง
 //
 //  วิธีใช้:
-//    DonutLegend legend(GScreen);
+//    DonutLegend legend;
 //    legend.grid_cell(1, 0, GRID_ALIGN_START, GRID_ALIGN_CENTER);
 //    legend.create();
 // ════════════════════════════════════════════════════════════════

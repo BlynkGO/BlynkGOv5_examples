@@ -39,7 +39,7 @@ IMAGE_DECLARE(img_hvac_800x480);
 
 class GGaugeGRAFANA : GScale {      // สร้าง class แตกมาจากวิตเจ็ต GScale
   public:
-    GGaugeGRAFANA(GWidget&parent= GScreen) : GScale(parent), _ranges{0, 40, 60, 80, 100}, _sect_colors{ TFT_COLOR_HSV(220,100,100), TFT_GREEN, TFT_YELLOW, TFT_RED} {}
+    GGaugeGRAFANA(GPARENT) : GScale(parent), _ranges{0, 40, 60, 80, 100}, _sect_colors{ TFT_COLOR_HSV(220,100,100), TFT_GREEN, TFT_YELLOW, TFT_RED} {}
 
     void create(){
       if(GScale::isCreated()) return;
