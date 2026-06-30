@@ -28,7 +28,7 @@
 
 class GGaugeDial : public GScale {
   public:
-    GGaugeDial(GWidget& parent = GScreen)
+    GGaugeDial(GPARENT)
       : GScale(parent),
         _ranges{0, 40, 60, 80, 100},
         _sect_colors{ TFT_COLOR_HSV(220,100,100), TFT_GREEN, TFT_YELLOW, TFT_RED }

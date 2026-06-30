@@ -113,7 +113,7 @@ class GGaugeArc : public GRect {
     GLabel  lb_value;
     GLabel  lb_unit;
 
-    GGaugeArc(GWidget& parent = GScreen)
+    GGaugeArc(GPARENT)
       : GRect(parent),
         _ranges{ 0, 15, 30, 40, 50 },
         _zone_colors{ TFT_COLOR_HEX(0x22D3EE), TFT_COLOR_HEX(0x22C55E),

@@ -98,7 +98,7 @@ class GGaugeRing : public GRect {
     GLabel  lb_unit;
     GCircle dot;
 
-    GGaugeRing(GWidget& parent = GScreen)
+    GGaugeRing(GPARENT)
       : GRect(parent),
         _ranges{ 0, 25, 50, 75, 100 },
         _sect_colors{ TFT_COLOR_HSV(220,100,100), TFT_GREEN, TFT_YELLOW, TFT_RED }
